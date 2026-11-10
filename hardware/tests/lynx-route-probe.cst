@@ -1,0 +1,10 @@
+// Tool-only registered core harness. Not the handheld pin map.
+// Clock/LED/button locations checked against Sipeed's HDMI and flow_led CSTs.
+IO_LOC "probe_clock" 4;
+IO_PORT "probe_clock" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+IO_LOC "probe_serial_in" 87;
+IO_PORT "probe_serial_in" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+IO_LOC "probe_capture" 88;
+IO_PORT "probe_capture" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+IO_LOC "probe_serial_out" 15;
+IO_PORT "probe_serial_out" IO_TYPE=LVCMOS33 DRIVE=4;

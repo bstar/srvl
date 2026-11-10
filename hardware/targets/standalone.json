@@ -1,0 +1,63 @@
+{
+  "name": "standalone-ecp5-12f",
+  "status": "development-target-not-hardware-acceptance",
+  "fpga": {
+    "part": "LFE5U-12F-6BG256C",
+    "lut4_capacity": 12000,
+    "ebr_blocks_capacity": 32,
+    "multipliers_capacity": 28,
+    "user_io_capacity": 197,
+    "lut4_limit": 9600,
+    "ebr_blocks_limit": 28,
+    "multipliers_limit": 16,
+    "user_io_limit": 128
+  },
+  "allocations": {
+    "cpu": {"lut4": 4000, "ebr_blocks": 8, "multipliers": 0},
+    "memory_and_boot": {"lut4": 800, "ebr_blocks": 1, "multipliers": 0},
+    "scaled_blitter": {"lut4": 1600, "ebr_blocks": 4, "multipliers": 4},
+    "layer_compositor": {"lut4": 1500, "ebr_blocks": 3, "multipliers": 0},
+    "raster_palette": {"lut4": 300, "ebr_blocks": 5, "multipliers": 0},
+    "triangle_and_math": {"lut4": 800, "ebr_blocks": 1, "multipliers": 8},
+    "audio_input_timers": {"lut4": 600, "ebr_blocks": 0, "multipliers": 0}
+  },
+  "io_allocations": {
+    "sdram": 39,
+    "lcd_rgb_and_timing": 28,
+    "lcd_control": 5,
+    "qspi_flash": 6,
+    "sd_spi_and_detect": 5,
+    "buttons": 8,
+    "stereo_audio": 2,
+    "clock_reset": 2,
+    "debug_allowance": 6,
+    "reserve": 16
+  },
+  "clocks_hz": {
+    "reference": 25152000,
+    "memory": 100608000,
+    "graphics": 50304000,
+    "cpu_enhanced_target": 20121600,
+    "pixel": 6288000
+  },
+  "video": {"width": 320, "height": 204, "total_width": 400, "total_height": 262, "fps": 60},
+  "graphics": {
+    "address_bits": 20,
+    "local_bytes": 1048576,
+    "tile_planes": 8,
+    "object_descriptors": 256,
+    "descriptor_bytes": 32,
+    "surface_bytes_per_pixel": 2,
+    "surface_count": 2,
+    "max_tile_map_bytes": 32768,
+    "palette_entries": 256,
+    "palette_entry_bytes": 2
+  },
+  "external_memory": {"physical_bytes": 33554432, "bus_bits": 16, "useful_bytes_per_second_target": 64000000},
+  "traffic_reserve_bytes_per_second": {"cpu_and_boot_cache": 8000000, "uploads": 4000000, "geometry": 4000000},
+  "acceptance_profiles": [
+    {"name": "dense-2d", "planes": 4, "objects": 256, "object_width": 16, "object_height": 16},
+    {"name": "large-sprites", "planes": 2, "objects": 128, "object_width": 32, "object_height": 32},
+    {"name": "eight-planes", "planes": 8, "objects": 64, "object_width": 16, "object_height": 16}
+  ]
+}

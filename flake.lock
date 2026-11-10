@@ -1,0 +1,99 @@
+{
+  "nodes": {
+    "cpu-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1375432804,
+        "narHash": "sha256-NyORHfj+Ec9fYeW492RPeqGjwQ+4lLqZNtauN4CojKw=",
+        "owner": "freecores",
+        "repo": "cpu65c02_true_cycle",
+        "rev": "acd38f0ec29facbf7a0d6c144b20a4757bfc0358",
+        "type": "github"
+      },
+      "original": {
+        "owner": "freecores",
+        "repo": "cpu65c02_true_cycle",
+        "rev": "acd38f0ec29facbf7a0d6c144b20a4757bfc0358",
+        "type": "github"
+      }
+    },
+    "cpu-tests": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1578229838,
+        "narHash": "sha256-ew/RnAIWz7OEWB5a5C+iIzGM3DBa1Y7fmlhiG9d3SXg=",
+        "owner": "Klaus2m5",
+        "repo": "6502_65C02_functional_tests",
+        "rev": "7954e2dbb49c469ea286070bf46cdd71aeb29e4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Klaus2m5",
+        "repo": "6502_65C02_functional_tests",
+        "rev": "7954e2dbb49c469ea286070bf46cdd71aeb29e4b",
+        "type": "github"
+      }
+    },
+    "lynx-reference": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784002007,
+        "narHash": "sha256-BsQtjLrHIxvzegcwz/81lJoqpp3ot/aEVHPfipyhUBg=",
+        "owner": "MiSTer-devel",
+        "repo": "AtariLynx_MiSTer",
+        "rev": "3708e457e413aa7a33f8bec8fcd79eba45ce4702",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MiSTer-devel",
+        "repo": "AtariLynx_MiSTer",
+        "rev": "3708e457e413aa7a33f8bec8fcd79eba45ce4702",
+        "type": "github"
+      }
+    },
+    "mister-template": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792134932,
+        "narHash": "sha256-iz7eMlwv5uv+ochS5fH/Fdb4JiLcfXU1ocV5G6tRjwk=",
+        "owner": "MiSTer-devel",
+        "repo": "Template_MiSTer",
+        "rev": "5dda37366d02b04b8448da7b322235c1831af811",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MiSTer-devel",
+        "repo": "Template_MiSTer",
+        "rev": "5dda37366d02b04b8448da7b322235c1831af811",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1793110635,
+        "narHash": "sha256-dhoW6VgFWlaodSY5jrBn+CF2FLmaUvDVgM7+C7T2+NM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "31ecbaca1bdefa45dffc409f0250bd8039ea0010",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "cpu-core": "cpu-core",
+        "cpu-tests": "cpu-tests",
+        "lynx-reference": "lynx-reference",
+        "mister-template": "mister-template",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

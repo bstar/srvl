@@ -1,0 +1,9 @@
+/result
+/result-*
+/.cache/
+/build/
+/.direnv/
+/vendor/
+*.vcd
+*.fst
+__pycache__/

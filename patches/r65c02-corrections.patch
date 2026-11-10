@@ -1,0 +1,74 @@
+--- a/fsm_execution_unit.vhd
++++ b/fsm_execution_unit.vhd
+@@ -1,3 +1,4 @@
++-- Modified for Chipbuilder, 2026-10-28: BRK stack D flag, RDY defaults, and branch-output factoring.
+ -- VHDL Entity r65c02_tc.fsm_execution_unit.symbol
+ --
+ -- Created:
+@@ -4121,6 +4122,7 @@
+    )
+    -----------------------------------------------------------------
+    BEGIN
++      next_state <= current_state; -- Chipbuilder: hold on otherwise unassigned RDY paths.
+       CASE current_state IS
+          WHEN s544 => 
+             next_state <= s550;
+@@ -8578,39 +8580,17 @@
+                ld_o <= "11";
+                ld_pc_o <= '1';
+             END IF;
+-         WHEN s305 => 
+-            IF ((rdy_i = '1' and
+-                zw_b3 = adr_nxt_pc_i (15 downto 8)) AND (nmi_i = '1') AND (rdy_i = '1')) THEN 
+-               offset_o <= (zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) & 
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(6 downto 0));
+-               ld_o <= "11";
+-               ld_pc_o <= '1';
+-            ELSIF ((rdy_i = '1' and
+-                   zw_b3 = adr_nxt_pc_i (15 downto 8)) AND (irq_n_i = '0' and
+-                   reg_F(2) = '0') AND (rdy_i = '1')) THEN 
+-               offset_o <= (zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) & 
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(6 downto 0));
+-               ld_o <= "11";
+-               ld_pc_o <= '1';
+-            ELSIF (rdy_i = '1' and
+-                   zw_b3 = adr_nxt_pc_i (15 downto 8)) THEN 
+-               offset_o <= (zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) & 
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(6 downto 0));
+-               ld_o <= "11";
+-               ld_pc_o <= '1';
+-               sig_SYNC <= '1';
+-            ELSIF (rdy_i = '1') THEN 
++         WHEN s305 =>
++            IF (rdy_i = '1') THEN
+                offset_o <= (zw_b2(7) & zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(7) & zw_b2(7) & zw_b2(7) &
+-               zw_b2(7) & zw_b2(7) & zw_b2(6 downto 0));
+-               ld_o <= "11";
+-               ld_pc_o <= '1';
++                            zw_b2(7) & zw_b2(7) & zw_b2(7) & zw_b2(7) &
++                            zw_b2(7) & zw_b2(7) & zw_b2(6 downto 0));
++               ld_o <= "11";
++               ld_pc_o <= '1';
++               IF (zw_b3 = adr_nxt_pc_i(15 downto 8) AND nmi_i = '0' AND
++                   (irq_n_i = '1' OR reg_F(2) = '1')) THEN
++                  sig_SYNC <= '1';
++               END IF;
+             END IF;
+          WHEN s306 => 
+             IF ((rdy_i = '1') AND (nmi_i = '1') AND (rdy_i = '1')) THEN 
+@@ -8819,7 +8799,7 @@
+             sig_RWn <= '0';
+             sig_RD <= '0';
+             sig_WR <= '1';
+-            sig_D_OUT <= (reg_F OR X"10") AND X"F7";
++            sig_D_OUT <= (reg_F OR X"10");
+          WHEN s542 => 
+             IF ((rdy_i = '1') AND (nmi_i = '1') AND (rdy_i = '1')) THEN 
+                adr_o <= d_i & zw_b1;

@@ -1,0 +1,16 @@
+{
+  "name": "tang-nano-20k-lynx-audit",
+  "status": "compatibility-audit-not-board-acceptance",
+  "part": "GW2AR-LV18QN88C8/I7",
+  "nextpnr_family": "GW2A-18C",
+  "lut4_capacity": 20736,
+  "flip_flop_capacity": 15552,
+  "bsram_blocks": 46,
+  "bsram_bits_per_block": 18432,
+  "multipliers_18x18": 48,
+  "sdram_bytes": 8388608,
+  "sdram_bus_bits": 32,
+  "flash_bytes": 8388608,
+  "legacy_core_clock_hz": 64000000,
+  "source": "https://wiki.sipeed.com/hardware/en/tang/tang-nano-20k/nano-20k.html"
+}
