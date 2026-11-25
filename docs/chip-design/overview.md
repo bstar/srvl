@@ -39,7 +39,7 @@ acceptance requirement. The line styles describe ownership and design role;
 they are not a pass/fail test report.
 
 Select a block for its details. Use zoom and horizontal scrolling for larger
-views; **Open SVG** and **Download SVG** preserve crisp labels for review and
+views; **Open drawing** and **Save drawing** give the figure as a file for review and
 printing. The diagrams work offline and their source is kept with the generator.
 They are logical diagrams, not physical floorplans, routed nets or schematics.
 
