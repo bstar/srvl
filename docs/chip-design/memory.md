@@ -29,11 +29,10 @@ an old response while accepting the next owner on the same edge. A write ACK
 follows the physical WRITE; bank recovery independently delays the next ACTIVATE.
 The conservative 64 MHz command timings and independent pin model are retained.
 
-The [standalone acceptance](../milestones/enhanced-memory.md) checks 9,390 responses,
+The [standalone acceptance](../milestones/enhanced-memory.md) checks
 all masks/bank boundaries, strict fairness, refresh, stalls, resets and fault
-recovery. The enhanced blitter's unchanged dense and host-contended scaled scenes
-now take **10.960 ms** and **14.572 ms** at an assumed 64 MHz. Both budgets are
-checked across front-read phases. Those workload timings exclude CPU staging;
+recovery, and records the measured renderer workloads on this service. Both
+60 Hz renderer budgets are checked across front-read phases. Those workload timings exclude CPU staging;
 the separate [CPU diagnostic](../architecture/native-graphics-mmio.md) proves
 functional command integration. Layer composition, scanout under dense
 workloads and physical board timing remain ahead.

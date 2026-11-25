@@ -117,6 +117,13 @@ def check(root, source):
                 errors.append(f"Current evidence references a missing/outside source: {relative}")
             elif hashlib.sha256(path.read_bytes()).hexdigest() != digest:
                 errors.append(f"Current evidence is stale for {relative}; rerun affected checks and record their snapshot")
+    # Every checked-in snapshot is either current (hash-checked above) or
+    # declared historical; nothing sits in the directory unclassified.
+    current = {config["audit_evidence"], config["integration_evidence"], *config.get("design_evidence", [])}
+    historical = set(config.get("historical_evidence", []))
+    present = {p.relative_to(source).as_posix() for p in (source / "docs/research/evidence").glob("*.json")}
+    if current & historical or current | historical != present:
+        errors.append(f"Evidence classification differs from the directory: {sorted((current | historical) ^ present)} / both: {sorted(current & historical)}")
     home = pages.get(root / "index.html")
     if not home:
         errors.append("No home page")

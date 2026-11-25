@@ -10,6 +10,14 @@
     "docs/research/evidence/native-graphics-2026-11-17.json",
     "docs/research/evidence/enhanced-system-2026-11-24.json"
   ],
+  "historical_evidence": [
+    "docs/research/evidence/lynx-tang20k-2026-10-30.json",
+    "docs/research/evidence/scaled-blitter-baseline-2026-11-17.json",
+    "docs/research/evidence/scaled-blitter-legacy-memory-2026-11-17.json",
+    "docs/research/evidence/tang-core-integration-2026-11-17.json",
+    "docs/research/evidence/tang-services-2026-11-17.json",
+    "docs/research/evidence/tang-video-2026-11-17.json"
+  ],
   "groups": [
     {
       "title": "Project",

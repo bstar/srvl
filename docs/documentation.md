@@ -75,6 +75,17 @@ encoding and reset control. The checker also validates those source hashes;
 these proofs retain their own scope and do not replace the portable-system or
 core-only evidence.
 
+Every file in `docs/research/evidence` must be listed either as current or under
+`historical_evidence`; the checker fails on an unclassified snapshot. After the
+full `nix flake check` passes on a changed tree, run
+`python scripts/refresh-evidence.py` to re-record the hashes of current
+snapshots (`--check` only reports). It never edits historical snapshots, and it
+does not regenerate recorded measurements: update those from the check outputs.
+
+The work-gate strip on the roadmap page is generated from the roadmap itself.
+Each numbered gate carries a `Gate: label · Done|Active|Pending` line directly
+under its heading, and the site build fails if one is missing or malformed.
+
 Build definitions are in [flake.nix](../flake.nix) and the
 [Nix documentation recipe](../nix/docs.nix). The
 [HTML generator](../scripts/build-docs.py) and

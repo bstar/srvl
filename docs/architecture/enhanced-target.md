@@ -37,11 +37,11 @@ An original [scaled-blitter component](../milestones/scaled-blitter.md) is now
 implemented separately: exact 4/8-bit scaling, coverage/index/band output, fills,
 clipping, masked writes and completion fences pass independent tests and real
 SDRAM-controller integration. A separate [native MMIO/CPU diagnostic](native-graphics-mmio.md)
-now uploads sources and submits draws on the actual CPU; a playable enhanced game,
-compositor and native scanout remain ahead. With the [enhanced elastic memory service](../milestones/enhanced-memory.md),
-its dense 256-draw workload takes **10.960 ms** at an assumed 64 MHz. The scaled
-scene with continuous host traffic takes **14.572 ms**. All bounded renderer-only
-60 Hz checks pass, including front-read phase repeats. Full-system budgets and
+now uploads sources and submits draws on the actual CPU, and a first
+[enhanced top](../milestones/enhanced-skeleton.md) adds native scanout and frame
+ownership; a playable enhanced game and the compositor remain ahead. With the
+[enhanced elastic memory service](../milestones/enhanced-memory.md), all bounded
+renderer-only 60 Hz checks pass, including front-read phase repeats. Full-system budgets and
 enhanced clock qualification remain open.
 
 ## Planning numbers versus promises

@@ -1,6 +1,7 @@
 # Project at a glance
 
-Reviewed: **2026-11-17**. This is the current project summary. Historical research
+Reviewed: **2026-11-24**. This is the current project summary and the one place
+other pages point to for current figures. Historical research
 and measurements retain their original review dates.
 
 ## The console we are building

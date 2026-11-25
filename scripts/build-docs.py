@@ -172,16 +172,21 @@ def architecture_panel():
     </section>'''
 
 
-def gate_panel(md):
+GATE_STATES = {"Done": ("done", "Software verified"), "Active": ("active", "Active"), "Pending": ("", "Pending")}
+
+
+def gate_panel(md, source):
+    """Gate strip driven by the roadmap: each numbered section states `Gate: label · state`."""
+    declared = re.findall(r"^## (\d+)\. [^\n]+\n\nGate: ([^·\n]+) · (\w+)$", source, re.M)
+    tokens = [token for token in md.toc_tokens if re.match(r"\d+\.", token["name"])]
+    if len(declared) != len(tokens):
+        raise ValueError("docs/roadmap.md: every numbered gate needs a 'Gate: label · Done|Active|Pending' line")
     items = []
-    for i, token in enumerate(md.toc_tokens):
-        if not re.match(r"\d+\.", token["name"]):
-            continue
-        number = len(items) + 1
-        label = ["Foundation", "Board services", "Presentation", "Complete build", "Physical tests", "Enhanced engines", "LCD & power", "PCB & case"][number - 1]
-        state = "done" if number <= 3 else "active" if number == 4 else ""
-        status = "Software verified" if number <= 3 else "Next" if number == 4 else "Pending"
-        items.append(f'<a class="{state}" href="#{esc(token["id"])}"><small>{number:02d} / {status}</small>{label}</a>')
+    for token, (number, label, state) in zip(tokens, declared):
+        if state not in GATE_STATES or not token["name"].startswith(number + "."):
+            raise ValueError(f"docs/roadmap.md: invalid gate line for section {number}")
+        css, status = GATE_STATES[state]
+        items.append(f'<a class="{css}" href="#{esc(token["id"])}"><small>{int(number):02d} / {status}</small>{esc(label.strip())}</a>')
     return '<nav class="gate-strip" aria-label="Work gates">' + "".join(items) + "</nav>"
 
 
@@ -272,7 +277,7 @@ def build(root, out):
         elif doc["source"] == "docs/architecture/tang-prototype.md":
             extra = architecture_panel()
         elif doc["source"] == "docs/roadmap.md":
-            extra = gate_panel(doc["md"])
+            extra = gate_panel(doc["md"], (root / doc["source"]).read_text())
         elif doc["source"] == "docs/architecture/decisions/README.md":
             extra = decisions_panel(decision_docs)
         notice = ""

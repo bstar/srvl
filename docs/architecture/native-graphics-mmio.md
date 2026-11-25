@@ -1,6 +1,6 @@
 # Native graphics MMIO and CPU diagnostic
 
-Reviewed: **2026-11-17**. Status: **experimental v1 implemented and tested with
+Reviewed: **2026-11-24**. Status: **experimental v1 implemented and tested with
 the actual native CPU; complete enhanced console remains in development**.
 This is a concrete development interface, not a frozen public SDK or the Lynx
 compatibility map. The separate Circuit Courier machine retains its existing map.

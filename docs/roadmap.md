@@ -1,11 +1,13 @@
 # Work plan and acceptance gates
 
-Reviewed: **2026-11-17**. Ordered gates, not delivery dates. Progress comes from
+Reviewed: **2026-11-24**. Ordered gates, not delivery dates. Progress comes from
 recorded evidence; writing RTL or accepting a direction does not close a gate.
 Current work is the Tang integration path; the original software game remains
 the regression baseline.
 
 ## 1. Keep the working foundation — verified in software
+
+Gate: Foundation · Done
 
 Nix development shells, original-ROM simulator, native CPU tests, peripheral/game
 checks and the legacy feasibility audit exist. Preserve reproducible pins,
@@ -16,6 +18,8 @@ Acceptance: existing applicable Nix checks continue to pass. Physical MiSTer
 testing remains deferred under ADR 0004.
 
 ## 2. Board services — service-level software checks pass
+
+Gate: Board services · Done
 
 Implement and independently verify the UART, CRC protocol, loader/reset path and
 the Tang's x32 SDRAM controller. These service checks now pass, including guarded
@@ -29,6 +33,8 @@ lanes and bank/row/column boundaries are correct; refresh continues under load;
 controller reads/writes match an independent memory model.
 
 ## 3. Legacy presentation and controls — original diagnostics verified in software
+
+Gate: Presentation · Done
 
 Integrate the original console with cartridge reads, RGB capture, completed-frame
 handoff, line buffers, exact pixel replication, controls and audio transport.
@@ -53,6 +59,8 @@ through status; input and memory contention cannot silently corrupt output.
 
 ## 4. Complete Tang build — next implementation gate
 
+Gate: Complete build · Active
+
 Add the real board top, verified pin constraints, clock-generator configuration,
 PLLs, SDRAM clock phase, video serializers and reset sequencing. Synthesize,
 place, route and pack the **complete** design through Nix.
@@ -73,6 +81,8 @@ not satisfy this gate.
 
 ## 5. Physical bring-up and compatibility — deferred physical work
 
+Gate: Physical tests · Pending
+
 Run the original diagnostic on the actual Tang first. Then use owner-supplied
 BIOS/game images to test loading, original features, orientation and timing-sensitive
 behavior. Record image hashes, board revisions, display setup and failures.
@@ -82,7 +92,9 @@ corners need focused tests before broad claims of compatibility.
 Acceptance: repeatable real-board boots and a named compatibility matrix.
 ComLynx and physical cartridges are additional gates, not implied capabilities.
 
-## 6. Enhanced graphics configuration — planned and budget open
+## 6. Enhanced graphics configuration — skeleton routes; engines and budget open
+
+Gate: Enhanced engines · Active
 
 Re-budget the native CPU, memory and new engines on Tang. Specify request/stall
 interfaces and a bounded register/command ABI. Implement scaled drawing first,
@@ -96,12 +108,9 @@ now pass six cold/warm boots, CPU asset uploads, completion IRQs and three clock
 configurations. A first [enhanced top](milestones/enhanced-skeleton.md) now adds
 native scanout and front/back ownership, runs a CPU-drawn demo in simulation and
 routes on Tang with open tools; the compositor, input, audio and a game remain
-open. Paired fills, fused sampling/stores, single-carry stepping and the
-[enhanced elastic memory service](milestones/enhanced-memory.md) reduce the same
-256-draw scene from 22.531 ms to **10.960 ms** at an assumed 64 MHz. The scaled
-scene with continuous host traffic now takes **14.572 ms**, down from 23.656 ms.
-Renderer-only frame budgets pass across front-read phases and are regression
-limits. Complete-system throughput and enhanced timing remain unqualified;
+open. With the [enhanced elastic memory service](milestones/enhanced-memory.md),
+the renderer-only frame budgets pass across front-read phases and are regression
+limits; [project status](project-status.md) carries the current figures. Complete-system throughput and enhanced timing remain unqualified;
 preserve both baselines and measure the new CPU/compositor/scanout workload.
 
 Acceptance: native 320 × 204 scenes meet the stated 60 fps workloads with measured
@@ -110,6 +119,8 @@ that every large object can be drawn each frame. Stress scaling, overlap,
 minification, clipping, memory stalls and incomplete-frame handling.
 
 ## 7. Display qualification and handheld electronics — open dependencies
+
+Gate: LCD & power · Pending
 
 Select a backlit color panel after motion, refresh, brightness, orientation,
 interface, lifecycle, cost and power checks. Set stereo output, controls,
@@ -122,6 +133,8 @@ complete current/voltage budget; connector and thermal clearance in the mechanic
 model. Do not freeze a case around an unqualified panel.
 
 ## 8. Custom PCB and enclosure — later
+
+Gate: PCB & case · Pending
 
 Build and bring up the carrier/custom board, integrate a screen and gamepad,
 print the case, then measure power, sound, temperature and usability. Iterate

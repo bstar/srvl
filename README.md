@@ -13,25 +13,34 @@ For the HTML review area, run `nix run .#docs` and open
 history, open tradeoffs, work plan and evidence. The
 [documentation workflow](docs/documentation.md) explains building and updating it.
 
-This repository contains the development environment, research, architecture
-records, a CPU-driven software prototype with an original game, and a separate
-display/controller/audio bring-up core built for MiSTer. It contains no PCB or
-physically verified Lynx compatibility core. The separate Lynx feasibility audit
-passes its software and core-only resource/timing gates; board integration is in progress.
-See the [prototype build and hardware instructions](hardware/README.md).
-Simulation and Quartus compilation pass. Physical testing is deferred at the
-owner's request; development proceeds using software simulation under
-[ADR 0004](docs/architecture/decisions/0004-software-first-validation.md). The
-[acceptance record](docs/milestones/first-mister-prototype.md) contains the RBF
-hash, timing results, and remaining checks.
-Existing MiSTer hardware remains available for bring-up. The current standalone
-prototype target is **Tang Nano 20K with the Lynx CPU inside the FPGA** under
-[ADR 0009](docs/architecture/decisions/0009-tang-prototype.md); see the
-[current integration architecture](docs/architecture/tang-prototype.md).
-The [earlier ECP5 contract](docs/architecture/standalone-platform.md) remains
-historical reference. Neither the complete Tang board port nor enhanced graphics
-fit has been demonstrated. Physical CPUs and manufactured custom chips remain
-possible later destinations.
+## Where the project stands
+
+The prototype target is a **Tang Nano 20K** with the CPU inside the FPGA
+([ADR 0009](docs/architecture/decisions/0009-tang-prototype.md)). Nothing has
+run on a board yet: physical testing is deferred under
+[ADR 0004](docs/architecture/decisions/0004-software-first-validation.md), so
+every result below is simulation, mapping or open-tool routing.
+
+- **Legacy Lynx on Tang.** The pinned Lynx core with our loader, SDRAM service,
+  buffered 2× video and stereo audio passes software checks, and the complete
+  bench top routes and packs. See the [integration architecture](docs/architecture/tang-prototype.md).
+- **Enhanced console.** A first [enhanced top](docs/milestones/enhanced-skeleton.md)
+  runs a CPU-drawn demo through the scaled blitter and native scanout in
+  simulation, and routes on Tang. The compositor, input, audio and a game are ahead.
+- **Circuit Courier.** An original 65C02 game running against earlier custom
+  tile/sprite/audio hardware in a desktop simulator; it is the regression baseline.
+
+[Project status](docs/project-status.md) holds the current numbers and their
+limits. There is no PCB, handheld, physical result or commercial-game test.
+
+### History
+
+The first bring-up circuit was a display/controller/audio test core for MiSTer;
+its [acceptance record](docs/milestones/first-mister-prototype.md) and
+[build instructions](hardware/README.md) remain, and it compiles in Quartus. An
+[ECP5 platform contract](docs/architecture/standalone-platform.md) preceded the
+Tang decision and is kept as historical reference. Physical CPUs and
+manufactured custom chips remain possible later destinations.
 
 ## Play the software prototype
 
@@ -135,7 +144,7 @@ The [stereo audio milestone](docs/milestones/tang-audio.md) adds signed filterin
 coherent left/right transfer and pin-decoded I²S from actual Mikey-generated tones
 while video runs. Use `nix build .#audio-output-check .#lynx-tang-av-check .#tang-av-sizing`.
 These are software/mapping checks. Video serialization, analog audio, full board
-timing, physical testing and enhanced-engine implementation remain ahead.
+timing and physical testing remain ahead.
 
 The route probe separates the pinned console from MiSTer's infrastructure, uses
 registered test boundaries and retains failures as evidence; inspect its exit
