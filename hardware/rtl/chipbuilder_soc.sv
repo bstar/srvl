@@ -29,6 +29,7 @@ module chipbuilder_soc #(
     reg [7:0] read_data;
     /* verilator lint_on UNOPTFLAT */
     wire write_enable, read_enable, write_n, sync, irq, cpu_sleep;
+    wire _unused_cpu_strobes = &{1'b0, write_n};
     // Stop the CPU between frame updates. Update the gate only while the master
     // clock is low; video/audio/input hardware continues running. A physical FPGA
     // adapter must map this function onto its dedicated clock-control resource.
@@ -36,6 +37,9 @@ module chipbuilder_soc #(
     always @(negedge clk) cpu_running <= reset || !cpu_sleep;
     wire cpu_clock = clk && cpu_running;
     wire [7:0] peripheral_data;
+    // Only genuine CPU read cycles reach the peripherals: the timer's low-byte
+    // snapshot must not fire on dummy cycles or while the CPU clock is stopped.
+    wire peripheral_read = read_enable && cpu_running && !reset;
     wire peripheral_write = write_enable && cpu_running && !reset && address >= 16'h2000 && address < 16'h8000;
     chipbuilder_cpu cpu (
         .clk(cpu_clock), .reset(reset), .read_data(read_data), .irq(irq),
@@ -55,7 +59,7 @@ module chipbuilder_soc #(
     end
     chipbuilder_peripherals #(.FONT_FILE(FONT_FILE),.SPRITE_FILE(SPRITE_FILE)) peripherals (
         .clk(clk), .reset(reset), .address(address), .write_data(write_data),
-        .write_enable(peripheral_write), .read_enable(1'b1), .read_data(peripheral_data),
+        .write_enable(peripheral_write), .read_enable(peripheral_read), .read_data(peripheral_data),
         .buttons(buttons), .irq(irq), .cpu_sleep(cpu_sleep), .red(red), .green(green), .blue(blue),
         .de(de), .hsync(hsync), .vsync(vsync), .video_x(video_x), .video_y(video_y),
         .audio_left(audio_left), .audio_right(audio_right), .frame_count(frame_count),

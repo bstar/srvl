@@ -173,7 +173,9 @@ module chipbuilder_peripherals #(
     // Eight sprites, 16x16 pixels, two-bit masks. No CPU pixel loop.
     // Low slot numbers take priority. Mask 0=transparent, 1=shadow, 2=body, 3=light.
     function automatic [4:0] sprite_sample(input [8:0] px, py);
+        /* verilator lint_off UNUSEDSIGNAL */
         integer slot, lx, ly, row;
+        /* verilator lint_on UNUSEDSIGNAL */
         reg [1:0] ink;
         begin
             sprite_sample = 0;

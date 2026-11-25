@@ -38,6 +38,9 @@ module cb_blitter_mmio (
     reg cpu_busy, done, rejected, irq_enable;
     reg init_sync1, init_sync2, fault_sync1, fault_sync2;
     reg byte_fault;
+    // Graphics-domain launch register: the CPU-domain synchronizer must sample
+    // a flop, not the combinational OR of several fault sources.
+    reg fault_launch;
     typedef enum logic [2:0] {IDLE,DECODE,DRAW_REQUEST,DRAW_WAIT,BYTE_REQUEST,BYTE_WAIT,WAIT_ACK} state_t;
     state_t state;
     reg [31:0] elapsed, byte_stalls;
@@ -111,7 +114,7 @@ module cb_blitter_mmio (
         end else begin
             reply_sync1<=reply_toggle; reply_sync2<=reply_sync1;
             init_sync1<=initialized; init_sync2<=init_sync1;
-            fault_sync1<=protocol_fault; fault_sync2<=fault_sync1;
+            fault_sync1<=fault_launch; fault_sync2<=fault_sync1;
             if(bus_write) begin
                 if(bus_address>=8'h40 && bus_address<8'h64) shadow[bus_address[5:0]]<=bus_write_data;
                 else if(bus_address==8'h04) irq_enable<=bus_write_data[0];
@@ -134,6 +137,7 @@ module cb_blitter_mmio (
             end
         end
     end
+    always @(posedge graphics_clk) fault_launch<=!reset && protocol_fault;
     always @(posedge graphics_clk) begin
         if(reset) begin
             request_sync1<=0; request_sync2<=0; request_seen<=0;

@@ -655,7 +655,7 @@
     "hardware/display/cb_tmds_encoder.sv": "8b09cdfa04d15a7611a2010ad4f6ed1de9a8e52ad2f3af62b42908391166cc55",
     "hardware/tang/cb_memory_arbiter.sv": "896e79aad7da9752dc490c01ecc50ca46c9404bbddda96f852fc6e45c2bd40fd",
     "hardware/tang/lynx_cart_bridge.sv": "77ff7d6e79bbfaad4ea900af3d65fc18d0b51f61fba00c26532484957c8604d8",
-    "hardware/tang/lynx_loader.sv": "9078ae853e7d38627101fc0ab1969c034eaea00eb3828666e1340ecf6614f7e8",
+    "hardware/tang/lynx_loader.sv": "73794072ebb08645ca09e04c9fbc473066dea4bc78bd1916b64769cbefda206e",
     "hardware/tang/lynx_packet.sv": "ae3915fac2d1790f837fff3254460e60d26519be8488ea0fb6266b333f2bf282",
     "hardware/tang/lynx_sdram.sv": "659db31e45b93395b79af87b6bb0adf86e8a30d4c03b8945254edd0b6813d234",
     "hardware/tang/lynx_tang_system.sv": "e1f39fdb57ec1a263c99fec68d5f607921bdfb5b1164e1af32769f85d5f37a86",

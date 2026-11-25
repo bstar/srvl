@@ -168,8 +168,8 @@ diagnostic runs. A test palette makes covered index zero gray and cleared pixels
 dark. It is not a native scanout capture or an implemented RGB palette/compositor.
 All three clock configurations produce byte-identical output.
 
-Separate synthesis of the MMIO plus blitter uses **2,276 registers**,
-**2,577 LUT1–LUT4 cells** and **1,091 ALU cells**, plus mux primitives, without
+Separate synthesis of the MMIO plus blitter uses **2,281 registers**,
+**2,562 LUT1–LUT4 cells** and **1,091 ALU cells**, plus mux primitives, without
 DSP, block RAM or unintended latches. This excludes the CPU, ROM/RAM, memory
 service, compositor and scanout; it is not a complete enhanced fit or timing result.
 

@@ -54,7 +54,9 @@ module chipbuilder_demo (
 
     wire image_area = de && v >= 10'd36 && v < 10'd444;
     wire [8:0] x = h[9:1];
+    /* verilator lint_off UNUSEDSIGNAL */
     wire [9:0] image_v = v - 10'd36;
+    /* verilator lint_on UNUSEDSIGNAL */
     wire [7:0] y = image_v[8:1];
     wire marker = x >= marker_x && x < marker_x + 9'd16 &&
                   {1'b0,y} >= {1'b0,marker_y} &&

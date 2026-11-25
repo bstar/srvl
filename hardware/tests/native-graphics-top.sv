@@ -5,8 +5,11 @@ module native_graphics_top #(
     parameter ROM_FILE="native-graphics.hex"
 ) (
     input wire clk, cpu_clk, reset, memory_stall, test_fault,
+    // The test bus is used only when USE_CPU=0.
+    /* verilator lint_off UNUSEDSIGNAL */
     input wire [7:0] test_bus_address, test_bus_data,
     input wire test_bus_write,
+    /* verilator lint_on UNUSEDSIGNAL */
     output wire [7:0] test_read_data,
     output wire irq, initialized, protocol_fault,
     output wire [7:0] diagnostic,

@@ -56,7 +56,8 @@ module lynx_loader (
     assign memory_data={rom_data,rom_data};
     assign memory_mask=rom_address[1] ? 4'b1100:4'b0011;
     // Bits 0..7: memory ready, BIOS valid, running, image valid, loading,
-    // protocol error, reserved, reserved. Bits 8..12 belong to presentation.
+    // protocol error, reserved, reserved. Bits 8..14 belong to presentation
+    // (video status in 8..12, audio ready 13, audio underrun 14).
     assign status={16'h4c59,1'b0,presentation_status,2'b0,protocol_error,
                    loading,image_valid,running,bios_valid,memory_initialized};
     always @(posedge clk) begin
