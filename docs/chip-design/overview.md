@@ -31,11 +31,12 @@ mode has its own [separate diagram and timing boundary](legacy.md).
 
 ## Read the diagrams
 
-**Green** identifies original project logic or a proposed project interface.
-**Blue** identifies reused implementation. **Amber** identifies integration work
-or a boundary that still needs qualification. Every selectable block has a state,
-inputs, outputs and an acceptance requirement. These colors describe ownership
-and design role; they are not a pass/fail test report.
+The drawings are black line art. A **solid** outline is original project logic
+or a proposed project interface. **Long dashes** mark a reused implementation.
+A **dotted** outline marks integration work or a boundary that still needs
+qualification. Every selectable block has a state, inputs, outputs and an
+acceptance requirement. The line styles describe ownership and design role;
+they are not a pass/fail test report.
 
 Select a block for its details. Use zoom and horizontal scrolling for larger
 views; **Open SVG** and **Download SVG** preserve crisp labels for review and
@@ -75,7 +76,7 @@ and a real game to measure the combined load.
 
 Diagram definitions and rendering live in
 [chip_diagrams.py](../../scripts/chip_diagrams.py). The HTML build exports the same
-definitions as SVG and as inspector data, keeping the labels and block details
+definitions as SVG and as block-description data, keeping the labels and block details
 together. Update the relevant page, diagram and verification evidence when an
 interface or implementation state changes. See the
 [documentation workflow](../documentation.md).
