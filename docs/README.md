@@ -1,5 +1,11 @@
 # Project documentation
 
+Start with the [current project summary](project-status.md),
+[work plan](roadmap.md), [tradeoffs](tradeoffs.md) and
+[Tang architecture](architecture/tang-prototype.md). For a searchable HTML view of
+all project documents, run `nix run .#docs` and open <http://127.0.0.1:8787>.
+See the [documentation workflow](documentation.md) for rebuilding and upkeep.
+
 Research reviewed on **2026-10-28**. Dates indicate when sources were examined,
 not when the underlying products or documents were first published. Availability
 and manufacturer lifecycle statements must be rechecked before procurement.
@@ -17,6 +23,13 @@ and manufacturer lifecycle statements must be rechecked before procurement.
 
 ## Architecture
 
+- [Chip design handbook with inspectable diagrams](chip-design/overview.md)
+- [System control and boot ROM design](chip-design/system.md)
+- [Clock, reset and display-output design](chip-design/board-output.md)
+- [Current hardware choices and integration boundaries](hardware.md)
+- [Current Tang prototype](architecture/tang-prototype.md)
+- [Current enhanced graphics target and its limits](architecture/enhanced-target.md)
+- [Original versus reused components](architecture/provenance.md)
 - [Overview and open questions](architecture/overview.md)
 - [Selected standalone development platform and hardware tradeoffs](architecture/standalone-platform.md)
 - [Decision-record index and conventions](architecture/decisions/README.md)
@@ -26,6 +39,7 @@ and manufacturer lifecycle statements must be rechecked before procurement.
 - [Enhanced graphics effects proposal and bandwidth targets](architecture/graphics-effects.md)
 - [Physical retro CPU with FPGA graphics](architecture/hybrid-hardware.md)
 - [Playable software prototype milestone](milestones/playable-software-prototype.md)
+- [Tang board-service and serial-loading acceptance](milestones/tang-board-services.md)
 
 Research notes preserve evidence, alternatives, and uncertainty. An accepted ADR
 records a project decision, not a claim that the hardware already works. Revise

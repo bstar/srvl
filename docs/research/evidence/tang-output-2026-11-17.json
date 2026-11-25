@@ -1,0 +1,48 @@
+{
+  "reviewed_date": "2026-11-17",
+  "scope": "digital TMDS encoding/lane mapping and board reset/audio-activity control; no serializer primitive, PLL, full board route or physical output acceptance",
+  "artifacts": {
+    "encoding": "/nix/store/b029pf2k2zp6qb09jhzbv09s3x2z40ir-chipbuilder-dvi-encoder-check",
+    "control": "/nix/store/hg0hjrcx0x5dzmc6wjbjnp7yclz3hbjx-chipbuilder-board-control-check"
+  },
+  "encoding": {
+    "scope": "registered DVI TMDS encoding and RGB/control lane mapping; no physical serializer/board timing",
+    "cycles": 630926,
+    "reachable_disparity_states": 9,
+    "exhaustive_state_byte_cases": 2304,
+    "active_codewords": 460,
+    "checked_active_symbols": 622245,
+    "checked_rgb_pixels": 504911,
+    "physical_testing": false,
+    "passed": true
+  },
+  "control": {
+    "scope": "board reset and audio activity control RTL; ideal clocks and lock inputs, no PLL or physical timing",
+    "reset_events": 2,
+    "local_release_edges": 3,
+    "physical_testing": false,
+    "passed": true
+  },
+  "tool_versions": {
+    "encoding": "Verilator 5.052 2026-09-05 rev v5.052",
+    "control": "Verilator 5.052 2026-09-05 rev v5.052"
+  },
+  "source_sha256": {
+    "hardware/display/cb_tmds_encoder.sv": "8b09cdfa04d15a7611a2010ad4f6ed1de9a8e52ad2f3af62b42908391166cc55",
+    "hardware/display/cb_dvi_symbols.sv": "50860186ffc7776483172879ff2f0aa3c317c87f1b2a4d158a3c9ad97dd3b0a0",
+    "hardware/tests/dvi-encoder-top.sv": "9311c756662a9a0712f09217688c34c32fff6f9a60cfd41f4131250ead5fd852",
+    "sim/dvi-encoder.cpp": "f8b662dae9034c5956d15db29483f40c21300340173593d9108f55f0699048a2",
+    "sim/tmds-model.hpp": "bcffd710ac50d6fae815f3ba38b6d987f5645dd76b3acf1b26bc9f0882e06e11",
+    "hardware/boards/tang_nano20k/cb_reset_sync.sv": "82fac35f3e283cd31adb6774c6251e70fe5fdb01a8f62d418d01e6b0db6d2022",
+    "hardware/boards/tang_nano20k/cb_board_control.sv": "ee1acee915ba787a86ee83c0d1fe72fc79dbc6e637885bf2781521e7751c79f4",
+    "sim/board-control.cpp": "38badda58cb04c7fcd3e2ba0281409d3946dea1e493eddb4765e63b3e0015e9f",
+    "nix/tang-board.nix": "fc3242ab93fab4727b5b9219d751e0584b20a82b3aa7bd422d94e5e4f0312307",
+    "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a"
+  },
+  "serializer_primitive_simulation": false,
+  "complete_board_route": false,
+  "physical_testing": false,
+  "references": {
+    "encoding": "https://ez.analog.com/cfs-file/__key/communityserver-discussions-components-files/331/DVI_2D00_1.0_5F00_specs.pdf"
+  }
+}

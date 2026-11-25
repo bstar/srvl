@@ -1,0 +1,80 @@
+{
+  "reviewed_date": "2026-11-17",
+  "kind": "native-graphics-cpu-mmio",
+  "scope": "experimental dual-clock MMIO plus actual pinned R65C02 original diagnostic; no frame ownership, native scanout, complete enhanced timing or physical qualification",
+  "artifacts": {
+    "registers": "/nix/store/h8v05pdxrna2966j5pmf1msnqlnp9p0g-chipbuilder-blitter-mmio-check",
+    "cpu": "/nix/store/3fy34bv6y7r2nm7a9cyx99q7487635q0-chipbuilder-native-graphics-check"
+  },
+  "register_tests": {
+    "scope": "dual-clock MMIO, real blitter/elastic arbiter/SDRAM against independent pin/pixel models; direct register driver, no CPU firmware or scanout",
+    "completed_commands": 399,
+    "draw_fill_commands": 159,
+    "byte_commands": 201,
+    "format_errors": 39,
+    "clock_phase_configurations": 3,
+    "physical_testing": false,
+    "passed": true
+  },
+  "cpu_tests": {
+    "scope": "actual pinned R65C02 executes original diagnostic ROM through dual-clock MMIO, real blitter/arbiter/SDRAM and unchanged pin/pixel models; no native scanout, frame ownership or complete board timing",
+    "completed_cpu_submissions": 654,
+    "cpu_instruction_fetches": 138802,
+    "cpu_write_cycles": 9792,
+    "acknowledged_cpu_irq_completions": 6,
+    "graphics_cycles": 2187211,
+    "clock_phase_configurations": 3,
+    "cold_and_warm_boots": 6,
+    "host_asset_uploads": 0,
+    "physical_testing": false,
+    "passed": true
+  },
+  "mapping": {
+    "scope": "dual-clock MMIO plus scaled blitter; no CPU/SDRAM or integrated route/timing",
+    "mapped_cells": {
+      "DFFR": 138,
+      "LUT4": 1187,
+      "LUT3": 586,
+      "MUX2_LUT5": 133,
+      "LUT1": 85,
+      "DFFRE": 1850,
+      "LUT2": 719,
+      "ALU": 1091,
+      "GND": 1,
+      "VCC": 1,
+      "$scopeinfo": 1,
+      "DFFE": 288
+    },
+    "passed": true
+  },
+  "cpu_source": "/nix/store/d40cn04xmnrlwwml4n678fwkrg0pc2vp-chipbuilder-r65c02-hdl",
+  "generated_cpu_sha256": "8f6fd5fcd0645e7b093b32c837ecead3678b7e5625e19232b911707dac6b8a66",
+  "diagnostic_rom_sha256": "b6c73e7a301e27eda925bc71ce6dbd987063a6f8e44ad1878628f8f0a531baa1",
+  "functional_checks_passed": true,
+  "frame_ownership_implemented": false,
+  "native_scanout_implemented": false,
+  "cpu_external_memory_stall_adapter": false,
+  "enhanced_system_place_route_passed": false,
+  "physical_testing": false,
+  "source_sha256": {
+    "firmware/enhanced-diagnostic.s": "a46d2df83cd660b864c94376c057e1d5230bfd0b49fd6a274cd9e57e92911f83",
+    "firmware/rom.cfg": "a8640e35b542d6f9b6d1a3c8422a07c08a9cdd84b300120a55577a80ef084eed",
+    "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
+    "hardware/enhanced/cb_blitter_mmio.sv": "494f8c0004d70995e1232c5dc08cb5cd0d200740445a3499efe8052ac1476fb0",
+    "hardware/enhanced/cb_graphics_arbiter.sv": "6d1dab63643100bae14936e07fbfd6c4b5e0191b5912f6ca0f19d164ae09e74c",
+    "hardware/enhanced/cb_graphics_sdram.sv": "2a8f83b7eba31332075f7cea9f94792a78622ae571f0b41f2a781a021e9a56b7",
+    "hardware/enhanced/cb_scaled_blitter.sv": "3df064b263a76c147c0c7c349805a6be95a1c61c15104d7d8f5270714593aaaa",
+    "hardware/tests/native-graphics-top.sv": "d92f70c546e8eddac11f06fb7b334fe58c7559e39b328638eb2e7e77a670523f",
+    "nix/enhanced.nix": "f2377e0d4adc1a85af3580ba17f4b50c50249fbcb4480e8d56dafd2592e08581",
+    "patches/r65c02-corrections.patch": "e0ff2532a998c5c891429276596ae705a3ff69452adc74f1e3f013aaf87f98f3",
+    "scripts/generate-cpu.py": "c004f7dede211cc7c6be31ba521ba26c01d0d03450d7b6aac7aa910aa9c3a756",
+    "sim/blitter-mmio.cpp": "bbbbbd385b5b411863cf2bbac4110d6cbda0cf6952f28c8efb24701b95721831",
+    "sim/native-graphics-model.hpp": "051d0e2fc738a8629e7cae863d1db3c5cd489b4c16f52d5e589389e89ac5399f",
+    "sim/native-graphics.cpp": "fd890c7560d0823e5339ce6a15b44ededb3104b19782e120c39a47d4a1fbc8fe",
+    "sim/scaled-blitter-model.hpp": "fad0455908a995f9ef9d7beb96fc9befc8bb69ad4adc4c43f4d7a1f614bac16c",
+    "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6"
+  },
+  "media_sha256": {
+    "docs/images/native-graphics-scene.png": "3f47074cef72b9e8d78bfdd9b324f5ec8cf48f6348539dc00ff75d441230786b"
+  }
+}

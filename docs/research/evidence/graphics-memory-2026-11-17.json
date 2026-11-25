@@ -1,0 +1,70 @@
+{
+  "reviewed_date": "2026-11-17",
+  "kind": "enhanced-memory-service",
+  "scope": "elastic round-robin arbiter and conservative auto-precharge SDRAM controller, standalone and blitter model evidence; no complete enhanced timing or physical qualification",
+  "artifact": "/nix/store/9q43vxfr6yxrj6ln613agwdl5qdjx0ih-chipbuilder-graphics-memory-check",
+  "service": {
+    "scope": "enhanced elastic arbiter and auto-precharge SDRAM RTL against unchanged independent pin/byte-lane models; no CPU, video scanout or physical timing qualification",
+    "accepted_transactions": 9394,
+    "completed_transactions": 9390,
+    "reset_cancelled_transactions": 4,
+    "bypass_launches": 4465,
+    "simultaneous_retire_accepts": 8990,
+    "continuous_requests": 6000,
+    "continuous_cycles": 36433,
+    "continuous_max_accepted_to_response_cycles": 14,
+    "continuous_max_offered_to_response_cycles": 25,
+    "refreshes": 132,
+    "max_refresh_gap_cycles": 509,
+    "resets": 8,
+    "physical_testing": false,
+    "passed": true
+  },
+  "mapping": {
+    "scope": "separately mapped enhanced arbiter/controller; no integrated route/timing",
+    "mapped_cells": {
+      "cb_graphics_arbiter": {
+        "LUT3": 133,
+        "MUX2_LUT5": 62,
+        "LUT4": 124,
+        "LUT1": 2,
+        "GND": 1,
+        "ALU": 2,
+        "LUT2": 3,
+        "DFFRE": 67,
+        "VCC": 1
+      },
+      "cb_graphics_sdram": {
+        "DFFRE": 127,
+        "LUT2": 24,
+        "ALU": 38,
+        "LUT4": 72,
+        "DFFR": 17,
+        "LUT3": 46,
+        "DFFS": 14,
+        "MUX2_LUT5": 43,
+        "MUX2_LUT6": 14,
+        "MUX2_LUT7": 6,
+        "LUT1": 24,
+        "MUX2_LUT8": 1,
+        "VCC": 1,
+        "GND": 1,
+        "DFFSE": 4,
+        "DFF": 9
+      }
+    },
+    "passed": true
+  },
+  "functional_checks_passed": true,
+  "enhanced_system_place_route_passed": false,
+  "physical_testing": false,
+  "source_sha256": {
+    "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
+    "hardware/enhanced/cb_graphics_arbiter.sv": "6d1dab63643100bae14936e07fbfd6c4b5e0191b5912f6ca0f19d164ae09e74c",
+    "hardware/enhanced/cb_graphics_sdram.sv": "2a8f83b7eba31332075f7cea9f94792a78622ae571f0b41f2a781a021e9a56b7",
+    "hardware/tests/graphics-memory-top.sv": "5f9500047d172a038e98600b34956ba28456496d9dafe34f8907090089950524",
+    "nix/enhanced.nix": "f2377e0d4adc1a85af3580ba17f4b50c50249fbcb4480e8d56dafd2592e08581",
+    "sim/graphics-memory.cpp": "cb8d1862a315c0b0f30247c877d8a4243a473e4b5a72dbcce8c7bfa8ed43f61c",
+    "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6"
+  }
+}

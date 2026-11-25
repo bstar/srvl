@@ -1,0 +1,30 @@
+{
+  "scope": "UART/packet/loader/controller simulation; no Lynx execution, board timing or physical testing",
+  "seed": "0x1ac00217",
+  "clock_hz": 64000000,
+  "baud": 460800,
+  "cycles": 12455777,
+  "memory_requests": 618859,
+  "memory_completions": 618858,
+  "refreshes": 24597,
+  "maximum_refresh_gap_clocks": 512,
+  "rom_word_pulses": 557153,
+  "bios_write_pulses": 1025,
+  "checked_serial_replies": 25,
+  "passed": true,
+  "reviewed_date": "2026-11-17",
+  "artifact": "/nix/store/a410azyvpg0jpkv1rcf5kbmjdv7g10mw-chipbuilder-tang-services-check",
+  "verilator": "Verilator 5.052 2026-09-05 rev v5.052",
+  "upstream_lynx_revision": "3708e457e413aa7a33f8bec8fcd79eba45ce4702",
+  "reset_cancelled_requests": 1,
+  "source_sha256": {
+    "hardware/tang/lynx_cart_bridge.sv": "a164ef8f2d6d693de91d39921213dec02c002fb35947647c9603d50ca1468b12",
+    "hardware/tang/lynx_loader.sv": "50fd88a14aa93b157faad92e6cf177b807472fc9395336ffe835ddbec2f93a3f",
+    "hardware/tang/lynx_packet.sv": "ae3915fac2d1790f837fff3254460e60d26519be8488ea0fb6266b333f2bf282",
+    "hardware/tang/lynx_sdram.sv": "659db31e45b93395b79af87b6bb0adf86e8a30d4c03b8945254edd0b6813d234",
+    "hardware/tang/lynx_uart.sv": "479166daca6fd557e2d02a4ad7ee6cc44d2de35abff1b84102f9e25d26fbb0e6",
+    "hardware/tests/tang-services-top.sv": "869465edecb6d06f21e80581a3fe228c95c8f1642ae0dc9208e833a876d20588",
+    "sim/tang-services.cpp": "324ffa9f5a96648c4996175c218e87c55fdc841471b7bbeadf5138d187508f27",
+    "sim/sdram-model.hpp": "886df1e5b02b6fcb9f1ca6e20250ca086a03bd2583df164cb0a0301043326210"
+  }
+}

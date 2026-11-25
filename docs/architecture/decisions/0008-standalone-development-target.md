@@ -1,7 +1,12 @@
 # 0008: Standalone development target and hardware tradeoffs
 
 Date: 2026-10-30
-Status: Accepted
+Status: Superseded
+
+Superseded for the immediate standalone prototype by
+[ADR 0009](0009-tang-prototype.md). The following ECP5 contract preserves the
+earlier decision and its calculations; enhanced graphics must be re-budgeted
+for Tang rather than treating these numbers as verified Tang performance.
 
 ## Context
 

@@ -1,5 +1,9 @@
 # Physical retro CPU with FPGA graphics
 
+Current update, 2026-11-15: [ADR 0009](decisions/0009-tang-prototype.md) keeps the
+CPU inside Tang Nano 20K for the first prototype. The ECP5 and physical-CPU
+comparisons below are historical alternative research.
+
 Date: 2026-10-30. Status: evaluated alternative, not selected for the first
 standalone target under [ADR 0008](decisions/0008-standalone-development-target.md).
 The [selected platform](standalone-platform.md) keeps the CPU in ECP5-12F because

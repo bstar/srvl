@@ -1,0 +1,678 @@
+{
+  "kind": "tang-board-build",
+  "reviewed_date": "2026-11-17",
+  "scope": "complete bench-board mapping, pin/clock packing and scoped route/Fmax report; incomplete timing models and no physical acceptance",
+  "artifacts": {
+    "mapping": "/nix/store/a3y5gkdmnh0c0nlpn0xa9546nlsv0938-chipbuilder-tang-board-mapping",
+    "checks": "/nix/store/24d8pjwsv5aiaxd0y0fdznvvkmdh3h2a-chipbuilder-tang-board-constraint-check",
+    "route": "/nix/store/1mpw0jw78rnsk21cfmjz4zgg617lfr3p-chipbuilder-tang-board-route",
+    "report": "/nix/store/aks3wc0km4dfakrbqhzl9dc2jjbh00x0-chipbuilder-tang-board-report",
+    "image": "/nix/store/1nhc4fs9998851v4w4nrrlcdrfp7iwrs-chipbuilder-tang-bench-bitstream"
+  },
+  "build": {
+    "scope": "complete bench-board mapping, pin/clock packing and scoped route/Fmax report; incomplete timing models and no physical acceptance",
+    "mapping": {
+      "scope": "complete bench-board top with original console, services, RGB/audio, clock/reset, serializer primitives and I/O; mapped only",
+      "mapped_cells": {
+        "OBUF": 42,
+        "LUT4": 9524,
+        "$scopeinfo": 281,
+        "IBUF": 5,
+        "DFFP": 9,
+        "rPLL": 2,
+        "CLKDIV": 1,
+        "DFFRE": 3113,
+        "ALU": 3620,
+        "DFFR": 737,
+        "TLVDS_OBUF": 4,
+        "MUX2_LUT5": 1090,
+        "DFFS": 28,
+        "OSER10": 4,
+        "DFFE": 1993,
+        "IOBUF": 32,
+        "GND": 1,
+        "VCC": 1,
+        "DFFSE": 70,
+        "DFF": 278,
+        "SDPX9B": 2,
+        "MUX2_LUT6": 26,
+        "MUX2_LUT7": 7,
+        "MUX2_LUT8": 2,
+        "MULT9X9": 9,
+        "MULT18X18": 3,
+        "DPX9B": 1,
+        "DPB": 32,
+        "DFFCE": 1
+      },
+      "block_rams": 35,
+      "registers": 6229,
+      "lut1_to_lut4_cells": 9524,
+      "alu_cells": 3620,
+      "top_level_bits": 79,
+      "place_and_route_passed": false,
+      "board_timing_signoff": false,
+      "physical_testing": false,
+      "passed_synthesis_checks": true
+    },
+    "constraints": {
+      "scope": "all mapped top-level bits assigned to reviewed package/die pads; explicit frequency targets, not I/O timing signoff",
+      "part": "GW2AR-LV18QN88C8/I7",
+      "covered_top_level_bits": 79,
+      "differential_pairs": 4,
+      "pins": {
+        "sys_ref": "10",
+        "video_ref": "11",
+        "audio_ref": "13",
+        "reset_button": "88",
+        "uart_rx": "70",
+        "uart_tx": "69",
+        "led_n[0]": "15",
+        "led_n[1]": "16",
+        "led_n[2]": "17",
+        "led_n[3]": "18",
+        "led_n[4]": "19",
+        "led_n[5]": "20",
+        "sdram_clk": "IOR11B",
+        "sdram_cke": "IOL13A",
+        "sdram_cs_n": "IOL14B",
+        "sdram_cas_n": "IOL14A",
+        "sdram_ras_n": "IOL13B",
+        "sdram_we_n": "IOL12B",
+        "sdram_dqm[0]": "IOL12A",
+        "sdram_dqm[1]": "IOR11A",
+        "sdram_dqm[2]": "IOL18A",
+        "sdram_dqm[3]": "IOR15B",
+        "sdram_a[0]": "IOR14A",
+        "sdram_a[1]": "IOR13B",
+        "sdram_a[2]": "IOR14B",
+        "sdram_a[3]": "IOR15A",
+        "sdram_a[4]": "IOL16B",
+        "sdram_a[5]": "IOL17B",
+        "sdram_a[6]": "IOL16A",
+        "sdram_a[7]": "IOL17A",
+        "sdram_a[8]": "IOL15B",
+        "sdram_a[9]": "IOL15A",
+        "sdram_a[10]": "IOR12B",
+        "sdram_ba[0]": "IOR13A",
+        "sdram_ba[1]": "IOR12A",
+        "sdram_dq[0]": "IOL3A",
+        "sdram_dq[1]": "IOL3B",
+        "sdram_dq[2]": "IOL8A",
+        "sdram_dq[3]": "IOL8B",
+        "sdram_dq[4]": "IOL9A",
+        "sdram_dq[5]": "IOL9B",
+        "sdram_dq[6]": "IOL11A",
+        "sdram_dq[7]": "IOL11B",
+        "sdram_dq[8]": "IOR9B",
+        "sdram_dq[9]": "IOR9A",
+        "sdram_dq[10]": "IOR5B",
+        "sdram_dq[11]": "IOR6A",
+        "sdram_dq[12]": "IOR5A",
+        "sdram_dq[13]": "IOR4B",
+        "sdram_dq[14]": "IOR3B",
+        "sdram_dq[15]": "IOR3A",
+        "sdram_dq[16]": "IOL39B",
+        "sdram_dq[17]": "IOL39A",
+        "sdram_dq[18]": "IOL35B",
+        "sdram_dq[19]": "IOL35A",
+        "sdram_dq[20]": "IOL30B",
+        "sdram_dq[21]": "IOL30A",
+        "sdram_dq[22]": "IOL20A",
+        "sdram_dq[23]": "IOL18B",
+        "sdram_dq[24]": "IOR17A",
+        "sdram_dq[25]": "IOR16A",
+        "sdram_dq[26]": "IOR16B",
+        "sdram_dq[27]": "IOR17B",
+        "sdram_dq[28]": "IOR18A",
+        "sdram_dq[29]": "IOR18B",
+        "sdram_dq[30]": "IOR44A",
+        "sdram_dq[31]": "IOR44B",
+        "tmds_clock_p": "33",
+        "tmds_clock_n": "34",
+        "tmds_data_p[0]": "35",
+        "tmds_data_p[1]": "37",
+        "tmds_data_p[2]": "39",
+        "tmds_data_n[0]": "36",
+        "tmds_data_n[1]": "38",
+        "tmds_data_n[2]": "40",
+        "amplifier_enable": "51",
+        "audio_sd": "54",
+        "audio_ws": "55",
+        "audio_bclk": "56"
+      },
+      "clock_targets_hz": {
+        "sys_ref": 64000000,
+        "video_ref": 25200000,
+        "audio_ref": 12288000,
+        "clocks.sys_clk": 64000000,
+        "clocks.serial_clk": 126000000,
+        "clocks.pixel_clk": 25200000,
+        "clocks.sdram_clk": 64000000,
+        "control.audio_clk": 12288000
+      },
+      "clock_primitive_parameters": {
+        "clocks.system_pll": {
+          "output_hz": 64000000,
+          "calculated_vco_hz": 512000000,
+          "phase_parameter": "1000"
+        },
+        "clocks.video_pll": {
+          "output_hz": 126000000,
+          "calculated_vco_hz": 504000000,
+          "phase_parameter": "0000"
+        }
+      },
+      "unconstrained_top_level_bits": [],
+      "physical_testing": false,
+      "passed": true
+    },
+    "normalization": {
+      "scope": "per-cell combinational equivalence of small-LUT to LUT4 normalization; no DSP/I/O timing qualification",
+      "converted_cells": {
+        "LUT3": 2684,
+        "LUT1": 638,
+        "LUT2": 1471
+      },
+      "exhaustive_original_input_cases": 28632,
+      "unused_inputs": "constant zero",
+      "truth_table_equivalence_passed": true
+    },
+    "timing_model_coverage": {
+      "scope": "actual pinned binary cell-timing model coverage, not complete path or board timing signoff",
+      "part": "GW2AR-LV18QN88C8/I7",
+      "speed_grade": "C8/I7",
+      "database_version": 6,
+      "database_sha256": "dc1a320db124b30d299804faa292b919f64bb4127f643be39dae792a7ea00eef",
+      "reviewed_tool_source_sha256": {
+        "himbaechel/chipdb.h": "1c5f03f1bfbf7d2e3fba0accb706b6c15e200c9f381f60eaac2ac4014866db51",
+        "common/kernel/relptr.h": "4fe23853c93c61d2a26f404f59e71bd39f13596e1977a5c8713c681586e0eba3",
+        "himbaechel/arch.cc": "b3830fba2bc619e38a3b8f8bcdd4004927c377866911a01358f6b741dc7bd764",
+        "himbaechel/uarch/gowin/gowin_arch_gen.py": "15400f4b1601eb9fe1475a0667ebc80ff48a904c017f1b9b1925d07db62b9cf3",
+        "common/kernel/sdc.cc": "c1707113def30aa5964516304b7bdec31c721a536f8f882826cc0aca5f0084b3",
+        "himbaechel/uarch/gowin/constids.inc": "0b39cb1807c085409afe020a30f1d80ba4f08541edf5a508fddb04451bceedbb"
+      },
+      "available_cell_models": {
+        "LUT4": {
+          "pins": 1,
+          "combinational_arcs": 4,
+          "register_arcs": 0
+        },
+        "MUX2_LUT5": {
+          "pins": 1,
+          "combinational_arcs": 3,
+          "register_arcs": 0
+        },
+        "MUX2_LUT6": {
+          "pins": 1,
+          "combinational_arcs": 3,
+          "register_arcs": 0
+        },
+        "MUX2_LUT7": {
+          "pins": 1,
+          "combinational_arcs": 3,
+          "register_arcs": 0
+        },
+        "MUX2_LUT8": {
+          "pins": 1,
+          "combinational_arcs": 3,
+          "register_arcs": 0
+        },
+        "ALU": {
+          "pins": 2,
+          "combinational_arcs": 8,
+          "register_arcs": 0
+        },
+        "DFF": {
+          "pins": 4,
+          "combinational_arcs": 0,
+          "register_arcs": 3
+        },
+        "DFFE": {
+          "pins": 4,
+          "combinational_arcs": 0,
+          "register_arcs": 3
+        },
+        "DFFS": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFSE": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFR": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFRE": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFP": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFPE": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFC": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFCE": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFN": {
+          "pins": 4,
+          "combinational_arcs": 0,
+          "register_arcs": 3
+        },
+        "DFFNE": {
+          "pins": 4,
+          "combinational_arcs": 0,
+          "register_arcs": 3
+        },
+        "DFFNS": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFNSE": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFNR": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFNRE": {
+          "pins": 5,
+          "combinational_arcs": 0,
+          "register_arcs": 4
+        },
+        "DFFNP": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFNPE": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFNC": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "DFFNCE": {
+          "pins": 5,
+          "combinational_arcs": 1,
+          "register_arcs": 4
+        },
+        "RAM16SDP4": {
+          "pins": 14,
+          "combinational_arcs": 16,
+          "register_arcs": 13
+        },
+        "DP": {
+          "pins": 158,
+          "combinational_arcs": 0,
+          "register_arcs": 156
+        },
+        "DPB": {
+          "pins": 158,
+          "combinational_arcs": 0,
+          "register_arcs": 156
+        },
+        "DPX9B": {
+          "pins": 174,
+          "combinational_arcs": 0,
+          "register_arcs": 172
+        },
+        "SP": {
+          "pins": 86,
+          "combinational_arcs": 0,
+          "register_arcs": 85
+        },
+        "SPX9": {
+          "pins": 109,
+          "combinational_arcs": 0,
+          "register_arcs": 149
+        },
+        "SDP": {
+          "pins": 106,
+          "combinational_arcs": 0,
+          "register_arcs": 104
+        },
+        "SDPB": {
+          "pins": 106,
+          "combinational_arcs": 0,
+          "register_arcs": 104
+        },
+        "SDPX9B": {
+          "pins": 114,
+          "combinational_arcs": 0,
+          "register_arcs": 112
+        },
+        "SDPX9": {
+          "pins": 114,
+          "combinational_arcs": 0,
+          "register_arcs": 112
+        },
+        "DPX9": {
+          "pins": 174,
+          "combinational_arcs": 0,
+          "register_arcs": 172
+        }
+      },
+      "mapped_cell_counts": {
+        "OBUF": 42,
+        "LUT4": 9524,
+        "$scopeinfo": 281,
+        "IBUF": 5,
+        "DFFP": 9,
+        "rPLL": 2,
+        "CLKDIV": 1,
+        "DFFRE": 3113,
+        "ALU": 3620,
+        "DFFR": 737,
+        "TLVDS_OBUF": 4,
+        "MUX2_LUT5": 1090,
+        "DFFS": 28,
+        "OSER10": 4,
+        "DFFE": 1993,
+        "IOBUF": 32,
+        "GND": 1,
+        "VCC": 1,
+        "DFFSE": 70,
+        "DFF": 278,
+        "SDPX9B": 2,
+        "MUX2_LUT6": 26,
+        "MUX2_LUT7": 7,
+        "MUX2_LUT8": 2,
+        "MULT9X9": 9,
+        "MULT18X18": 3,
+        "DPX9B": 1,
+        "DPB": 32,
+        "DFFCE": 1
+      },
+      "cell_types_without_models": {
+        "CLKDIV": 1,
+        "GND": 1,
+        "IBUF": 5,
+        "IOBUF": 32,
+        "MULT18X18": 3,
+        "MULT9X9": 9,
+        "OBUF": 42,
+        "OSER10": 4,
+        "TLVDS_OBUF": 4,
+        "VCC": 1,
+        "rPLL": 2
+      },
+      "missing_fabric_models": [],
+      "fabric_model_presence_passed": true,
+      "unsupported_or_unqualified": [
+        "DSP delay arcs",
+        "OSER10 and serializer phase",
+        "PLL/clock phase and jitter",
+        "external SDRAM setup/hold and read capture",
+        "external I/O budgets",
+        "CDC/metastability and reset recovery",
+        "complete hold/path coverage"
+      ],
+      "sdc_limitations": {
+        "set_false_path": "parsed but not applied",
+        "input_output_delay_commands": "unsupported by pinned generic parser"
+      },
+      "complete_board_timing_signoff": false,
+      "physical_testing": false
+    },
+    "route": {
+      "artifact": "/nix/store/1mpw0jw78rnsk21cfmjz4zgg617lfr3p-chipbuilder-tang-board-route",
+      "exit_code": 0,
+      "utilization": {
+        "ALU": {
+          "available": 15552,
+          "used": 4228
+        },
+        "ALU54D": {
+          "available": 24,
+          "used": 0
+        },
+        "BSRAM": {
+          "available": 46,
+          "used": 35
+        },
+        "BUFG": {
+          "available": 24,
+          "used": 2
+        },
+        "CLKDIV": {
+          "available": 8,
+          "used": 1
+        },
+        "CLKDIV2": {
+          "available": 16,
+          "used": 0
+        },
+        "DCS": {
+          "available": 8,
+          "used": 0
+        },
+        "DFF": {
+          "available": 15552,
+          "used": 6229
+        },
+        "DHCEN": {
+          "available": 24,
+          "used": 0
+        },
+        "DQCE": {
+          "available": 24,
+          "used": 0
+        },
+        "DUMMY_CELL": {
+          "available": 0,
+          "used": 21
+        },
+        "GND": {
+          "available": 1,
+          "used": 1
+        },
+        "GSR": {
+          "available": 1,
+          "used": 1
+        },
+        "IOB": {
+          "available": 384,
+          "used": 47
+        },
+        "IOBUF": {
+          "available": 0,
+          "used": 32
+        },
+        "IOLOGICI": {
+          "available": 384,
+          "used": 0
+        },
+        "IOLOGICO": {
+          "available": 384,
+          "used": 4
+        },
+        "IOLOGIC_DUMMY": {
+          "available": 0,
+          "used": 4
+        },
+        "LUT4": {
+          "available": 20736,
+          "used": 13414
+        },
+        "MULT18X18": {
+          "available": 48,
+          "used": 3
+        },
+        "MULT36X36": {
+          "available": 12,
+          "used": 0
+        },
+        "MULT9X9": {
+          "available": 96,
+          "used": 9
+        },
+        "MULTADDALU18X18": {
+          "available": 24,
+          "used": 0
+        },
+        "MULTALU18X18": {
+          "available": 24,
+          "used": 0
+        },
+        "MULTALU36X18": {
+          "available": 24,
+          "used": 0
+        },
+        "MUX2_LUT5": {
+          "available": 10368,
+          "used": 1090
+        },
+        "MUX2_LUT6": {
+          "available": 5184,
+          "used": 26
+        },
+        "MUX2_LUT7": {
+          "available": 2592,
+          "used": 7
+        },
+        "MUX2_LUT8": {
+          "available": 2592,
+          "used": 2
+        },
+        "OSC": {
+          "available": 1,
+          "used": 0
+        },
+        "PADD18": {
+          "available": 48,
+          "used": 0
+        },
+        "PADD9": {
+          "available": 96,
+          "used": 0
+        },
+        "RAM16SDP4": {
+          "available": 648,
+          "used": 0
+        },
+        "VCC": {
+          "available": 1,
+          "used": 1
+        },
+        "rPLL": {
+          "available": 2,
+          "used": 2
+        }
+      },
+      "reported_fmax_mhz": {
+        "clocks.pixel_clk": {
+          "achieved": 80.97821807861328,
+          "constraint": 25.20034408569336
+        },
+        "clocks.sys_clk": {
+          "achieved": 69.38180541992188,
+          "constraint": 64
+        },
+        "control.audio_clk": {
+          "achieved": 207.5980987548828,
+          "constraint": 12.288031578063965
+        }
+      },
+      "applied_clock_targets_mhz": {
+        "sys_ref": 64.0,
+        "video_ref": 25.2,
+        "audio_ref": 12.29,
+        "clocks.sys_clk": 64.0,
+        "clocks.serial_clk": 126.0,
+        "clocks.pixel_clk": 25.2,
+        "clocks.sdram_clk": 64.0,
+        "control.audio_clk": 12.29
+      },
+      "missing_or_wrong_targets": [],
+      "required_domain_checks": {
+        "clocks.sys_clk": true,
+        "clocks.pixel_clk": true,
+        "control.audio_clk": true
+      },
+      "scoped_route_checks_passed": true
+    },
+    "complete_board_timing_signoff": false,
+    "physical_testing": false
+  },
+  "image": {
+    "file": "lynx-tang-bench.fs",
+    "sha256": "e29c6e9333f9922291dc86d718c2e64c274f0668491a38f4f98efaf5d04d3b4b",
+    "file_bytes": 7261470,
+    "fuse_packing_passed": true,
+    "programmed_hardware": false,
+    "source_bundle_derivation_evaluated": "/nix/store/ch7g4dlz1cay1nzh9zc2xss72508dy6w-chipbuilder-tang-bench-bitstream.drv",
+    "source_bundle_evaluation_matches_original": true
+  },
+  "historical_runs": [
+    {
+      "artifact": "/nix/store/0k35x65fjaikncjdcra4a4kpgcls8n7y-chipbuilder-tang-board-route",
+      "acceptance": false,
+      "reason": "No small-LUT timing models; audio input target did not propagate internally"
+    },
+    {
+      "artifact": "/nix/store/fbs32dqsb7ia06qisdmvgxvchw60851w-chipbuilder-tang-board-route",
+      "acceptance": false,
+      "reason": "Scoped route passed after LUT normalization; fuse packing rejected emulated LVDS on true-LVDS pins"
+    }
+  ],
+  "source_sha256": {
+    "hardware/audio/cb_audio_lowpass.sv": "6a89e16ff06f565dd46edbdd3dd87dd73010d30dbc9357116e547a4a98b0051f",
+    "hardware/audio/cb_i2s_tx.sv": "db1f8e0d5ad07cd3645ca3e1e4bf5b5bd826ce0673cc09148dcd4574f6ced015",
+    "hardware/audio/cb_stereo_mailbox.sv": "e5b52c600a28e915a40e85a8e75622bf3345ddcb2b650e028f4392d2f338e227",
+    "hardware/audio/lynx_audio_output.sv": "bbfb15787279dd3a9d409d497ccbfb098ca6b2d896b6cdeab583a46df0d6660f",
+    "hardware/boards/tang_nano20k/cb_board_control.sv": "ee1acee915ba787a86ee83c0d1fe72fc79dbc6e637885bf2781521e7751c79f4",
+    "hardware/boards/tang_nano20k/cb_reset_sync.sv": "82fac35f3e283cd31adb6774c6251e70fe5fdb01a8f62d418d01e6b0db6d2022",
+    "hardware/boards/tang_nano20k/gowin_board_clocks.sv": "31212baaee9eaf2fa90fbc98c9c126622ceb1a4132debb7e9eeac6290a6d661b",
+    "hardware/boards/tang_nano20k/gowin_dvi_tx.sv": "64a7b31af9ca9142e4c0652584e9bf8acb10d51f131800e35f4eed21e0c2f602",
+    "hardware/boards/tang_nano20k/lynx_tang_board.sv": "e6c56e8e5d1069ca01884fa141d111e86db4555dba507e77f16ea3f8548b42a8",
+    "hardware/display/cb_dvi_symbols.sv": "50860186ffc7776483172879ff2f0aa3c317c87f1b2a4d158a3c9ad97dd3b0a0",
+    "hardware/display/cb_tmds_encoder.sv": "8b09cdfa04d15a7611a2010ad4f6ed1de9a8e52ad2f3af62b42908391166cc55",
+    "hardware/tang/cb_memory_arbiter.sv": "896e79aad7da9752dc490c01ecc50ca46c9404bbddda96f852fc6e45c2bd40fd",
+    "hardware/tang/lynx_cart_bridge.sv": "77ff7d6e79bbfaad4ea900af3d65fc18d0b51f61fba00c26532484957c8604d8",
+    "hardware/tang/lynx_loader.sv": "9078ae853e7d38627101fc0ab1969c034eaea00eb3828666e1340ecf6614f7e8",
+    "hardware/tang/lynx_packet.sv": "ae3915fac2d1790f837fff3254460e60d26519be8488ea0fb6266b333f2bf282",
+    "hardware/tang/lynx_sdram.sv": "659db31e45b93395b79af87b6bb0adf86e8a30d4c03b8945254edd0b6813d234",
+    "hardware/tang/lynx_tang_system.sv": "e1f39fdb57ec1a263c99fec68d5f607921bdfb5b1164e1af32769f85d5f37a86",
+    "hardware/tang/lynx_uart.sv": "88dca470f5111e120cf9925df686fef7e800a24db1b67ada3ea016fa1b6cf9f6",
+    "hardware/video/cb_sync_fifo.sv": "3639e8aed972c636f0df9f78ab6925b0f6353f26f2a9d44b9d54b515fc9b4fd0",
+    "hardware/video/lynx_frame_capture.sv": "9146a2ee577f97cff1ccde409f3ea29f1908c5fb5011e5ea0a365619dc409346",
+    "hardware/video/lynx_scanout.sv": "2329bab93cd098313cc35dbf1c8fabf87ca7da59678b32eb373cd1c987479ca5",
+    "hardware/boards/tang_nano20k/pins.json": "7a2885224cc74c417861b04e79f9b12afe43881a198ea402e87b127cfc639f44",
+    "nix/tang-bitstream.nix": "314d77a35668f69042825391ba752fda00d27e466f3fda7bb96ed6077691fdb5",
+    "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
+    "scripts/prepare-tang-board.py": "5e4b15efe8d1874b9ffe29cc67ab3329555cf88e986e34e571f75f01d1771b8b",
+    "scripts/check-tang-constraints.py": "08087ec4ac213c024caded79d5292c7a8e861d352d4bcb5d54be1f3738d895ab",
+    "scripts/normalize-gowin-luts.py": "a77a571bde9f3aa3fa477f3720d9b5a5b06b6b54d92f42800976f8b599a73a51",
+    "scripts/report-gowin-timing-coverage.py": "adb4f55a2e1697b38e0bae049e09716be2530dae7bed94e55eeb9978d8390bd1",
+    "scripts/report-tang-board-build.py": "c83088082cb2547d6420cb4f0a5cd905b7dad8838b13daf9af35d518f2e3ff1d",
+    "scripts/prepare-lynx-audit.py": "459c469c67a46c6a471b9d8583696fa337623f3da64a3f3da6439a631f2fdab6"
+  },
+  "complete_board_timing_signoff": false,
+  "physical_testing": false
+}

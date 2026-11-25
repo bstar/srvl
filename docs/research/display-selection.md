@@ -57,13 +57,22 @@ clear 60 fps gameplay based on the interface rate alone.
 
 ## Resolution and integration
 
+**Owner clarification, 2026-11-17:** Lynx mode must fill the 320 × 204 logical
+screen at exact 2× with **no added borders**. Preserve every source pixel.
+The final visible panel area/interface must satisfy that mapping. The old
+letterboxed arithmetic below explains an aspect-ratio mismatch; it is **not an
+accepted final layout**. Optical candidates in this dated shortlist have not
+been qualified against the border-free requirement.
+
 | Landscape panel area | Enhanced image | Legacy image | Borders |
 |---|---|---|---|
 | 320 × 240 | 320 × 204, native | 160 × 102 at 2× | 18 rows above/below |
 | 640 × 480 | 320 × 204 at 2× | 160 × 102 at 4× | 36 rows above/below |
 
-These preserve square pixels and aspect ratio. Physical LCD resolution does not
-require the game to render a larger framebuffer. A conventional backlit IPS panel
+These historical examples preserve square pixels/aspect ratio but add borders,
+so they do not satisfy the clarified final presentation requirement. Physical
+LCD resolution does not require the game to render a larger framebuffer.
+A conventional backlit IPS panel
 such as EastRising ER-TFT035-7 is a fallback; it is not a qualified transflective
 replacement and its exact timing/motion also needs validation.
 
@@ -86,7 +95,8 @@ minimum quantity, stock/lead time, and lifecycle confirmation. Then test:
 
 1. Native 60 Hz operation with a unique frame counter; check dropped/repeated frames.
 2. Scrolling pixel art, small text and high-contrast moving sprites at 60 fps.
-3. Legacy scaling and representative Lynx palette ramps, without cropping/stretching.
+3. Exact logical 2× legacy scaling, all source edges and palette ramps, with no
+   added borders or cropped game content in the final visible area.
 4. Backlight dimming, indoor/dark play, sunlight readability and off-axis viewing.
 5. Total LCD/backlight/driver power and rotation/scanout memory bandwidth.
 

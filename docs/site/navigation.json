@@ -1,0 +1,220 @@
+{
+  "reviewed": "2026-11-17",
+  "audit_evidence": "docs/research/evidence/lynx-tang20k-2026-11-17.json",
+  "integration_evidence": "docs/research/evidence/tang-audio-2026-11-17.json",
+  "design_evidence": [
+    "docs/research/evidence/tang-output-2026-11-17.json",
+    "docs/research/evidence/tang-board-2026-11-17.json",
+    "docs/research/evidence/scaled-blitter-2026-11-17.json",
+    "docs/research/evidence/graphics-memory-2026-11-17.json",
+    "docs/research/evidence/native-graphics-2026-11-17.json"
+  ],
+  "groups": [
+    {
+      "title": "Project",
+      "pages": [
+        {
+          "source": "docs/project-status.md",
+          "label": "Overview",
+          "state": "Current",
+          "summary": "The target, what works today, and the boundaries of our evidence."
+        },
+        {
+          "source": "docs/roadmap.md",
+          "label": "Work plan",
+          "state": "In progress",
+          "summary": "The sequence of work and the evidence needed to close each gate."
+        },
+        {
+          "source": "docs/tradeoffs.md",
+          "label": "Open decisions",
+          "state": "Open",
+          "summary": "Alternatives, compromises, dependencies and when we need to decide."
+        }
+      ]
+    },
+    {
+      "title": "Chip design",
+      "pages": [
+        {
+          "source": "docs/chip-design/overview.md",
+          "label": "Design handbook",
+          "state": "Current",
+          "summary": "Detailed circuit diagrams, engine contracts, implementation status and open decisions."
+        },
+        {
+          "source": "docs/chip-design/sprites.md",
+          "label": "Scaled sprites",
+          "state": "Scoped evidence",
+          "summary": "Implemented scaling/fill engine: exact sampling, masks, fences and measured SDRAM workloads."
+        },
+        {
+          "source": "docs/chip-design/compositor.md",
+          "label": "Parallax & composition",
+          "state": "Proposed",
+          "summary": "Independent tile planes, object bands, priority, palette and completed scanlines."
+        },
+        {
+          "source": "docs/chip-design/geometry.md",
+          "label": "Geometry & triangles",
+          "state": "Proposed",
+          "summary": "CPU scene preparation, fixed-point math, edge coverage and flat triangle filling."
+        },
+        {
+          "source": "docs/chip-design/memory.md",
+          "label": "Memory & timing",
+          "state": "In progress",
+          "summary": "Queues, arbitration, refresh, CPU stalls, clock crossings and frame ownership."
+        },
+        {
+          "source": "docs/chip-design/system.md",
+          "label": "System & boot ROM",
+          "state": "Proposed",
+          "summary": "Safe startup, system firmware, loading, commit, game handoff and recovery."
+        },
+        {
+          "source": "docs/chip-design/audio.md",
+          "label": "Stereo audio logic",
+          "state": "Scoped evidence",
+          "summary": "Fixed-point filtering, coherent stereo transfer, I2S framing and physical output choices."
+        },
+        {
+          "source": "docs/chip-design/board-output.md",
+          "label": "Clocks & display output",
+          "state": "Scoped evidence",
+          "summary": "Clock islands, reset release, TMDS encoding and the physical serializer boundary."
+        },
+        {
+          "source": "docs/chip-design/legacy.md",
+          "label": "Lynx logic boundary",
+          "state": "Scoped evidence",
+          "summary": "Retained upstream CPU/Suzy/Mikey and the new board/presentation path."
+        },
+        {
+          "source": "docs/chip-design/verification.md",
+          "label": "Verification gates",
+          "state": "Current",
+          "summary": "From interface contracts and reference models to synthesis, timing and physical acceptance."
+        }
+      ]
+    },
+    {
+      "title": "System design",
+      "pages": [
+        {
+          "source": "docs/hardware.md",
+          "label": "Hardware choices",
+          "state": "Current",
+          "summary": "The prototype board, internal and external functions, cost boundaries and handheld dependencies."
+        },
+        {
+          "source": "docs/architecture/tang-prototype.md",
+          "label": "Tang architecture",
+          "state": "In progress",
+          "summary": "The current legacy-console port: integrated CPU, memory and board services."
+        },
+        {
+          "source": "docs/architecture/enhanced-target.md",
+          "label": "Enhanced graphics",
+          "state": "Proposed",
+          "summary": "Scaled sprites, parallax, dense objects and basic 3D: desired behavior and bounded workloads."
+        },
+        {
+          "source": "docs/architecture/native-graphics-mmio.md",
+          "label": "Native graphics MMIO",
+          "state": "Scoped evidence",
+          "summary": "Implemented registers, descriptor encoding, dual-clock commands, IRQ and actual CPU diagnostic evidence."
+        },
+        {
+          "source": "docs/architecture/provenance.md",
+          "label": "Original & reused",
+          "state": "Current",
+          "summary": "What we author, what we reuse, and which CPU belongs to each configuration."
+        },
+        {
+          "source": "docs/architecture/software-prototype.md",
+          "label": "Software prototype",
+          "state": "Software verified",
+          "summary": "The working native system, memory map, game, graphics, timers and audio."
+        },
+        {
+          "source": "docs/research/display-selection.md",
+          "label": "Display research",
+          "state": "Open",
+          "summary": "Backlit color LCD requirements, historical shortlist and qualification gates."
+        },
+        {
+          "source": "docs/architecture/standalone-platform.md",
+          "label": "Earlier ECP5 budget",
+          "state": "Historical",
+          "summary": "Preserved platform calculations; enhanced resources need re-budgeting for Tang."
+        }
+      ]
+    },
+    {
+      "title": "Decisions & evidence",
+      "pages": [
+        {
+          "source": "docs/architecture/decisions/README.md",
+          "label": "Decision records",
+          "state": "Current",
+          "summary": "Accepted choices, superseded records and their reasoning."
+        },
+        {
+          "source": "docs/research/lynx-tang20k-compatibility.md",
+          "label": "Lynx feasibility audit",
+          "state": "Scoped evidence",
+          "summary": "Exact source, RAM behavior, measured core fit and core-only timing."
+        },
+        {
+          "source": "docs/milestones/tang-board-services.md",
+          "label": "Tang service acceptance",
+          "state": "Software verified",
+          "summary": "UART/CRC loading, commit protection, cartridge caching, SDRAM command tests and exact evidence limits."
+        },
+        {
+          "source": "docs/milestones/tang-video.md",
+          "label": "Buffered RGB acceptance",
+          "state": "Software verified",
+          "summary": "Real-console exact 2× output, cross-clock line ownership, contention, fault recovery and portable-system mapping."
+        },
+        {
+          "source": "docs/milestones/tang-audio.md",
+          "label": "Stereo audio acceptance",
+          "state": "Software verified",
+          "summary": "Actual Mikey tones, pin-decoded stereo, signed filtering, mute/reload and audiovisual mapping."
+        },
+        {
+          "source": "docs/milestones/playable-software-prototype.md",
+          "label": "Software acceptance",
+          "state": "Software verified",
+          "summary": "Recorded functional tests, original game revisions and verification limits."
+        },
+        {
+          "source": "docs/milestones/tang-board-build.md",
+          "label": "Tang board build",
+          "state": "In progress",
+          "summary": "Complete bench top, checked pins/clocks, packing, routing and timing-model coverage."
+        },
+        {
+          "source": "docs/milestones/scaled-blitter.md",
+          "label": "Scaled-blitter evidence",
+          "state": "Scoped evidence",
+          "summary": "Original drawing logic, exact pixels, memory integration, resources and bounded renderer frame budgets."
+        },
+        {
+          "source": "docs/milestones/enhanced-memory.md",
+          "label": "Enhanced memory evidence",
+          "state": "Scoped evidence",
+          "summary": "Elastic arbitration, conservative SDRAM timing, fairness, reset recovery and measured rendering throughput."
+        },
+        {
+          "source": "docs/documentation.md",
+          "label": "Keep docs current",
+          "state": "Workflow",
+          "summary": "Build, review and update this local documentation snapshot."
+        }
+      ]
+    }
+  ]
+}

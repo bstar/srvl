@@ -1,4 +1,9 @@
-# First standalone development target
+# Earlier ECP5 development contract
+
+**Historical platform record:** [ADR 0009](decisions/0009-tang-prototype.md)
+selects Tang Nano 20K for the current standalone prototype. Read the
+[current Tang architecture](tang-prototype.md) first. The ECP5/x16 budgets below
+remain useful calculations, but do not establish Tang performance or fit.
 
 Date: 2026-10-30. Status: selected engineering target under
 [ADR 0008](decisions/0008-standalone-development-target.md). Physical acceptance,

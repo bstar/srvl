@@ -8,22 +8,30 @@ New games target **320 × 204** native rendering. Legacy Lynx games retain
 **160 × 102** rendering and receive exact 2× visual scaling. A color display with
 a **backlight** is required; the exact panel remains under investigation.
 
+For the HTML review area, run `nix run .#docs` and open
+<http://127.0.0.1:8787>. It covers the current target, architecture, decision
+history, open tradeoffs, work plan and evidence. The
+[documentation workflow](docs/documentation.md) explains building and updating it.
+
 This repository contains the development environment, research, architecture
 records, a CPU-driven software prototype with an original game, and a separate
 display/controller/audio bring-up core built for MiSTer. It contains no PCB or
-verified Lynx compatibility core.
+physically verified Lynx compatibility core. The separate Lynx feasibility audit
+passes its software and core-only resource/timing gates; board integration is in progress.
 See the [prototype build and hardware instructions](hardware/README.md).
 Simulation and Quartus compilation pass. Physical testing is deferred at the
 owner's request; development proceeds using software simulation under
 [ADR 0004](docs/architecture/decisions/0004-software-first-validation.md). The
 [acceptance record](docs/milestones/first-mister-prototype.md) contains the RBF
 hash, timing results, and remaining checks.
-Existing MiSTer hardware remains available for bring-up. The selected standalone
-development target is **ECP5-12F with the 65C02 inside, x16 SDRAM and QSPI flash**;
-see the [hardware tradeoffs and resource contract](docs/architecture/standalone-platform.md).
-This target is not yet a complete bitstream or PCB. The approximately US$17 FPGA
-exceeds the earlier US$10 aspiration; no hardware purchase is implied. Physical
-CPUs and manufactured custom chips remain possible later destinations.
+Existing MiSTer hardware remains available for bring-up. The current standalone
+prototype target is **Tang Nano 20K with the Lynx CPU inside the FPGA** under
+[ADR 0009](docs/architecture/decisions/0009-tang-prototype.md); see the
+[current integration architecture](docs/architecture/tang-prototype.md).
+The [earlier ECP5 contract](docs/architecture/standalone-platform.md) remains
+historical reference. Neither the complete Tang board port nor enhanced graphics
+fit has been demonstrated. Physical CPUs and manufactured custom chips remain
+possible later destinations.
 
 ## Play the software prototype
 
@@ -109,10 +117,30 @@ nix --extra-experimental-features 'nix-command flakes' build .#lynx-audit-route-
 ```
 
 The [compatibility audit](docs/research/lynx-tang20k-compatibility.md) separates
-the pinned upstream console from MiSTer's infrastructure. The route probe uses
+the original console from board services. The new
+[Tang service and console integration milestone](docs/milestones/tang-board-services.md)
+covers the UART/CRC host loader, guarded image commit, SDRAM/controller tests,
+cartridge cache, ordered RGB frames and warm-reset correction. Reproduce with:
+
+```sh
+nix --extra-experimental-features 'nix-command flakes' build .#tang-services-check .#lynx-link-check .#lynx-tang-core-check .#video-fifo-check .#frame-capture-check -L
+nix --extra-experimental-features 'nix-command flakes' run .#lynx-link -- inspect path/to/owned-game.lnx
+```
+
+The [buffered-video milestone](docs/milestones/tang-video.md) adds the capture,
+shared memory arbiter and dual-clock line buffers. Patterned console output now
+passes exact 2× pixel comparisons on a centered 320×204 canvas. Reproduce with
+`nix build .#video-pipeline-check .#lynx-tang-video-check .#tang-system-sizing`.
+The [stereo audio milestone](docs/milestones/tang-audio.md) adds signed filtering,
+coherent left/right transfer and pin-decoded I²S from actual Mikey-generated tones
+while video runs. Use `nix build .#audio-output-check .#lynx-tang-av-check .#tang-av-sizing`.
+These are software/mapping checks. Video serialization, analog audio, full board
+timing, physical testing and enhanced-engine implementation remain ahead.
+
+The route probe separates the pinned console from MiSTer's infrastructure, uses
 registered test boundaries and retains failures as evidence; inspect its exit
 code and timing report. It is not a playable Tang image or board acceptance.
-The baseline console passed the registered-core 64 MHz route test, using 56% of
+The corrected baseline console passed the registered-core 64 MHz route test, using 56.5% of
 logic sites and 33/46 block RAMs after routing, including the test harness.
 The aggregate audit also checks the diagnostic and Intel RAM-model comparison.
 

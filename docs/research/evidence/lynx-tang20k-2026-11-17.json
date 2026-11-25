@@ -1,0 +1,72 @@
+{
+  "upstream_revision": "3708e457e413aa7a33f8bec8fcd79eba45ce4702",
+  "part": "GW2AR-LV18QN88C8/I7",
+  "verdict": "baseline console passes resource and registered-core timing audit; complete board integration is outside this probe",
+  "source_adaptations_sha256": "ff610b3cf5626dd3bc0fc27da280b399fe427adafd87cceda571f138e262f01b",
+  "post_route_with_test_harness": {
+    "LUT4": {
+      "available": 20736,
+      "used": 11710,
+      "remaining": 9026
+    },
+    "DFF": {
+      "available": 15552,
+      "used": 5062,
+      "remaining": 10490
+    },
+    "BSRAM": {
+      "available": 46,
+      "used": 33,
+      "remaining": 13
+    }
+  },
+  "clock_mhz": {
+    "achieved": 81.83306121826172,
+    "constraint": 64
+  },
+  "test_harness": {
+    "scope": "registered core-only route/timing probe; not a playable port or board timing signoff",
+    "original_core_cells": 17052,
+    "added_cells": 261,
+    "input_registers": 95,
+    "output_registers": 81,
+    "clock_mhz": 64,
+    "omitted": [
+      "SDRAM controller",
+      "loader",
+      "framebuffers",
+      "HDMI/LCD",
+      "audio transport",
+      "real board clock setup"
+    ]
+  },
+  "passed": [
+    "translated upstream diagnostic",
+    "warm reset/reload diagnostic",
+    "Intel RAM model comparison",
+    "Gowin block RAM mapping",
+    "core-only placement and routing at 64 MHz"
+  ],
+  "commercial_games_tested": 0,
+  "playable_tang_image": false,
+  "board_timing_signoff": false,
+  "physical_testing": false,
+  "enhanced_graphics_fit_verified": false,
+  "remaining_integration": [
+    "SDRAM controller",
+    "loader",
+    "framebuffers",
+    "HDMI/LCD",
+    "audio transport",
+    "real board clock setup"
+  ],
+  "nixpkgs_revision": "31ecbaca1bdefa45dffc409f0250bd8039ea0010",
+  "tool_versions": {
+    "ghdl": "GHDL 6.0.0 (tarball) [Dunoon edition]",
+    "yosys": "Yosys 0.70+post (git sha1 v0.70, Release, GNU /nix/store/r5ri78axx1qggkjq3vawywlzglg70b5w-gcc-wrapper-16.2.0/bin/g++ 16.2.0)",
+    "nextpnr": "\"nextpnr-himbaechel\" -- Next Generation Place and Route (Version 0.11.1)"
+  },
+  "reviewed_date": "2026-11-17",
+  "artifact": "/nix/store/wlh8ki89irghnjv2rnzy8mhvzdvslljm-chipbuilder-lynx-compatibility-audit",
+  "scope_note": "Corrected warm-reset core with registered timing harness; service/core integration has separate evidence, and is not inside this routed design."
+}

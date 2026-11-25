@@ -1,0 +1,162 @@
+{
+  "reviewed_date": "2026-11-17",
+  "kind": "scaled-blitter-component",
+  "scope": "original enhanced blitter plus elastic arbiter/auto-precharge SDRAM; all bounded renderer workloads pass at assumed 64 MHz, complete enhanced system and timing remain open",
+  "artifacts": {
+    "component": "/nix/store/23pbz09h7qilg3nw52fdixp0v12mwlvz-chipbuilder-scaled-blitter-check",
+    "memory_integration": "/nix/store/awqzmlhi2vhjbmx2b83qzas5ifa6aca6-chipbuilder-scaled-blitter-memory-check",
+    "memory_service": "/nix/store/9q43vxfr6yxrj6ln613agwdl5qdjx0ih-chipbuilder-graphics-memory-check"
+  },
+  "component": {
+    "scope": "scaled sprite/fill RTL against direct integer pixel reference and delayed memory model; no CPU/SDRAM/scanout integration",
+    "commands": 513,
+    "sampled_pixels": 2208062,
+    "written_pixels": 2022893,
+    "command_cycles": 12853825,
+    "memory_stall_cycles": 7478928,
+    "accepted_transactions": 1215676,
+    "completed_transactions": 1215674,
+    "reset_cancelled_transactions": 2,
+    "resets": 6,
+    "physical_testing": false,
+    "passed": true
+  },
+  "mapping": {
+    "scope": "standalone scaled-blitter mapped cells; no integrated enhanced fit/timing",
+    "mapped_cells": {
+      "DFFRE": 823,
+      "LUT3": 363,
+      "ALU": 1018,
+      "LUT2": 243,
+      "LUT4": 671,
+      "MUX2_LUT5": 128,
+      "LUT1": 89,
+      "DFFR": 64,
+      "GND": 1,
+      "VCC": 1,
+      "MUX2_LUT6": 2
+    },
+    "passed": true
+  },
+  "memory_integration": {
+    "scope": "scaled-blitter plus actual arbiter/SDRAM RTL against independent physical-command and pixel models; host commands and synthetic front reads, no CPU/native scanout",
+    "commands": 1521,
+    "sampled_pixels": 1494382,
+    "written_pixels": 1376448,
+    "refreshes": 18133,
+    "max_refresh_gap_cycles": 512,
+    "max_peer_response_from_release_cycles": 25,
+    "engine_accepted_transactions": 837036,
+    "engine_completed_transactions": 837033,
+    "engine_reset_cancelled_transactions": 3,
+    "reset_after_committed_write": true,
+    "reset_with_physical_read_in_flight": true,
+    "assumed_system_hz": 64000000,
+    "scenes": [
+      {
+        "name": "clear plus 64 small sprites",
+        "cycles": 358851,
+        "sampled_pixels": 81664,
+        "written_pixels": 78336,
+        "reads": 3840,
+        "writes": 40064,
+        "peer_read_words": 11214,
+        "host_requests": 0,
+        "memory_stall_cycles": 236083,
+        "within_60hz_frame_at_assumed_clock": true
+      },
+      {
+        "name": "clear plus 256 small sprites",
+        "cycles": 701452,
+        "sampled_pixels": 130816,
+        "written_pixels": 117504,
+        "reads": 15360,
+        "writes": 62336,
+        "peer_read_words": 21921,
+        "host_requests": 0,
+        "memory_stall_cycles": 406844,
+        "within_60hz_frame_at_assumed_clock": true
+      },
+      {
+        "name": "clear plus 32 scaled sprites with host traffic",
+        "cycles": 932576,
+        "sampled_pixels": 112406,
+        "written_pixels": 102828,
+        "reads": 8631,
+        "writes": 52602,
+        "peer_read_words": 29143,
+        "host_requests": 63116,
+        "memory_stall_cycles": 735220,
+        "within_60hz_frame_at_assumed_clock": true
+      }
+    ],
+    "dense_front_release_phase_sweeps": [
+      {
+        "offset_cycles": 1,
+        "cycles": 701153
+      },
+      {
+        "offset_cycles": 7,
+        "cycles": 701223
+      },
+      {
+        "offset_cycles": 15,
+        "cycles": 701231
+      },
+      {
+        "offset_cycles": 31,
+        "cycles": 701183
+      }
+    ],
+    "scaled_host_front_release_phase_sweeps": [
+      {
+        "offset_cycles": 1,
+        "cycles": 932440
+      },
+      {
+        "offset_cycles": 7,
+        "cycles": 932472
+      },
+      {
+        "offset_cycles": 15,
+        "cycles": 932591
+      },
+      {
+        "offset_cycles": 31,
+        "cycles": 932406
+      }
+    ],
+    "dense_renderer_frame_checks_passed": true,
+    "scaled_host_renderer_frame_checks_passed": true,
+    "physical_testing": false,
+    "passed_functional_checks": true
+  },
+  "functional_checks_passed": true,
+  "dense_256_60hz_budget_passed": true,
+  "native_cpu_integration": true,
+  "native_compositor_scanout_integration": false,
+  "enhanced_system_place_route_passed": false,
+  "physical_testing": false,
+  "source_sha256": {
+    "docs/research/evidence/scaled-blitter-baseline-2026-11-17.json": "e500d5a55d36281944bd39153982868e48e020811dc84df91126b971c4a2b73a",
+    "docs/research/evidence/scaled-blitter-legacy-memory-2026-11-17.json": "acc91ffe0050f5414a69b92242c7ef88a72ec98c2709f603507b2caa6f26b2fe",
+    "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
+    "hardware/enhanced/cb_graphics_arbiter.sv": "6d1dab63643100bae14936e07fbfd6c4b5e0191b5912f6ca0f19d164ae09e74c",
+    "hardware/enhanced/cb_graphics_sdram.sv": "2a8f83b7eba31332075f7cea9f94792a78622ae571f0b41f2a781a021e9a56b7",
+    "hardware/enhanced/cb_scaled_blitter.sv": "3df064b263a76c147c0c7c349805a6be95a1c61c15104d7d8f5270714593aaaa",
+    "hardware/tests/enhanced-blitter-memory-top.sv": "b7fe1daeb94f75a9364f5392bf17a7bb6b3412a8d2579fada0027844b7ae1653",
+    "nix/enhanced.nix": "f2377e0d4adc1a85af3580ba17f4b50c50249fbcb4480e8d56dafd2592e08581",
+    "sim/scaled-blitter-memory.cpp": "f7cb9623599e65323f2399dc1cc245669b24e829d66510a0513d69df7572c0a6",
+    "sim/scaled-blitter-model.hpp": "fad0455908a995f9ef9d7beb96fc9befc8bb69ad4adc4c43f4d7a1f614bac16c",
+    "sim/scaled-blitter.cpp": "f64dcdfc772224acd722b102a051e1ef26be190464292fb5839518e632cd3879",
+    "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6",
+    "docs/research/evidence/native-graphics-2026-11-17.json": "d59f22ceb06e1e329b49af9bd48850e5bd6aca9bc4436b0e7ceb213a4010dbe4"
+  },
+  "media_sha256": {
+    "docs/images/scaled-blitter-scene.png": "63c7c19caaff9ad7e92cb84a9fd8401b75d6bdf5107f641b171c7e5662fee3a4"
+  },
+  "scaled_host_60hz_budget_passed": true,
+  "baseline_evidence": "docs/research/evidence/scaled-blitter-baseline-2026-11-17.json",
+  "optimized_blitter_legacy_service_evidence": "docs/research/evidence/scaled-blitter-legacy-memory-2026-11-17.json",
+  "native_cpu_integration_evidence": "docs/research/evidence/native-graphics-2026-11-17.json"
+}

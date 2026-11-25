@@ -1,5 +1,12 @@
 # Architecture overview
 
+**Current direction, 2026-11-15:** the next standalone prototype uses Tang Nano
+20K with the upstream Lynx CPU inside the FPGA under
+[ADR 0009](decisions/0009-tang-prototype.md). See the
+[current architecture](tang-prototype.md) and [project summary](../project-status.md).
+The earlier ECP5 requirements below preserve design history; their resource and
+throughput figures require a fresh Tang budget.
+
 Status: requirements and exploration, with a CPU-driven software prototype and
 a separate MiSTer display/input/audio bring-up circuit. Physical verification
 and Lynx compatibility remain ahead.
@@ -9,12 +16,12 @@ and Lynx compatibility remain ahead.
 - A plausible 1993–1995 Lynx successor, using modern development tools while
   keeping explicit limits on computation, memory, and bandwidth.
 - Original graphics, audio, and system hardware designs with a reused CPU core.
-  R65C02 is selected for the software prototype under ADR 0005; the eventual
-  timing-faithful Lynx compatibility CPU still needs validation.
+  R65C02 is selected for the software prototype under ADRs 0005/0006; the Tang
+  legacy configuration retains the separate upstream Lynx CPU implementation.
 - Existing retro chips may accompany the FPGA where they improve the design.
   The [physical CPU option](hybrid-hardware.md) was evaluated; the first standalone
-  development target retains the soft 65C02 in an ECP5-12F to reduce CPU/FPGA cost
-  and external-bus complexity. See the [selected platform](standalone-platform.md).
+  development target retains the CPU inside the Tang FPGA to avoid external-bus
+  complexity. See the [current hardware choices](../hardware.md).
 - FPGA development first, using the owner's existing MiSTer. First major outcome:
   a playable bench prototype, before custom handheld integration.
 - Native enhanced-game resolution of 320 × 204. Legacy software renders at
@@ -28,11 +35,11 @@ and Lynx compatibility remain ahead.
 - Eventual custom PCB, controls, screen, and 3D-printed enclosure. Custom silicon
   is a possible later stage, not a prerequisite for the first playable prototype.
 - Development tools and dependencies managed through project Nix shells.
-- The standalone engineering target is LFE5U-12F-6BG256C, one x16 SDR SDRAM and
-  QSPI flash under [ADR 0008](decisions/0008-standalone-development-target.md).
-  Its checked US$16.78 FPGA price exceeds the roughly US$10 aspiration; that
-  tradeoff does not authorize purchase or change the user's spending budget.
-  The US$275 ULX3S option remains rejected.
+- The current standalone prototype is Tang Nano 20K under
+  [ADR 0009](decisions/0009-tang-prototype.md), with 64 KiB local Lynx work RAM and
+  proposed SDRAM-backed cartridge/presentation storage. The earlier ECP5/x16
+  contract is [preserved as history](standalone-platform.md). A complete BOM
+  budget is open; the US$275 ULX3S option remains rejected.
 - Software-first validation for current development. Physical MiSTer testing is
   deferred under [ADR 0004](decisions/0004-software-first-validation.md).
 - A CPU-driven original-ROM prototype under
@@ -42,10 +49,9 @@ and Lynx compatibility remain ahead.
   [ADR 0006](decisions/0006-maze-game-and-sprite-budget.md), expanding the fixed
   sprite budget to eight and implementing lane movement and multiple guards.
 - The owner requested scaled sprites, many parallax layers, dense objects and
-  basic 3D. The [standalone contract](standalone-platform.md) fixes development
-  limits and workloads for the blitter, compositor and flat-triangle/math hardware.
-  Measured acceptance remains ahead; [ADR 0007](decisions/0007-enhanced-graphics-effects.md)
-  preserves the earlier exploration.
+  basic 3D. The [current enhanced target](enhanced-target.md) explains those
+  engines and their limits. The ECP5 workload calculations need a fresh Tang
+  budget; full implementation and measured acceptance remain ahead.
 
 ## Proposed functional boundaries
 
@@ -62,7 +68,7 @@ or a requirement for the eventual LCD. See the
 [acceptance record](../milestones/first-mister-prototype.md) for actual validation.
 
 Legacy mode must reproduce relevant timing and behavior, not merely CPU opcodes.
-Enhanced mode uses the selected resource/memory contract. The native enhanced
+Enhanced mode requires a new Tang resource/memory contract. The native enhanced
 register window is reserved at `$4400–$44FF`; bit fields and legacy activation
 will be specified with the respective engines.
 
@@ -77,6 +83,6 @@ will be specified with the respective engines.
 - Audio design, game format, boot code, SDK, and eventual cartridge interface.
 - Handheld size, battery, electrical interfaces, and ASIC feasibility/budget.
 
-Consult the [decision index](decisions/README.md) and selected platform contract
+Consult the [decision index](decisions/README.md) and current Tang architecture
 for development requirements. This is not a procurement-ready schematic or proof
 that the target has passed physical acceptance. The exact LCD remains open.

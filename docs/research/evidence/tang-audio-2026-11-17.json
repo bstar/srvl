@@ -1,0 +1,168 @@
+{
+  "reviewed_date": "2026-11-17",
+  "scope": "signed audio filtering, stereo CDC and pin-decoded I2S; actual Mikey + simultaneous buffered RGB; mapped portable AV system, no complete board route/physical acceptance",
+  "artifacts": {
+    "component": "/nix/store/h82m8nzlzw2wg3xm6m0jy6k5d1h7s63y-chipbuilder-audio-output-check",
+    "console": "/nix/store/32zpkflx5m2bxm6kj00adz7acqyxg7g1-chipbuilder-lynx-tang-av-check",
+    "portable_av_mapping": "/nix/store/wrzsqg304g4jbaywsw0rjgdr26p97w1z-chipbuilder-tang-portable-av-sizing"
+  },
+  "component": {
+    "scope": "fixed-point filter, coherent stereo mailbox and pin-decoded I2S; no analog/board timing acceptance",
+    "sys_cycles": 3334192,
+    "decoded_frames": 2500,
+    "source_snapshots": 2489,
+    "reset_cancelled_buffers": 2,
+    "gain_db": {
+      "1000": -0.174516,
+      "24000": -33.3406,
+      "32000": -42.1845
+    },
+    "independent_audio_half_periods": [
+      2625,
+      2623
+    ],
+    "sys_half_period": 504,
+    "source_clock_stop_and_recovery": true,
+    "physical_testing": false,
+    "passed": true
+  },
+  "component_mapping": {
+    "scope": "audio component mapped primitives; no complete board fit/timing",
+    "mapped_cells": {
+      "LUT2": 74,
+      "$scopeinfo": 3,
+      "DFFR": 263,
+      "ALU": 596,
+      "GND": 1,
+      "DFFRE": 127,
+      "LUT3": 21,
+      "LUT1": 11,
+      "VCC": 1,
+      "LUT4": 16,
+      "MUX2_LUT5": 11,
+      "MUX2_LUT6": 2,
+      "DFFSE": 1
+    },
+    "passed": true
+  },
+  "console": {
+    "scope": "UART-loaded patterned Lynx diagnostic through actual core, capture, arbiter, SDRAM, dual-clock line buffers and exact 2x RGB transport; no video serializer/board timing",
+    "scaled_video_frames": 23,
+    "video_green_frames": 15,
+    "video_red_frames": 4,
+    "warm_input_frames_verified": true,
+    "physical_testing": false,
+    "display_transport_tested": "parallel RGB/timing in simulation",
+    "audio_decoded_frames": 26151,
+    "audio_source_snapshots": 26152,
+    "audio_nonzero_frames": 16523,
+    "audio_input_phases": 6,
+    "audio_reference_hz": 12288000,
+    "audio_sample_rate_hz": 48000,
+    "audio_transport_tested": true,
+    "cycles": 34869130,
+    "image_bytes": 298,
+    "ordered_frame_pixels": 16320,
+    "frame_cycles": [
+      3601128,
+      1761419,
+      1766867,
+      3601128
+    ],
+    "cartridge_requests": 12,
+    "cartridge_acks": 12,
+    "external_cartridge_reads": 2,
+    "refreshes": 69542,
+    "passed": true
+  },
+  "portable_av_mapping": {
+    "scope": "portable Lynx console plus UART/loader/cart, frame capture, arbiter, SDRAM and dual-clock RGB scanout; mapped primitives only",
+    "audio_included": true,
+    "mapped_cells": {
+      "DFFRE": 3142,
+      "LUT3": 2575,
+      "ALU": 3533,
+      "LUT2": 1499,
+      "LUT1": 858,
+      "$scopeinfo": 270,
+      "DFFE": 1993,
+      "DFFR": 695,
+      "LUT4": 4721,
+      "MUX2_LUT5": 1225,
+      "DFFSE": 88,
+      "DFF": 278,
+      "SDPX9B": 2,
+      "DFFS": 13,
+      "MUX2_LUT6": 106,
+      "MUX2_LUT8": 15,
+      "MUX2_LUT7": 40,
+      "MULT18X18": 5,
+      "DPX9B": 1,
+      "DPB": 32,
+      "MULT9X9": 8,
+      "VCC": 1,
+      "GND": 1
+    },
+    "block_rams": 35,
+    "registers": 6209,
+    "lut1_to_lut4_cells": 9653,
+    "alu_cells": 3533,
+    "place_and_route_passed": false,
+    "board_timing_signoff": false,
+    "omitted": [
+      "clock generation/reset synchronizers",
+      "pin/IO buffers",
+      "HDMI serializer"
+    ],
+    "passed_synthesis_checks": true
+  },
+  "observed_tone_hz": {
+    "left": 2000.0,
+    "right": 2500.0
+  },
+  "wave_frames": 26151,
+  "wave_sha256": "92bb3a31c3528bee4af148715b048814b5bd763eb32095a8fde077b0bd9a3c11",
+  "source_sha256": {
+    "hardware/audio/cb_audio_lowpass.sv": "6a89e16ff06f565dd46edbdd3dd87dd73010d30dbc9357116e547a4a98b0051f",
+    "hardware/audio/cb_i2s_tx.sv": "db1f8e0d5ad07cd3645ca3e1e4bf5b5bd826ce0673cc09148dcd4574f6ced015",
+    "hardware/audio/cb_stereo_mailbox.sv": "e5b52c600a28e915a40e85a8e75622bf3345ddcb2b650e028f4392d2f338e227",
+    "hardware/audio/lynx_audio_output.sv": "bbfb15787279dd3a9d409d497ccbfb098ca6b2d896b6cdeab583a46df0d6660f",
+    "hardware/tang/cb_memory_arbiter.sv": "896e79aad7da9752dc490c01ecc50ca46c9404bbddda96f852fc6e45c2bd40fd",
+    "hardware/tang/lynx_cart_bridge.sv": "77ff7d6e79bbfaad4ea900af3d65fc18d0b51f61fba00c26532484957c8604d8",
+    "hardware/tang/lynx_loader.sv": "9078ae853e7d38627101fc0ab1969c034eaea00eb3828666e1340ecf6614f7e8",
+    "hardware/tang/lynx_packet.sv": "ae3915fac2d1790f837fff3254460e60d26519be8488ea0fb6266b333f2bf282",
+    "hardware/tang/lynx_sdram.sv": "659db31e45b93395b79af87b6bb0adf86e8a30d4c03b8945254edd0b6813d234",
+    "hardware/tang/lynx_tang_system.sv": "e1f39fdb57ec1a263c99fec68d5f607921bdfb5b1164e1af32769f85d5f37a86",
+    "hardware/tang/lynx_uart.sv": "88dca470f5111e120cf9925df686fef7e800a24db1b67ada3ea016fa1b6cf9f6",
+    "hardware/tests/lynx-audit.s": "125ec20fd70e44d105587bf79b431a51fb4471cc666fc85218d1f5df6d7f44b0",
+    "hardware/tests/tang-services-top.sv": "44c3ac248b6352df323c0d6b9c5c4377f55018bcf0c405645261a138786d64cc",
+    "hardware/video/cb_sync_fifo.sv": "3639e8aed972c636f0df9f78ab6925b0f6353f26f2a9d44b9d54b515fc9b4fd0",
+    "hardware/video/lynx_frame_capture.sv": "9146a2ee577f97cff1ccde409f3ea29f1908c5fb5011e5ea0a365619dc409346",
+    "hardware/video/lynx_scanout.sv": "2329bab93cd098313cc35dbf1c8fabf87ca7da59678b32eb373cd1c987479ca5",
+    "nix/tang.nix": "5b9b4b9eba835cf24f5e0b105a10a032808639e5d4587ea8632f1ca23279ba54",
+    "sim/audio-model.hpp": "347d03d9a938d7d20482c3bc8c8464a25ffd83b83e8311da17568f5faa5b24f9",
+    "sim/audio-output.cpp": "d24d27a75b96527c7389b00e41755f6c662619a2f6f8ba651e050dc3085ac1d8",
+    "sim/i2s-decoder.hpp": "ec8bcbb63f4578a3ae89fe6b8c2895a53db9d96155447a69aaadbc34c06f6f61",
+    "sim/lynx-audio-monitor.hpp": "86f8b8ab0a4272bd3dbdc6e34e3f51d25e3de7419ab9ba5f1e386b8c4673c5c4",
+    "sim/lynx-tang.cpp": "fe43e1307e509fb8e51fec001548bcaf1482ad7f01dc53c0404474636407b01d",
+    "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6",
+    "tools/lynx_link.py": "306bc8474abbcda3e1e780d87875a14f5cfa627a0c8ed6fd635ea33bf2f73d4d",
+    "tools/test_lynx_link.py": "7814dcc56bf154d468259816ae9472ee0348f6ff1ed57d3614dca809938fefce",
+    "scripts/prepare-lynx-audit.py": "459c469c67a46c6a471b9d8583696fa337623f3da64a3f3da6439a631f2fdab6",
+    "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a"
+  },
+  "source_adaptations_sha256": "ff610b3cf5626dd3bc0fc27da280b399fe427adafd87cceda571f138e262f01b",
+  "upstream_revision": "3708e457e413aa7a33f8bec8fcd79eba45ce4702",
+  "tool_versions": {
+    "verilator": "Verilator 5.052 2026-09-05 rev v5.052",
+    "yosys": "Yosys 0.70+post (git sha1 v0.70, Release, GNU /nix/store/r5ri78axx1qggkjq3vawywlzglg70b5w-gcc-wrapper-16.2.0/bin/g++ 16.2.0)"
+  },
+  "physical_testing": false,
+  "analog_fidelity_qualified": false,
+  "commercial_games_tested": 0,
+  "board_timing_signoff": false,
+  "enhanced_graphics_fit_verified": false,
+  "media_sha256": {
+    "docs/audio/lynx-stereo.wav": "92bb3a31c3528bee4af148715b048814b5bd763eb32095a8fde077b0bd9a3c11"
+  }
+}

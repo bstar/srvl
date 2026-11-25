@@ -1,0 +1,36 @@
+{
+  "scope": "UART-loaded pinned Lynx CPU/Suzy/Mikey, local RAM, loader/cart bridge and command-modeled SDRAM; RGB source stream only",
+  "cycles": 19701726,
+  "image_bytes": 198,
+  "ordered_frame_pixels": 16320,
+  "frame_cycles": [
+    3429308,
+    2095203,
+    2095275,
+    3429304
+  ],
+  "cartridge_requests": 12,
+  "cartridge_acks": 12,
+  "external_cartridge_reads": 2,
+  "refreshes": 39301,
+  "passed": true,
+  "physical_testing": false,
+  "display_transport_tested": false,
+  "reviewed_date": "2026-11-17",
+  "artifact": "/nix/store/q1h229p78vd1akfszby6m0xjy9pr0ikj-chipbuilder-lynx-tang-core-check",
+  "console_source_artifact": "/nix/store/0ccg69bbgqn22ckkvljli0d2p2ka0h23-chipbuilder-lynx-audit-hdl",
+  "upstream_revision": "3708e457e413aa7a33f8bec8fcd79eba45ce4702",
+  "source_adaptations_sha256": "ff610b3cf5626dd3bc0fc27da280b399fe427adafd87cceda571f138e262f01b",
+  "source_sha256": {
+    "hardware/tang/lynx_cart_bridge.sv": "a164ef8f2d6d693de91d39921213dec02c002fb35947647c9603d50ca1468b12",
+    "hardware/tang/lynx_loader.sv": "50fd88a14aa93b157faad92e6cf177b807472fc9395336ffe835ddbec2f93a3f",
+    "hardware/tang/lynx_packet.sv": "ae3915fac2d1790f837fff3254460e60d26519be8488ea0fb6266b333f2bf282",
+    "hardware/tang/lynx_sdram.sv": "659db31e45b93395b79af87b6bb0adf86e8a30d4c03b8945254edd0b6813d234",
+    "hardware/tang/lynx_tang_system.sv": "7a71bc7cbecb9b44acdfd1c3b96c8ba60653a364140afbbaba69c13231ce542c",
+    "hardware/tang/lynx_uart.sv": "479166daca6fd557e2d02a4ad7ee6cc44d2de35abff1b84102f9e25d26fbb0e6",
+    "sim/lynx-tang.cpp": "ab92bb13f652c79a152c972cf51afef18d9ffa935e2a3a08c121a7d3194c077b",
+    "sim/sdram-model.hpp": "886df1e5b02b6fcb9f1ca6e20250ca086a03bd2583df164cb0a0301043326210",
+    "hardware/tests/lynx-audit.s": "a08764229e3111cd2c54f016b41a61d52c423ebb9bfc4374e0ff9503a3ea65e9",
+    "scripts/prepare-lynx-audit.py": "459c469c67a46c6a471b9d8583696fa337623f3da64a3f3da6439a631f2fdab6"
+  }
+}

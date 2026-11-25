@@ -1,5 +1,27 @@
 # Lynx MiSTer core on Tang Nano 20K
 
+**2026-11-17 integration update:** [UART/loader/cart/SDRAM service checks](../milestones/tang-board-services.md)
+now pass, and the real console diagnostic cold-boots and warm-reloads through that
+path. Warm reload exposed retained CPU bus strobes in the pinned upstream core;
+the exported adaptation patch now clears CPU request/IRQ strobes, memory write/
+completion enables and cart wait during reset. Normal execution logic is unchanged.
+Both the standalone cold/input/warm diagnostic and ordered-frame serial integration
+regressions pass. The corrected core also passes a fresh registered route probe:
+**11,710/20,736 LUT sites**, **5,062/15,552 registers**, **33/46 BSRAMs**, and
+**81.833 MHz** estimated maximum against the **64 MHz** requirement. The
+[current snapshot](evidence/lynx-tang20k-2026-11-17.json) includes the adaptation
+hash and artifact. Board services are not inside this routed harness. The tables
+below preserve the **2026-10-30 historical baseline**, before the reset correction.
+
+The subsequent [buffered-video milestone](../milestones/tang-video.md) now adds
+simulated exact-2× RGB through capture, shared SDRAM and cross-clock line buffers,
+plus a 35-block-RAM portable-system mapping. Those services are still outside the
+registered core-only route probe; full board timing remains open.
+
+The [stereo acceptance record](../milestones/tang-audio.md) subsequently adds
+actual Mikey timers, signed filtering, coherent sample transfer and pin-decoded
+I²S alongside video. Analog fidelity and full board timing remain separate gates.
+
 Reviewed: 2026-10-30. Status: compatibility and resource investigation; not a
 playable Tang port, board acceptance, or replacement of ADR 0008.
 
@@ -100,6 +122,13 @@ refresh, row changes and burst inefficiency. Buffering must cover the pixel
 bursts and scanout deadlines, not only average throughput.
 
 ## Clocks and compatibility hazards
+
+**2026-11-17 timing-coverage clarification:** the historical registered core
+probe's 81.833 MHz result uses the pinned tool's partial timing models. A later
+[complete-board review](../milestones/tang-board-build.md#timing-coverage-is-a-measured-boundary)
+found missing LUT1–LUT3 and DSP timing variants in the actual database. The new
+board build normalizes small LUTs to equivalent LUT4s; it does not retroactively
+qualify this older probe or close DSP/serializer/external I/O timing.
 
 The upstream console input is 64 MHz. Normal system enable is every fourth
 clock, giving a 16 MHz system timing basis; this is not a 16 MHz instruction

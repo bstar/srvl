@@ -49,6 +49,17 @@
         source = lynx-reference;
         inherit quartus;
       };
+      documentation = pkgs.callPackage ./nix/docs.nix { };
+      enhanced = pkgs.callPackage ./nix/enhanced.nix { cpuHdl = software.cpu-hdl; };
+      tang = pkgs.callPackage ./nix/tang.nix { lynxHdl = lynxAudit.hdl; };
+      tangBoard = pkgs.callPackage ./nix/tang-board.nix {
+        lynxHdl = lynxAudit.hdl;
+        apycula = pkgs.python3Packages.apycula;
+      };
+      tangBitstream = pkgs.callPackage ./nix/tang-bitstream.nix {
+        lynxHdl = lynxAudit.hdl;
+        apycula = pkgs.python3Packages.apycula;
+      };
       tools = with pkgs; [
         verilator
         iverilog
@@ -56,7 +67,7 @@
         yosys
         gtkwave
         cc65
-        python3
+        documentation.python
         gnumake
         git
         openssh
@@ -131,6 +142,35 @@
         };
       };
       packages.${system} = {
+        docs = documentation.site;
+        docs-check = documentation.check;
+        tang-services-check = tang.servicesCheck;
+        lynx-link-check = tang.hostCheck;
+        lynx-link = tang.host;
+        lynx-tang-core-check = tang.coreCheck;
+        lynx-tang-video-check = tang.videoCoreCheck;
+        lynx-tang-av-check = tang.avCoreCheck;
+        video-fifo-check = tang.videoFifoCheck;
+        frame-capture-check = tang.frameCaptureCheck;
+        video-pipeline-check = tang.videoPipelineCheck;
+        audio-output-check = tang.audioCheck;
+        dvi-encoder-check = tangBoard.dviCheck;
+        board-control-check = tangBoard.controlCheck;
+        tang-board-mapping = tangBitstream.mapping;
+        tang-board-constraints = tangBitstream.constraints;
+        tang-board-pack-probe = tangBitstream.packProbe;
+        tang-board-route = tangBitstream.route;
+        tang-board-check = tangBitstream.buildCheck;
+        tang-bench-bitstream = tangBitstream.image;
+        tang-timing-coverage = tangBitstream.coverage;
+        tang-board-report = tangBitstream.report;
+        scaled-blitter-check = enhanced.blitterCheck;
+        scaled-blitter-memory-check = enhanced.blitterMemoryCheck;
+        graphics-memory-check = enhanced.memoryServiceCheck;
+        blitter-mmio-check = enhanced.mmioCheck;
+        native-graphics-check = enhanced.nativeCpuCheck;
+        tang-system-sizing = tang.systemSizing;
+        tang-av-sizing = tang.avSizing;
         inherit quartus;
         inherit (software) cpu-hdl cpu-check cpu-functional;
         inherit (software) simulator simulator-equivalence game-data;
@@ -199,19 +239,51 @@
               sha256sum Chipbuilder.rbf > sha256.txt
             '';
       };
-      apps.${system}.sim = {
-        type = "app";
-        program = "${software.simulator}/bin/chipbuilder-sim";
-        meta.description = "Play Circuit Courier on the Chipbuilder HDL prototype";
+      apps.${system} = {
+        lynx-link = {
+          type = "app";
+          program = "${tang.host}/bin/chipbuilder-lynx-link";
+          meta.description = "Inspect or explicitly upload owner-supplied Lynx images to the Tang UART";
+        };
+        sim = {
+          type = "app";
+          program = "${software.simulator}/bin/chipbuilder-sim";
+          meta.description = "Play Circuit Courier on the Chipbuilder HDL prototype";
+        };
+        docs = {
+          type = "app";
+          program = "${documentation.server}/bin/chipbuilder-docs";
+          meta.description = "Review the local console architecture, decisions and work plan";
+        };
       };
       formatter.${system} = pkgs.writeShellApplication {
         name = "chipbuilder-fmt";
         runtimeInputs = [ pkgs.nixfmt ];
         text = ''
-          exec nixfmt "$@" flake.nix nix/quartus.nix nix/software.nix nix/lynx-audit.nix
+          exec nixfmt "$@" flake.nix nix/quartus.nix nix/software.nix nix/lynx-audit.nix nix/docs.nix nix/tang.nix nix/tang-board.nix nix/tang-bitstream.nix nix/enhanced.nix
         '';
       };
       checks.${system} = {
+        tang-services = tang.servicesCheck;
+        lynx-link = tang.hostCheck;
+        lynx-tang-core = tang.coreCheck;
+        lynx-tang-video = tang.videoCoreCheck;
+        lynx-tang-av = tang.avCoreCheck;
+        video-fifo = tang.videoFifoCheck;
+        frame-capture = tang.frameCaptureCheck;
+        video-pipeline = tang.videoPipelineCheck;
+        audio-output = tang.audioCheck;
+        dvi-encoder = tangBoard.dviCheck;
+        board-control = tangBoard.controlCheck;
+        tang-board-constraints = tangBitstream.buildCheck;
+        scaled-blitter = enhanced.blitterCheck;
+        scaled-blitter-memory = enhanced.blitterMemoryCheck;
+        graphics-memory = enhanced.memoryServiceCheck;
+        blitter-mmio = enhanced.mmioCheck;
+        native-graphics = enhanced.nativeCpuCheck;
+        tang-system-mapping = tang.systemSizing;
+        tang-av-mapping = tang.avSizing;
+        html-documentation = documentation.check;
         lynx-diagnostic = lynxAudit.smoke;
         standalone-budget = self.packages.${system}.standalone-cpu-sizing;
         cpu = software.cpu-directed;

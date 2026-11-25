@@ -17,6 +17,15 @@ with backlighting; leave the panel and interface selection open.
 
 ## Consequences
 
+Owner clarification, **2026-11-17**: Lynx mode fills the **entire 320 × 204
+logical screen**, with each original pixel represented by exactly 2×2 pixels.
+**No added black borders, cropping or missing source pixels** are part of the
+handheld target. Panel adaptation must preserve this requirement; a letterboxed
+320 × 240 or 640 × 480 presentation is not the accepted final display policy.
+The current centered 640 × 480 HDMI output is a temporary bench harness.
+Its presentation policy needs a separate choice because that raster does not
+match the game's aspect ratio.
+
 Scope clarification, 2026-10-29: the initial Lynx path runs unmodified game images
 at their original logical resolution and replicates each output pixel into a
 2×2 block. Native-resolution patches, decompilation/recompilation and enhanced

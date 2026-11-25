@@ -9,7 +9,8 @@
 | [0005](0005-prototype-cpu-and-peripherals.md) | Superseded | Initial R65C02/four-sprite prototype; carried forward and extended by 0006 |
 | [0006](0006-maze-game-and-sprite-budget.md) | Accepted | Rail maze game and eight-sprite budget, retaining the CPU/system design |
 | [0007](0007-enhanced-graphics-effects.md) | Superseded | Initial graphics proposal; standalone target and budgets selected in 0008 |
-| [0008](0008-standalone-development-target.md) | Accepted | ECP5-12F/soft-65C02 development target, x16 SDRAM and bounded graphics workloads; no purchase authorization |
+| [0008](0008-standalone-development-target.md) | Superseded | Earlier ECP5-12F/x16 development target and graphics workload estimates; retained as historical reference |
+| [0009](0009-tang-prototype.md) | Accepted | Tang Nano 20K legacy prototype, internal Lynx CPU and new board adapters; enhanced graphics require a fresh budget |
 
 Use the next four-digit number and a descriptive filename. Each record contains
 Date, Status, Context, Decision, Consequences, and References. Valid statuses are

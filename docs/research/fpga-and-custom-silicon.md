@@ -1,5 +1,10 @@
 # FPGA development and custom silicon
 
+Current update, 2026-11-15: [ADR 0009](../architecture/decisions/0009-tang-prototype.md)
+selects Tang Nano 20K for the immediate prototype after its core feasibility audit.
+ECP5 and pricing observations below remain dated research, not the current board
+selection. The enhanced design still needs a Tang resource/bandwidth budget.
+
 Reviewed: 2026-10-28. Status: development approach and later feasibility questions.
 
 For the later request to investigate original Lynx support before selecting the
