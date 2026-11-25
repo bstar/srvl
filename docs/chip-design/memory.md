@@ -6,7 +6,8 @@ Integrated console cold/warm boot and buffered exact-2× RGB output also pass.
 Display contention is covered by a separate component test; board timing remains open.
 The elastic arbiter/controller passes standalone and scaled-blitter contention
 checks, and since 2026-11-24 also serves the legacy system. A separate native CPU/MMIO diagnostic now uses
-the same service. Complete-frame/native scanout integration, deadline
+the same service, and the [enhanced skeleton](../milestones/enhanced-skeleton.md)
+adds native scanout with front/back ownership as its third client. Deadline
 reservations, cache sizes and the game-visible bus ABI remain open.
 
 ## Memory service defines the machine
@@ -34,8 +35,8 @@ recovery. The enhanced blitter's unchanged dense and host-contended scaled scene
 now take **10.960 ms** and **14.572 ms** at an assumed 64 MHz. Both budgets are
 checked across front-read phases. Those workload timings exclude CPU staging;
 the separate [CPU diagnostic](../architecture/native-graphics-mmio.md) proves
-functional command integration. Real native scanout, layer composition, complete-frame
-ownership and enhanced board timing remain ahead.
+functional command integration. Layer composition, scanout under dense
+workloads and physical board timing remain ahead.
 
 This one service now serves both the legacy system and the enhanced engines;
 the earlier legacy controller/arbiter were removed. It has no

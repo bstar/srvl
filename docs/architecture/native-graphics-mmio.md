@@ -142,8 +142,26 @@ partially written back surface before publishing it.
 
 This component does not enforce front/back ownership or publish a display frame.
 Callers still choose a surface not being displayed and immutable draw sources.
-There is no automatic timeout/abort. Frame ownership, native palette/layers and
-scanout are the next integration boundary.
+There is no automatic timeout/abort. Since 2026-11-24 the separate video-control
+block below provides swap, palette and ownership-fault detection.
+
+## Video control at $4500
+
+[cb_video_control.sv](../../hardware/enhanced/cb_video_control.sv) is generated
+from the same ABI source. Reads have no side effects. The
+[skeleton milestone](../milestones/enhanced-skeleton.md) describes the ownership rule.
+
+| Offset | Read | Write |
+| --- | --- | --- |
+| `$00` | Status: bit 0 swap pending, 1 enabled, 2 front surface, 6 underrun, 7 ownership fault | Ignored |
+| `$01` | Bit 0 enable | Bit 0 enable; bit 1 requests a swap, ignored while one is pending |
+| `$02` | Presented transport frames, wraps at 256 | Ignored |
+| `$04` | Palette index | Set palette index |
+| `$05` | Zero | Hold RGB444 bits 7:0 (green, blue) |
+| `$06` | Zero | Write entry with red from bits 3:0, then increment the index |
+
+Front surface 0 is `$100000` and 1 is `$140000`. Underrun and ownership fault are
+sticky until reset. Layers and a compositor are still ahead.
 
 ## Independent acceptance
 
@@ -191,5 +209,6 @@ Artifacts include original ROM bytes/listing/map, exact source and CPU-source
 snapshots, logs, JSON, mapped MMIO netlist and raw surface previews. The
 [dated evidence](../research/evidence/native-graphics-2026-11-17.json) distinguishes
 this CPU integration from the [renderer-only workload measurements](../milestones/scaled-blitter.md).
-There is no shared boot monitor/launcher, complete enhanced board top, native
-frame ownership, complete-system 60 fps result or physical enhanced run yet.
+A first [enhanced top with scanout and frame ownership](../milestones/enhanced-skeleton.md)
+now exists. There is no shared boot monitor/launcher, compositor, complete-system
+60 fps result or physical enhanced run yet.

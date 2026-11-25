@@ -7,7 +7,8 @@
     "docs/research/evidence/tang-board-2026-11-17.json",
     "docs/research/evidence/scaled-blitter-2026-11-17.json",
     "docs/research/evidence/graphics-memory-2026-11-17.json",
-    "docs/research/evidence/native-graphics-2026-11-17.json"
+    "docs/research/evidence/native-graphics-2026-11-17.json",
+    "docs/research/evidence/enhanced-system-2026-11-24.json"
   ],
   "groups": [
     {
@@ -207,6 +208,12 @@
           "label": "Enhanced memory evidence",
           "state": "Scoped evidence",
           "summary": "Elastic arbitration, conservative SDRAM timing, fairness, reset recovery and measured rendering throughput."
+        },
+        {
+          "source": "docs/milestones/enhanced-skeleton.md",
+          "label": "Enhanced skeleton",
+          "state": "Scoped evidence",
+          "summary": "First real enhanced top: CPU, blitter, native scanout, frame ownership, first fit and clock estimates."
         },
         {
           "source": "docs/documentation.md",

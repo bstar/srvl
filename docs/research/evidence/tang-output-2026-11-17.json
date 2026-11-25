@@ -33,7 +33,7 @@
     "hardware/tests/dvi-encoder-top.sv": "9311c756662a9a0712f09217688c34c32fff6f9a60cfd41f4131250ead5fd852",
     "sim/dvi-encoder.cpp": "f8b662dae9034c5956d15db29483f40c21300340173593d9108f55f0699048a2",
     "sim/tmds-model.hpp": "bcffd710ac50d6fae815f3ba38b6d987f5645dd76b3acf1b26bc9f0882e06e11",
-    "hardware/boards/tang_nano20k/cb_reset_sync.sv": "82fac35f3e283cd31adb6774c6251e70fe5fdb01a8f62d418d01e6b0db6d2022",
+    "hardware/boards/tang_nano20k/cb_reset_sync.sv": "f871d621c4aa5bbef091198636f1e0133ec422995fe14925246ffeffeda18099",
     "hardware/boards/tang_nano20k/cb_board_control.sv": "ee1acee915ba787a86ee83c0d1fe72fc79dbc6e637885bf2781521e7751c79f4",
     "sim/board-control.cpp": "38badda58cb04c7fcd3e2ba0281409d3946dea1e493eddb4765e63b3e0015e9f",
     "nix/tang-board.nix": "fc3242ab93fab4727b5b9219d751e0584b20a82b3aa7bd422d94e5e4f0312307",

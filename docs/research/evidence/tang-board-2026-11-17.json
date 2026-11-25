@@ -652,7 +652,7 @@
     "hardware/audio/cb_stereo_mailbox.sv": "e5b52c600a28e915a40e85a8e75622bf3345ddcb2b650e028f4392d2f338e227",
     "hardware/audio/lynx_audio_output.sv": "bbfb15787279dd3a9d409d497ccbfb098ca6b2d896b6cdeab583a46df0d6660f",
     "hardware/boards/tang_nano20k/cb_board_control.sv": "ee1acee915ba787a86ee83c0d1fe72fc79dbc6e637885bf2781521e7751c79f4",
-    "hardware/boards/tang_nano20k/cb_reset_sync.sv": "82fac35f3e283cd31adb6774c6251e70fe5fdb01a8f62d418d01e6b0db6d2022",
+    "hardware/boards/tang_nano20k/cb_reset_sync.sv": "f871d621c4aa5bbef091198636f1e0133ec422995fe14925246ffeffeda18099",
     "hardware/boards/tang_nano20k/gowin_board_clocks.sv": "31212baaee9eaf2fa90fbc98c9c126622ceb1a4132debb7e9eeac6290a6d661b",
     "hardware/boards/tang_nano20k/gowin_dvi_tx.sv": "64a7b31af9ca9142e4c0652584e9bf8acb10d51f131800e35f4eed21e0c2f602",
     "hardware/boards/tang_nano20k/lynx_tang_board.sv": "e6c56e8e5d1069ca01884fa141d111e86db4555dba507e77f16ea3f8548b42a8",
@@ -673,7 +673,7 @@
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
     "scripts/prepare-tang-board.py": "5e4b15efe8d1874b9ffe29cc67ab3329555cf88e986e34e571f75f01d1771b8b",
     "scripts/check-tang-constraints.py": "08087ec4ac213c024caded79d5292c7a8e861d352d4bcb5d54be1f3738d895ab",
-    "scripts/normalize-gowin-luts.py": "a77a571bde9f3aa3fa477f3720d9b5a5b06b6b54d92f42800976f8b599a73a51",
+    "scripts/normalize-gowin-luts.py": "c106ad3437b171cc24cc18ac027faf60e0acae0308b4b0c19e73b639ae126166",
     "scripts/report-gowin-timing-coverage.py": "adb4f55a2e1697b38e0bae049e09716be2530dae7bed94e55eeb9978d8390bd1",
     "scripts/report-tang-board-build.py": "c83088082cb2547d6420cb4f0a5cd905b7dad8838b13daf9af35d518f2e3ff1d",
     "scripts/prepare-lynx-audit.py": "459c469c67a46c6a471b9d8583696fa337623f3da64a3f3da6439a631f2fdab6"

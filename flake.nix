@@ -51,6 +51,7 @@
       };
       documentation = pkgs.callPackage ./nix/docs.nix { };
       enhanced = pkgs.callPackage ./nix/enhanced.nix { cpuHdl = software.cpu-hdl; };
+      enhancedSystem = pkgs.callPackage ./nix/enhanced-system.nix { cpuHdl = software.cpu-hdl; };
       tang = pkgs.callPackage ./nix/tang.nix { lynxHdl = lynxAudit.hdl; };
       tangBoard = pkgs.callPackage ./nix/tang-board.nix {
         lynxHdl = lynxAudit.hdl;
@@ -187,6 +188,11 @@
         graphics-memory-check = enhanced.memoryServiceCheck;
         blitter-mmio-check = enhanced.mmioCheck;
         native-graphics-check = enhanced.nativeCpuCheck;
+        enhanced-system-check = enhancedSystem.systemCheck;
+        enhanced-demo-rom = enhancedSystem.roms;
+        enhanced-board-mapping = enhancedSystem.mapping;
+        enhanced-board-route = enhancedSystem.route;
+        enhanced-board-check = enhancedSystem.routeCheck;
         tang-system-sizing = tang.systemSizing;
         tang-av-sizing = tang.avSizing;
         inherit quartus;
@@ -278,7 +284,7 @@
         name = "chipbuilder-fmt";
         runtimeInputs = [ pkgs.nixfmt ];
         text = ''
-          exec nixfmt "$@" flake.nix nix/quartus.nix nix/software.nix nix/lynx-audit.nix nix/docs.nix nix/tang.nix nix/tang-board.nix nix/tang-bitstream.nix nix/enhanced.nix
+          exec nixfmt "$@" flake.nix nix/quartus.nix nix/software.nix nix/lynx-audit.nix nix/docs.nix nix/tang.nix nix/tang-board.nix nix/tang-bitstream.nix nix/enhanced.nix nix/enhanced-system.nix
         '';
       };
       checks.${system} = {
@@ -300,6 +306,8 @@
         graphics-memory = enhanced.memoryServiceCheck;
         blitter-mmio = enhanced.mmioCheck;
         native-graphics = enhanced.nativeCpuCheck;
+        enhanced-system = enhancedSystem.systemCheck;
+        enhanced-board = enhancedSystem.routeCheck;
         tang-system-mapping = tang.systemSizing;
         tang-av-mapping = tang.avSizing;
         html-documentation = documentation.check;

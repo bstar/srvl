@@ -11,8 +11,9 @@ from pathlib import Path
 import sys
 
 input_path, output_path, evidence_path = map(Path, sys.argv[1:4])
+top_name = sys.argv[4] if len(sys.argv) > 4 else "lynx_tang_board"
 netlist = json.loads(input_path.read_text())
-top = netlist["modules"]["lynx_tang_board"]
+top = netlist["modules"][top_name]
 changed = collections.Counter()
 cases = 0
 for cell in top["cells"].values():

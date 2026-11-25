@@ -29,6 +29,16 @@ asm += [f"GFX_CONTROL_{name} = ${1 << number(bit):02x}" for name, bit in abi["co
 asm += [f"GFX_OP_{name} = {number(value)}" for name, value in abi["operations"].items()]
 asm += [f"GFX_ERROR_{name} = {number(value)}" for name, value in abi["errors"].items()]
 asm += [f"GFX_FIELD_{name} = {number(value)}" for name, value in abi["descriptor_fields"].items()]
+video = abi["video"]
+video_base = number(video["base"])
+surfaces = [number(value) for value in video["surfaces"]]
+bank_step = surfaces[1] - surfaces[0]
+bank_bit = bank_step.bit_length() - 1
+asm += [f"VID_BASE = ${video_base:04x}"]
+asm += [f"VID_{name} = ${video_base + number(offset):04x}" for name, offset in video["registers"].items()]
+asm += [f"VID_STATUS_{name} = ${1 << number(bit):02x}" for name, bit in video["status_bits"].items()]
+asm += [f"VID_CONTROL_{name} = ${1 << number(bit):02x}" for name, bit in video["control_bits"].items()]
+asm += [f"VID_SURFACE{index} = ${value:06x}" for index, value in enumerate(surfaces)]
 (destination / "graphics-abi.inc").write_text("\n".join(asm) + "\n")
 
 sv = [f"// {notice}",
@@ -43,6 +53,12 @@ sv += [f"    localparam integer CONTROL_{name} = {number(bit)};" for name, bit i
 sv += [f"    localparam logic [1:0] OP_{name} = 2'd{number(value)};" for name, value in abi["operations"].items()]
 sv += [f"    localparam logic [2:0] ERROR_{name} = 3'd{number(value)};" for name, value in abi["errors"].items()]
 sv += [f"    localparam integer FIELD_{name} = {number(value)};" for name, value in abi["descriptor_fields"].items()]
+sv += [f"    localparam logic [7:0] VIDEO_PAGE = 8'h{video_base >> 8:02x};"]
+sv += [f"    localparam logic [7:0] VIDEO_REG_{name} = 8'h{number(offset):02x};" for name, offset in video["registers"].items()]
+sv += [f"    localparam integer VIDEO_STATUS_{name} = {number(bit)};" for name, bit in video["status_bits"].items()]
+sv += [f"    localparam integer VIDEO_CONTROL_{name} = {number(bit)};" for name, bit in video["control_bits"].items()]
+sv += [f"    localparam logic [22:0] SURFACE_BASE = 23'h{surfaces[0]:06x};",
+       f"    localparam integer SURFACE_BANK_BIT = {bank_bit};"]
 sv.append("endpackage")
 sv.append("/* verilator lint_on UNUSEDPARAM */")
 (destination / "cb_abi_pkg.sv").write_text("\n".join(sv) + "\n")
@@ -50,3 +66,7 @@ sv.append("/* verilator lint_on UNUSEDPARAM */")
 descriptor = number(abi["registers"]["DESCRIPTOR"])
 if base & 0xff or descriptor % 64 or size > 64 or descriptor + size > 256:
     raise SystemExit("MMIO window must be one page; the descriptor must start on a 64-byte boundary inside it")
+if (video_base & 0xff or video_base == base or len(surfaces) != 2 or bank_step != 1 << bank_bit
+        or bank_step < 320 * 204 * 2 or surfaces[0] % bank_step or surfaces[0] & bank_step
+        or surfaces[1] + bank_step > 1 << 23):
+    raise SystemExit("Video registers need their own page; the two surfaces must differ in exactly one address bit")

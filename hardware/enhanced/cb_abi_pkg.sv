@@ -48,5 +48,21 @@ package cb_abi_pkg;
     localparam integer FIELD_CLIP_X1 = 31;
     localparam integer FIELD_CLIP_Y1 = 33;
     localparam integer FIELD_BYTE_VALUE = 35;
+    localparam logic [7:0] VIDEO_PAGE = 8'h45;
+    localparam logic [7:0] VIDEO_REG_STATUS = 8'h00;
+    localparam logic [7:0] VIDEO_REG_CONTROL = 8'h01;
+    localparam logic [7:0] VIDEO_REG_FRAME = 8'h02;
+    localparam logic [7:0] VIDEO_REG_PALETTE_INDEX = 8'h04;
+    localparam logic [7:0] VIDEO_REG_PALETTE_LOW = 8'h05;
+    localparam logic [7:0] VIDEO_REG_PALETTE_HIGH = 8'h06;
+    localparam integer VIDEO_STATUS_SWAP_PENDING = 0;
+    localparam integer VIDEO_STATUS_ENABLED = 1;
+    localparam integer VIDEO_STATUS_FRONT = 2;
+    localparam integer VIDEO_STATUS_UNDERRUN = 6;
+    localparam integer VIDEO_STATUS_OWNERSHIP_FAULT = 7;
+    localparam integer VIDEO_CONTROL_ENABLE = 0;
+    localparam integer VIDEO_CONTROL_SWAP = 1;
+    localparam logic [22:0] SURFACE_BASE = 23'h100000;
+    localparam integer SURFACE_BANK_BIT = 18;
 endpackage
 /* verilator lint_on UNUSEDPARAM */

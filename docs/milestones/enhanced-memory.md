@@ -125,7 +125,8 @@ and [optimized blitter on legacy memory](../research/evidence/scaled-blitter-leg
 remain available for comparison.
 
 The separate [native MMIO/CPU diagnostic](../architecture/native-graphics-mmio.md)
-now uses this service. Next add complete-frame ownership and compositor/scanout
-clients, then measure their simultaneous scene and resource/timing cost. Bursts,
+now uses this service, and the [enhanced skeleton](enhanced-skeleton.md) adds
+native scanout as a client. Next add the compositor and measure the simultaneous
+scene and resource/timing cost. Bursts,
 open-row scheduling or display reservations need their own evidence if that
 combined workload cannot meet its deadlines.

@@ -93,7 +93,9 @@ The [first scaled-blitter component](milestones/scaled-blitter.md) now passes
 independent pixel/memory tests, real-controller contention/reset checks and
 standalone synthesis. The [native MMIO and CPU diagnostic](architecture/native-graphics-mmio.md)
 now pass six cold/warm boots, CPU asset uploads, completion IRQs and three clock
-configurations. Frame ownership, native scanout and compositor integration remain
+configurations. A first [enhanced top](milestones/enhanced-skeleton.md) now adds
+native scanout and front/back ownership, runs a CPU-drawn demo in simulation and
+routes on Tang with open tools; the compositor, input, audio and a game remain
 open. Paired fills, fused sampling/stores, single-carry stepping and the
 [enhanced elastic memory service](milestones/enhanced-memory.md) reduce the same
 256-draw scene from 22.531 ms to **10.960 ms** at an assumed 64 MHz. The scaled

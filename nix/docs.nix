@@ -17,6 +17,7 @@ let
       ../nix/tang-board.nix
       ../nix/tang-bitstream.nix
       ../nix/enhanced.nix
+      ../nix/enhanced-system.nix
       ../docs
       ../hardware
       ../sim/README.md
@@ -39,6 +40,7 @@ let
       ../sim/native-graphics-model.hpp
       ../sim/blitter-mmio.cpp
       ../sim/native-graphics.cpp
+      ../sim/enhanced-system.cpp
       ../tools
       ../checks
       ../patches

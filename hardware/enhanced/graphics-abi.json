@@ -23,5 +23,16 @@
     "SOURCE_WIDTH": 11, "SOURCE_HEIGHT": 13, "SOURCE_STRIDE": 15, "DESTINATION_STRIDE": 17,
     "X": 19, "Y": 21, "WIDTH": 23, "HEIGHT": 25,
     "CLIP_X0": 27, "CLIP_Y0": 29, "CLIP_X1": 31, "CLIP_Y1": 33, "BYTE_VALUE": 35
+  },
+  "video": {
+    "description": "Native scanout control: front/back surface ownership, frame count and RGB444 palette.",
+    "base": "0x4500",
+    "registers": {
+      "STATUS": "0x00", "CONTROL": "0x01", "FRAME": "0x02",
+      "PALETTE_INDEX": "0x04", "PALETTE_LOW": "0x05", "PALETTE_HIGH": "0x06"
+    },
+    "status_bits": { "SWAP_PENDING": 0, "ENABLED": 1, "FRONT": 2, "UNDERRUN": 6, "OWNERSHIP_FAULT": 7 },
+    "control_bits": { "ENABLE": 0, "SWAP": 1 },
+    "surfaces": ["0x100000", "0x140000"]
   }
 }
