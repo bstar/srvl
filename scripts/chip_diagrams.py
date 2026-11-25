@@ -10,8 +10,9 @@ from pathlib import Path
 import textwrap
 
 
-COLORS = {"project": "#000000", "reused": "#000000", "integration": "#000000"}
-# Monochrome line art: the kind of a block or wire is shown by its line style.
+# Three spot inks on white. Line style repeats the distinction so that a
+# black-and-white print still reads.
+COLORS = {"project": "#1d6b34", "reused": "#1c4e9a", "integration": "#b06a00"}
 DASHES = {"project": "", "reused": ' stroke-dasharray="7 3"', "integration": ' stroke-dasharray="2 3"'}
 
 
@@ -75,7 +76,7 @@ class Diagram:
             title_lines = textwrap.wrap(n["title"], max(18, int((w-32)/10.2)))
             parts.append(f'''<g data-chip-node="{e(n['key'])}" role="button" tabindex="0" aria-label="{e(n['title'] + ': ' + n['state'])}" aria-pressed="false">
               <title>{e(n['title'])}</title><desc>{e(n['detail'])}</desc>
-              <rect class="node-box" x="{x}" y="{y}" width="{w}" height="{h}" fill="#ffffff" stroke="{color}"{DASHES[n["kind"]]}/>
+              <rect class="node-box" x="{x}" y="{y}" width="{w}" height="{h}" fill="#ffffff" stroke="{color}" stroke-width="1.6"{DASHES[n["kind"]]}/>
               <text x="{x+15}" y="{y+18}" fill="{color}" font-family="Courier, monospace" font-size="11" >{e(n['state'].upper())}</text>''')
             for i, line in enumerate(title_lines[:2]):
                 parts.append(f'<text x="{x+15}" y="{y+43+i*19}" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="bold">{e(line)}</text>')
@@ -89,7 +90,7 @@ class Diagram:
         legend_y = self.height - 24
         parts.append(f'<path d="M24 {legend_y-19}H1096" stroke="#000000"/>')
         for x, kind, label in [(30, "project", "PROJECT LOGIC OR PROPOSAL"), (365, "reused", "REUSED IMPLEMENTATION"), (700, "integration", "INTEGRATION OR QUALIFICATION")]:
-            parts.append(f'<path d="M{x-6} {legend_y-4}h16" stroke="#000000" stroke-width="1.2"{DASHES[kind]}/><text x="{x+15}" y="{legend_y}" fill="#000000" font-family="Courier, monospace" font-size="11.5">{label}</text>')
+            parts.append(f'<path d="M{x-6} {legend_y-4}h16" stroke="{COLORS[kind]}" stroke-width="2"{DASHES[kind]}/><text x="{x+15}" y="{legend_y}" fill="#000000" font-family="Courier, monospace" font-size="11.5">{label}</text>')
         parts.append('</svg>')
         return "".join(parts)
 
@@ -430,5 +431,5 @@ def diagram_figure(diagram):
       <div class="chip-toolbar"><span class="chip-interaction-hint">Select a block for its description</span><div class="chip-zoom" hidden><button type="button" data-zoom="out" aria-label="Zoom out diagram">−</button><output aria-label="Diagram zoom">100%</output><button type="button" data-zoom="in" aria-label="Zoom in diagram">+</button><button type="button" data-zoom="fit">Fit</button></div><a href="assets/chips/{key}.svg" target="_blank" rel="noopener">Open drawing</a><a href="assets/chips/{key}.svg" download="srvl-{key}.svg">Save drawing</a></div>
       <div class="chip-canvas" tabindex="0" aria-label="Scrollable {e(diagram.title)}">{diagram.svg()}</div>
       <div class="chip-inspector" aria-live="polite"><div class="chip-inspector-title"><span class="chip-node-kicker">Block description</span><strong>No block selected</strong><span class="badge proposed">Design scope</span></div><p class="chip-detail">{e(diagram.subtitle)}. The accompanying text defines limitations and acceptance; these diagrams do not add new hardware evidence.</p><dl class="chip-ports"><div><dt>Inputs</dt><dd data-port="inputs">Select a block</dd></div><div><dt>Outputs</dt><dd data-port="outputs">Select a block</dd></div><div><dt>Acceptance gate</dt><dd data-port="gate">Select a block</dd></div></dl></div>
-      <figcaption>{e(diagram.title)}. Solid outlines are project logic, long dashes reused implementation, dots integration work. Each block identifies its implementation state.</figcaption>
+      <figcaption>{e(diagram.title)}. Green solid outlines are project logic, blue long dashes reused implementation, amber dots integration work. Each block identifies its implementation state.</figcaption>
     </figure>'''

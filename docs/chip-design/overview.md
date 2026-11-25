@@ -31,12 +31,12 @@ mode has its own [separate diagram and timing boundary](legacy.md).
 
 ## Read the diagrams
 
-The drawings are black line art. A **solid** outline is original project logic
-or a proposed project interface. **Long dashes** mark a reused implementation.
-A **dotted** outline marks integration work or a boundary that still needs
-qualification. Every selectable block has a state, inputs, outputs and an
-acceptance requirement. The line styles describe ownership and design role;
-they are not a pass/fail test report.
+**Green**, with a solid outline, identifies original project logic or a
+proposed project interface. **Blue**, with long dashes, identifies reused
+implementation. **Amber**, dotted, identifies integration work or a boundary
+that still needs qualification. Every selectable block has a state, inputs,
+outputs and an acceptance requirement. The colors describe ownership and design
+role; they are not a pass/fail test report.
 
 Select a block for its details. Use zoom and horizontal scrolling for larger
 views; **Open drawing** and **Save drawing** give the figure as a file for review and

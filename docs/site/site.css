@@ -1,15 +1,17 @@
 /* SRVL manual: set like a laser-printed hardware reference of the early 1990s.
    Times for text, Helvetica for heads and tables, Courier for anything typed.
-   Black ink on paper. No colour, no rounded corners, no shadows. */
+   Black ink on paper with three spot colours: green for project work, blue
+   for reused work and links, amber for work still open. No rounded corners,
+   no shadows. */
 :root{--serif:"Times New Roman",Times,"Nimbus Roman","Liberation Serif",serif;
   --sans:Helvetica,Arial,"Nimbus Sans","Liberation Sans",sans-serif;
   --mono:Courier,"Courier New","Nimbus Mono PS","Liberation Mono",monospace;
-  --ink:#000;--paper:#fff;--desk:#d8d8d4;--muted:#333;--line:#000}
+  --ink:#000;--paper:#fff;--green:#1d6b34;--blue:#1c4e9a;--amber:#b06a00;--desk:#d8d8d4;--muted:#333;--line:#000}
 *{box-sizing:border-box}
 html{background:var(--desk)}
 body{margin:0 auto;max-width:1100px;min-height:100vh;background:var(--paper);color:var(--ink);
   font:17px/1.42 var(--serif);border-left:1px solid #888;border-right:1px solid #888;padding:0 44px 60px}
-a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
 a:hover{text-decoration:none}
 :focus-visible{outline:2px solid #000;outline-offset:2px}
 .sr-only,.skip-link{position:absolute;left:-9999px}
@@ -159,3 +161,17 @@ dialog::backdrop{background:rgba(0,0,0,.35)}
   .running-head{flex-wrap:wrap}.target-strip{grid-template-columns:1fr 1fr}.resource-grid{grid-template-columns:1fr}
   .page-outline>.toc>ul{columns:1}h1{font-size:27px}.diagram-grid{grid-template-columns:1fr}.logic-boundary{grid-row:auto}}
 @media print{html{background:#fff}body{border:0;max-width:none;padding:0}.sidebar,.tools{display:none!important}.page-layout{display:block}}
+
+/* Spot colour */
+.running-head{border-bottom-color:var(--green)}
+.running-head a,.sidebar a,.page-outline a,.gate-strip a,.record-card,.library-card,.read-next a,.search-results a{color:var(--ink)}
+.nav-link[aria-current=page]::before{color:var(--green)}
+.badge.current,.badge.accepted,.badge.software-verified,.badge.project{color:var(--green)}
+.badge.scoped-evidence,.badge.workflow,.badge.reference,.badge.reused{color:var(--blue)}
+.badge.in-progress,.badge.open,.badge.proposed,.badge.integration{color:var(--amber)}
+.badge.historical,.badge.superseded{color:#555}
+.resource-fill{background:repeating-linear-gradient(135deg,var(--green) 0 2px,#fff 2px 4px)}
+.gate-strip a.done small{color:var(--green)}
+.gate-strip a.active small{color:var(--amber)}
+.notice::before{color:var(--amber)}
+@media print{a{color:#000}}
