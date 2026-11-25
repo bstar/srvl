@@ -1,0 +1,282 @@
+{
+  "board": "Tang Nano 20K",
+  "part": "GW2AR-LV18QN88C8/I7",
+  "nextpnr_family": "GW2A-18C",
+  "reviewed": "2026-11-17",
+  "status": "bench constraints; no electrical/physical acceptance",
+  "io_type": "LVCMOS33",
+  "bank_vccio": 3.3,
+  "references": [
+    {
+      "role": "clocks",
+      "url": "https://wiki.sipeed.com/hardware/en/tang/tang-nano-20k/example/unbox.html"
+    },
+    {
+      "role": "UART, LED, reset, display and audio pins",
+      "repository": "https://github.com/sipeed/TangNano-20K-example",
+      "commit": "e23949a0a77381b94960cbc4e97a7c5e5ba8d222",
+      "files": [
+        "uart/src/top.cst",
+        "led/blink_leds/src/blink_leds.cst",
+        "hdmi/src/hdmi.cst",
+        "audio/src/audio.cst"
+      ]
+    },
+    {
+      "role": "embedded SDRAM die pads",
+      "repository": "https://github.com/Seyviour/sdram-tang-nano-20k-os-example",
+      "commit": "9f787879f8d7d93e076f35d3123879241d6a5cec",
+      "files": [
+        "src/sdram.nano20k.cst"
+      ]
+    }
+  ],
+  "ports": [
+    {
+      "port": "sys_ref",
+      "direction": "input",
+      "pins": [
+        "10"
+      ],
+      "reference_hz": 64000000
+    },
+    {
+      "port": "video_ref",
+      "direction": "input",
+      "pins": [
+        "11"
+      ],
+      "reference_hz": 25200000
+    },
+    {
+      "port": "audio_ref",
+      "direction": "input",
+      "pins": [
+        "13"
+      ],
+      "reference_hz": 12288000
+    },
+    {
+      "port": "reset_button",
+      "direction": "input",
+      "pins": [
+        "88"
+      ],
+      "pull": "DOWN",
+      "active_level": "high"
+    },
+    {
+      "port": "uart_rx",
+      "direction": "input",
+      "pins": [
+        "70"
+      ],
+      "pull": "UP"
+    },
+    {
+      "port": "uart_tx",
+      "direction": "output",
+      "pins": [
+        "69"
+      ]
+    },
+    {
+      "port": "led_n",
+      "direction": "output",
+      "pins": [
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20"
+      ],
+      "active_level": "low"
+    },
+    {
+      "port": "sdram_clk",
+      "direction": "output",
+      "pins": [
+        "IOR11B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_cke",
+      "direction": "output",
+      "pins": [
+        "IOL13A"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_cs_n",
+      "direction": "output",
+      "pins": [
+        "IOL14B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_cas_n",
+      "direction": "output",
+      "pins": [
+        "IOL14A"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_ras_n",
+      "direction": "output",
+      "pins": [
+        "IOL13B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_we_n",
+      "direction": "output",
+      "pins": [
+        "IOL12B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_dqm",
+      "direction": "output",
+      "pins": [
+        "IOL12A",
+        "IOR11A",
+        "IOL18A",
+        "IOR15B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_a",
+      "direction": "output",
+      "pins": [
+        "IOR14A",
+        "IOR13B",
+        "IOR14B",
+        "IOR15A",
+        "IOL16B",
+        "IOL17B",
+        "IOL16A",
+        "IOL17A",
+        "IOL15B",
+        "IOL15A",
+        "IOR12B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_ba",
+      "direction": "output",
+      "pins": [
+        "IOR13A",
+        "IOR12A"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "sdram_dq",
+      "direction": "inout",
+      "pins": [
+        "IOL3A",
+        "IOL3B",
+        "IOL8A",
+        "IOL8B",
+        "IOL9A",
+        "IOL9B",
+        "IOL11A",
+        "IOL11B",
+        "IOR9B",
+        "IOR9A",
+        "IOR5B",
+        "IOR6A",
+        "IOR5A",
+        "IOR4B",
+        "IOR3B",
+        "IOR3A",
+        "IOL39B",
+        "IOL39A",
+        "IOL35B",
+        "IOL35A",
+        "IOL30B",
+        "IOL30A",
+        "IOL20A",
+        "IOL18B",
+        "IOR17A",
+        "IOR16A",
+        "IOR16B",
+        "IOR17B",
+        "IOR18A",
+        "IOR18B",
+        "IOR44A",
+        "IOR44B"
+      ],
+      "pin_namespace": "die_pad"
+    },
+    {
+      "port": "tmds_clock_p",
+      "direction": "output",
+      "pins": [
+        "33"
+      ],
+      "negative_port": "tmds_clock_n",
+      "negative_pins": [
+        "34"
+      ],
+      "io_type": "LVDS25",
+      "drive": "3.5",
+      "primitive": "TLVDS_OBUF"
+    },
+    {
+      "port": "tmds_data_p",
+      "direction": "output",
+      "pins": [
+        "35",
+        "37",
+        "39"
+      ],
+      "negative_port": "tmds_data_n",
+      "negative_pins": [
+        "36",
+        "38",
+        "40"
+      ],
+      "io_type": "LVDS25",
+      "drive": "3.5",
+      "primitive": "TLVDS_OBUF"
+    },
+    {
+      "port": "amplifier_enable",
+      "direction": "output",
+      "pins": [
+        "51"
+      ]
+    },
+    {
+      "port": "audio_sd",
+      "direction": "output",
+      "pins": [
+        "54"
+      ]
+    },
+    {
+      "port": "audio_ws",
+      "direction": "output",
+      "pins": [
+        "55"
+      ]
+    },
+    {
+      "port": "audio_bclk",
+      "direction": "output",
+      "pins": [
+        "56"
+      ]
+    }
+  ]
+}
