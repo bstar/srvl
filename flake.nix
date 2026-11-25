@@ -294,6 +294,7 @@
         dvi-encoder = tangBoard.dviCheck;
         board-control = tangBoard.controlCheck;
         tang-board-constraints = tangBitstream.buildCheck;
+        graphics-abi = enhanced.abiCheck;
         scaled-blitter = enhanced.blitterCheck;
         scaled-blitter-memory = enhanced.blitterMemoryCheck;
         graphics-memory = enhanced.memoryServiceCheck;

@@ -30,6 +30,13 @@ need a complete-board constraints/CDC review; these tests do not model metastabi
 
 ## Register map
 
+Offsets, bit positions, operation codes and descriptor field positions have one
+source: [graphics-abi.json](../../hardware/enhanced/graphics-abi.json).
+[make-graphics-abi.py](../../scripts/make-graphics-abi.py) generates the RTL package and
+the ca65 include from it, and the `graphics-abi` check fails when the checked-in
+copies differ. The C++ test models keep their own hand-written values on purpose,
+as an independent cross-check.
+
 Offsets below are relative to **$4400**. All reads are free of side effects,
 including CPU dummy reads. Writes act once per CPU clock edge with a write
 strobe. Unmapped reads return zero and unmapped writes do nothing.
@@ -168,8 +175,8 @@ diagnostic runs. A test palette makes covered index zero gray and cleared pixels
 dark. It is not a native scanout capture or an implemented RGB palette/compositor.
 All three clock configurations produce byte-identical output.
 
-Separate synthesis of the MMIO plus blitter uses **2,281 registers**,
-**2,562 LUT1–LUT4 cells** and **1,091 ALU cells**, plus mux primitives, without
+Separate synthesis of the MMIO plus blitter uses **2,277 registers**,
+**2,586 LUT1–LUT4 cells** and **1,091 ALU cells**, plus mux primitives, without
 DSP, block RAM or unintended latches. This excludes the CPU, ROM/RAM, memory
 service, compositor and scanout; it is not a complete enhanced fit or timing result.
 

@@ -52,9 +52,23 @@ let
       ../sim/blitter-mmio.cpp
       ../sim/native-graphics.cpp
       ../firmware/enhanced-diagnostic.s
+      ../firmware/graphics-abi.inc
+      ../scripts/make-graphics-abi.py
       ../firmware/rom.cfg
     ];
   };
+  abiCheck =
+    runCommand "chipbuilder-graphics-abi-check"
+      {
+        nativeBuildInputs = [ python3 ];
+      }
+      ''
+        python ${nativeSource}/scripts/make-graphics-abi.py ${nativeSource}/hardware/enhanced/graphics-abi.json generated
+        cmp generated/cb_abi_pkg.sv ${nativeSource}/hardware/enhanced/cb_abi_pkg.sv
+        cmp generated/graphics-abi.inc ${nativeSource}/firmware/graphics-abi.inc
+        mkdir "$out"
+        cp generated/* "$out/"
+      '';
   mmioCheck =
     runCommand "chipbuilder-blitter-mmio-check"
       {
@@ -238,6 +252,7 @@ let
 in
 {
   inherit
+    abiCheck
     blitterCheck
     blitterMemoryCheck
     memoryServiceCheck

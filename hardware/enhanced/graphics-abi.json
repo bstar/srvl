@@ -1,0 +1,27 @@
+{
+  "description": "Experimental enhanced graphics MMIO v1. Single source for firmware and RTL constants; test models keep independent literals on purpose.",
+  "base": "0x4400",
+  "device_id": "0xcb",
+  "revision": 1,
+  "registers": {
+    "ID": "0x00", "REVISION": "0x01", "STATUS": "0x02", "CONTROL": "0x03",
+    "IRQ_ENABLE": "0x04", "ERROR": "0x05", "TAG": "0x06", "DATA": "0x08",
+    "CYCLES": "0x0c", "SAMPLES": "0x10", "PIXELS": "0x14",
+    "READS": "0x18", "WRITES": "0x1c", "STALLS": "0x20",
+    "DESCRIPTOR": "0x40"
+  },
+  "descriptor_bytes": 36,
+  "status_bits": {
+    "AVAILABLE": 0, "BUSY": 1, "DONE": 2, "ERROR": 3,
+    "REJECTED": 4, "FAULT": 5, "INITIALIZED": 6, "IRQ_ENABLE": 7
+  },
+  "control_bits": { "SUBMIT": 0, "ACKNOWLEDGE": 1, "CLEAR_REJECTION": 2 },
+  "operations": { "DRAW": 0, "FILL": 1, "WRITE_BYTE": 2, "READ_BYTE": 3 },
+  "errors": { "FORMAT": 5 },
+  "descriptor_fields": {
+    "FLAGS": 0, "FILL_INDEX": 1, "COLORS": 2, "TAG": 3, "SOURCE": 5, "DESTINATION": 8,
+    "SOURCE_WIDTH": 11, "SOURCE_HEIGHT": 13, "SOURCE_STRIDE": 15, "DESTINATION_STRIDE": 17,
+    "X": 19, "Y": 21, "WIDTH": 23, "HEIGHT": 25,
+    "CLIP_X0": 27, "CLIP_Y0": 29, "CLIP_X1": 31, "CLIP_Y1": 33, "BYTE_VALUE": 35
+  }
+}

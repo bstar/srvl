@@ -23,7 +23,50 @@ module cb_blitter_mmio (
     output wire [3:0] byte_mask,
     input wire [31:0] byte_read_data
 );
-    localparam integer DESCRIPTOR_BYTES=36;
+    // Register offsets, bits and descriptor layout come from graphics-abi.json
+    // through the generated cb_abi_pkg; firmware uses the same source.
+    localparam logic [7:0] REG_ID=cb_abi_pkg::REG_ID;
+    localparam logic [7:0] REG_REVISION=cb_abi_pkg::REG_REVISION;
+    localparam logic [7:0] REG_STATUS=cb_abi_pkg::REG_STATUS;
+    localparam logic [7:0] REG_CONTROL=cb_abi_pkg::REG_CONTROL;
+    localparam logic [7:0] REG_IRQ_ENABLE=cb_abi_pkg::REG_IRQ_ENABLE;
+    localparam logic [7:0] REG_ERROR=cb_abi_pkg::REG_ERROR;
+    localparam logic [7:0] REG_TAG=cb_abi_pkg::REG_TAG;
+    localparam logic [7:0] REG_DATA=cb_abi_pkg::REG_DATA;
+    localparam logic [7:0] REG_CYCLES=cb_abi_pkg::REG_CYCLES;
+    localparam logic [7:0] REG_SAMPLES=cb_abi_pkg::REG_SAMPLES;
+    localparam logic [7:0] REG_PIXELS=cb_abi_pkg::REG_PIXELS;
+    localparam logic [7:0] REG_READS=cb_abi_pkg::REG_READS;
+    localparam logic [7:0] REG_WRITES=cb_abi_pkg::REG_WRITES;
+    localparam logic [7:0] REG_STALLS=cb_abi_pkg::REG_STALLS;
+    localparam logic [7:0] REG_DESCRIPTOR=cb_abi_pkg::REG_DESCRIPTOR;
+    localparam logic [7:0] DEVICE_ID=cb_abi_pkg::DEVICE_ID;
+    localparam logic [7:0] REVISION=cb_abi_pkg::REVISION;
+    localparam integer DESCRIPTOR_BYTES=cb_abi_pkg::DESCRIPTOR_BYTES;
+    localparam integer CONTROL_SUBMIT=cb_abi_pkg::CONTROL_SUBMIT;
+    localparam integer CONTROL_ACKNOWLEDGE=cb_abi_pkg::CONTROL_ACKNOWLEDGE;
+    localparam integer CONTROL_CLEAR_REJECTION=cb_abi_pkg::CONTROL_CLEAR_REJECTION;
+    localparam integer FIELD_FLAGS=cb_abi_pkg::FIELD_FLAGS;
+    localparam integer FIELD_FILL_INDEX=cb_abi_pkg::FIELD_FILL_INDEX;
+    localparam integer FIELD_COLORS=cb_abi_pkg::FIELD_COLORS;
+    localparam integer FIELD_TAG=cb_abi_pkg::FIELD_TAG;
+    localparam integer FIELD_SOURCE=cb_abi_pkg::FIELD_SOURCE;
+    localparam integer FIELD_DESTINATION=cb_abi_pkg::FIELD_DESTINATION;
+    localparam integer FIELD_SOURCE_WIDTH=cb_abi_pkg::FIELD_SOURCE_WIDTH;
+    localparam integer FIELD_SOURCE_HEIGHT=cb_abi_pkg::FIELD_SOURCE_HEIGHT;
+    localparam integer FIELD_SOURCE_STRIDE=cb_abi_pkg::FIELD_SOURCE_STRIDE;
+    localparam integer FIELD_DESTINATION_STRIDE=cb_abi_pkg::FIELD_DESTINATION_STRIDE;
+    localparam integer FIELD_X=cb_abi_pkg::FIELD_X;
+    localparam integer FIELD_Y=cb_abi_pkg::FIELD_Y;
+    localparam integer FIELD_WIDTH=cb_abi_pkg::FIELD_WIDTH;
+    localparam integer FIELD_HEIGHT=cb_abi_pkg::FIELD_HEIGHT;
+    localparam integer FIELD_CLIP_X0=cb_abi_pkg::FIELD_CLIP_X0;
+    localparam integer FIELD_CLIP_Y0=cb_abi_pkg::FIELD_CLIP_Y0;
+    localparam integer FIELD_CLIP_X1=cb_abi_pkg::FIELD_CLIP_X1;
+    localparam integer FIELD_CLIP_Y1=cb_abi_pkg::FIELD_CLIP_Y1;
+    localparam integer FIELD_BYTE_VALUE=cb_abi_pkg::FIELD_BYTE_VALUE;
+    localparam logic [1:0] OP_WRITE_BYTE=cb_abi_pkg::OP_WRITE_BYTE;
+    localparam logic [2:0] ERROR_FORMAT=cb_abi_pkg::ERROR_FORMAT;
     typedef struct packed {
         logic [15:0] tag;
         logic [2:0] error;
@@ -51,56 +94,59 @@ module cb_blitter_mmio (
     function automatic [7:0] field_byte(input integer index);
         field_byte=active[index*8 +: 8];
     endfunction
-    wire [7:0] flags=field_byte(0);
-    wire [15:0] tag={field_byte(4),field_byte(3)};
-    wire [23:0] source_bytes={field_byte(7),field_byte(6),field_byte(5)};
-    wire [23:0] destination_bytes={field_byte(10),field_byte(9),field_byte(8)};
-    wire [15:0] source_width_bytes={field_byte(12),field_byte(11)};
-    wire [15:0] source_height_bytes={field_byte(14),field_byte(13)};
-    wire [15:0] x_bytes={field_byte(20),field_byte(19)};
-    wire [15:0] y_bytes={field_byte(22),field_byte(21)};
-    wire [15:0] width_bytes={field_byte(24),field_byte(23)};
-    wire [15:0] height_bytes={field_byte(26),field_byte(25)};
-    wire [15:0] clip_x0_bytes={field_byte(28),field_byte(27)};
-    wire [15:0] clip_y0_bytes={field_byte(30),field_byte(29)};
-    wire [15:0] clip_x1_bytes={field_byte(32),field_byte(31)};
-    wire [15:0] clip_y1_bytes={field_byte(34),field_byte(33)};
-    wire [7:0] colors=field_byte(2);
+    wire [7:0] flags=field_byte(FIELD_FLAGS);
+    wire [15:0] tag={field_byte(FIELD_TAG+1),field_byte(FIELD_TAG)};
+    wire [23:0] source_bytes={field_byte(FIELD_SOURCE+2),field_byte(FIELD_SOURCE+1),field_byte(FIELD_SOURCE)};
+    wire [23:0] destination_bytes={field_byte(FIELD_DESTINATION+2),field_byte(FIELD_DESTINATION+1),field_byte(FIELD_DESTINATION)};
+    wire [15:0] source_width_bytes={field_byte(FIELD_SOURCE_WIDTH+1),field_byte(FIELD_SOURCE_WIDTH)};
+    wire [15:0] source_height_bytes={field_byte(FIELD_SOURCE_HEIGHT+1),field_byte(FIELD_SOURCE_HEIGHT)};
+    wire [15:0] x_bytes={field_byte(FIELD_X+1),field_byte(FIELD_X)};
+    wire [15:0] y_bytes={field_byte(FIELD_Y+1),field_byte(FIELD_Y)};
+    wire [15:0] width_bytes={field_byte(FIELD_WIDTH+1),field_byte(FIELD_WIDTH)};
+    wire [15:0] height_bytes={field_byte(FIELD_HEIGHT+1),field_byte(FIELD_HEIGHT)};
+    wire [15:0] clip_x0_bytes={field_byte(FIELD_CLIP_X0+1),field_byte(FIELD_CLIP_X0)};
+    wire [15:0] clip_y0_bytes={field_byte(FIELD_CLIP_Y0+1),field_byte(FIELD_CLIP_Y0)};
+    wire [15:0] clip_x1_bytes={field_byte(FIELD_CLIP_X1+1),field_byte(FIELD_CLIP_X1)};
+    wire [15:0] clip_y1_bytes={field_byte(FIELD_CLIP_Y1+1),field_byte(FIELD_CLIP_Y1)};
+    wire [7:0] colors=field_byte(FIELD_COLORS);
     wire bad_format=flags[7] || destination_bytes[23] ||
         (flags[1] ? (|flags[7:2]):
          (source_bytes[23] || (|source_width_bytes[15:9]) || (|source_height_bytes[15:9]) ||
           (|x_bytes[15:12]) || (|y_bytes[15:12]) || (|width_bytes[15:11]) || (|height_bytes[15:11]) ||
           (|clip_x0_bytes[15:10]) || (|clip_y0_bytes[15:10]) || (|clip_x1_bytes[15:10]) || (|clip_y1_bytes[15:10])));
     assign byte_valid=!reset && state==BYTE_REQUEST;
-    assign byte_write=flags[1:0]==2;
+    assign byte_write=flags[1:0]==OP_WRITE_BYTE;
     assign byte_address={destination_bytes[22:2],2'b0};
-    assign byte_data={24'b0,field_byte(35)}<<(destination_bytes[1:0]*8);
+    assign byte_data={24'b0,field_byte(FIELD_BYTE_VALUE)}<<(destination_bytes[1:0]*8);
     assign byte_mask=byte_write ? (4'b0001<<destination_bytes[1:0]):4'b0;
     assign protocol_fault=engine_fault || byte_fault || external_protocol_fault;
     assign irq=!reset && irq_enable && (done || rejected || fault_sync2);
+    // The descriptor window starts on a 64-byte boundary (enforced by the
+    // generator), so the low six address bits index its bytes.
+    wire in_descriptor=bus_address>=REG_DESCRIPTOR && {24'b0,bus_address}<{24'b0,REG_DESCRIPTOR}+DESCRIPTOR_BYTES;
     reg [31:0] counter_read;
     always @* begin
-        case(bus_address[7:2])
-            6'h03:counter_read=cpu_result.cycles;
-            6'h04:counter_read=cpu_result.samples;
-            6'h05:counter_read=cpu_result.pixels;
-            6'h06:counter_read=cpu_result.reads;
-            6'h07:counter_read=cpu_result.writes;
-            6'h08:counter_read=cpu_result.stalls;
+        case({bus_address[7:2],2'b00})
+            REG_CYCLES:counter_read=cpu_result.cycles;
+            REG_SAMPLES:counter_read=cpu_result.samples;
+            REG_PIXELS:counter_read=cpu_result.pixels;
+            REG_READS:counter_read=cpu_result.reads;
+            REG_WRITES:counter_read=cpu_result.writes;
+            REG_STALLS:counter_read=cpu_result.stalls;
             default:counter_read=0;
         endcase
         bus_read_data=0;
-        if(bus_address>=8'h40 && bus_address<8'h64) bus_read_data=shadow[bus_address[5:0]];
-        else if(bus_address>=8'h0c && bus_address<8'h24) bus_read_data=counter_read[bus_address[1:0]*8 +: 8];
+        if(in_descriptor) bus_read_data=shadow[bus_address[5:0]];
+        else if(bus_address>=REG_CYCLES && bus_address<REG_STALLS+8'd4) bus_read_data=counter_read[bus_address[1:0]*8 +: 8];
         else case(bus_address)
-            8'h00:bus_read_data=8'hcb;
-            8'h01:bus_read_data=1;
-            8'h02:bus_read_data={irq_enable,init_sync2,fault_sync2,rejected,(done && (|cpu_result.error)),done,cpu_busy,(!cpu_busy && !done)};
-            8'h04:bus_read_data={7'b0,irq_enable};
-            8'h05:bus_read_data={5'b0,cpu_result.error};
-            8'h06:bus_read_data=cpu_result.tag[7:0];
-            8'h07:bus_read_data=cpu_result.tag[15:8];
-            8'h08,8'h09,8'h0a,8'h0b:bus_read_data=cpu_result.data[bus_address[1:0]*8 +: 8];
+            REG_ID:bus_read_data=DEVICE_ID;
+            REG_REVISION:bus_read_data=REVISION;
+            REG_STATUS:bus_read_data={irq_enable,init_sync2,fault_sync2,rejected,(done && (|cpu_result.error)),done,cpu_busy,(!cpu_busy && !done)};
+            REG_IRQ_ENABLE:bus_read_data={7'b0,irq_enable};
+            REG_ERROR:bus_read_data={5'b0,cpu_result.error};
+            REG_TAG:bus_read_data=cpu_result.tag[7:0];
+            REG_TAG+8'd1:bus_read_data=cpu_result.tag[15:8];
+            REG_DATA,REG_DATA+8'd1,REG_DATA+8'd2,REG_DATA+8'd3:bus_read_data=cpu_result.data[bus_address[1:0]*8 +: 8];
             default:bus_read_data=0;
         endcase
     end
@@ -116,12 +162,12 @@ module cb_blitter_mmio (
             init_sync1<=initialized; init_sync2<=init_sync1;
             fault_sync1<=fault_launch; fault_sync2<=fault_sync1;
             if(bus_write) begin
-                if(bus_address>=8'h40 && bus_address<8'h64) shadow[bus_address[5:0]]<=bus_write_data;
-                else if(bus_address==8'h04) irq_enable<=bus_write_data[0];
-                else if(bus_address==8'h03) begin
-                    if(bus_write_data[2]) rejected<=0;
-                    if(bus_write_data[1] && done) begin done<=0; acknowledge_toggle<=reply_seen; end
-                    if(bus_write_data[0]) begin
+                if(in_descriptor) shadow[bus_address[5:0]]<=bus_write_data;
+                else if(bus_address==REG_IRQ_ENABLE) irq_enable<=bus_write_data[0];
+                else if(bus_address==REG_CONTROL) begin
+                    if(bus_write_data[CONTROL_CLEAR_REJECTION]) rejected<=0;
+                    if(bus_write_data[CONTROL_ACKNOWLEDGE] && done) begin done<=0; acknowledge_toggle<=reply_seen; end
+                    if(bus_write_data[CONTROL_SUBMIT]) begin
                         // ACK+GO does not recycle a held completion in one write.
                         // A rejected GO cannot replace submitted data or its tag.
                         if(!cpu_busy && !done) begin
@@ -155,7 +201,7 @@ module cb_blitter_mmio (
                 end
                 DECODE: begin
                     graphics_result<='0; graphics_result.tag<=tag;
-                    if(bad_format) begin graphics_result.error<=5; reply_toggle<=!reply_toggle; state<=WAIT_ACK; end
+                    if(bad_format) begin graphics_result.error<=ERROR_FORMAT; reply_toggle<=!reply_toggle; state<=WAIT_ACK; end
                     else state<=flags[1] ? BYTE_REQUEST:DRAW_REQUEST;
                 end
                 DRAW_REQUEST: if(engine_ready) state<=DRAW_WAIT;
@@ -183,10 +229,10 @@ module cb_blitter_mmio (
         .clk(graphics_clk),.reset(reset),.command_valid(state==DRAW_REQUEST && !reset),.command_ready(engine_ready),
         .command_tag(tag),.command_fill(flags[0]),.command_fill_covered(flags[2]),.command_bpp4(flags[3]),
         .command_flip_x(flags[4]),.command_flip_y(flags[5]),.command_transparent(flags[6]),
-        .command_fill_index(field_byte(1)),.command_palette(colors[3:0]),.command_band(colors[7:4]),
+        .command_fill_index(field_byte(FIELD_FILL_INDEX)),.command_palette(colors[3:0]),.command_band(colors[7:4]),
         .command_source(source_bytes[22:0]),.command_destination(destination_bytes[22:0]),
         .command_source_width(source_width_bytes[8:0]),.command_source_height(source_height_bytes[8:0]),
-        .command_source_stride({field_byte(16),field_byte(15)}),.command_destination_stride({field_byte(18),field_byte(17)}),
+        .command_source_stride({field_byte(FIELD_SOURCE_STRIDE+1),field_byte(FIELD_SOURCE_STRIDE)}),.command_destination_stride({field_byte(FIELD_DESTINATION_STRIDE+1),field_byte(FIELD_DESTINATION_STRIDE)}),
         .command_x(x_bytes[11:0]),.command_y(y_bytes[11:0]),.command_width(width_bytes[10:0]),.command_height(height_bytes[10:0]),
         .command_clip_x0(clip_x0_bytes[9:0]),.command_clip_y0(clip_y0_bytes[9:0]),
         .command_clip_x1(clip_x1_bytes[9:0]),.command_clip_y1(clip_y1_bytes[9:0]),

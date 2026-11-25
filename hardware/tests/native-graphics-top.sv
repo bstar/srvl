@@ -44,7 +44,7 @@ module native_graphics_top #(
         always @* begin
             if(address[15]) read_data=rom[address[14:0]];
             else if(address<16'h2000) read_data=ram[address[12:0]];
-            else if(address[15:8]==8'h44) read_data=register_data;
+            else if(address[15:8]==cb_abi_pkg::BASE_PAGE) read_data=register_data;
             else read_data=0;
         end
         always @(posedge cpu_clk) begin
@@ -56,7 +56,7 @@ module native_graphics_top #(
         end
         assign diagnostic=result;
     end else begin: register_driver
-        assign address={8'h44,test_bus_address};
+        assign address={cb_abi_pkg::BASE_PAGE,test_bus_address};
         assign write_data=test_bus_data;
         assign write_enable=test_bus_write;
         assign sync=0;
@@ -77,7 +77,7 @@ module native_graphics_top #(
     wire [3:0] byte_mask;
     wire arbiter_fault;
     cb_blitter_mmio registers (.cpu_clk(cpu_clk),.graphics_clk(clk),.reset(reset),
-        .bus_address(address[7:0]),.bus_write_data(write_data),.bus_write(write_enable && address[15:8]==8'h44 && !reset),
+        .bus_address(address[7:0]),.bus_write_data(write_data),.bus_write(write_enable && address[15:8]==cb_abi_pkg::BASE_PAGE && !reset),
         .bus_read_data(register_data),.irq(irq),.initialized(initialized),
         .external_protocol_fault(arbiter_fault || test_fault),.protocol_fault(protocol_fault),
         .memory_valid(memory_valid),.memory_ready(memory_ready),.memory_write(memory_write),.memory_address(memory_address),

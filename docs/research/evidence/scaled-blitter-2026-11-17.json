@@ -145,12 +145,12 @@
     "hardware/enhanced/cb_graphics_sdram.sv": "2a8f83b7eba31332075f7cea9f94792a78622ae571f0b41f2a781a021e9a56b7",
     "hardware/enhanced/cb_scaled_blitter.sv": "3df064b263a76c147c0c7c349805a6be95a1c61c15104d7d8f5270714593aaaa",
     "hardware/tests/enhanced-blitter-memory-top.sv": "b7fe1daeb94f75a9364f5392bf17a7bb6b3412a8d2579fada0027844b7ae1653",
-    "nix/enhanced.nix": "d1e7684b304423d1f99a225e346bc80b9609ffafadaa50aabb3031f548ff7778",
+    "nix/enhanced.nix": "1af998df72ed44c3a36e95365ce59f798fc12754f595c21d2c2b60bc6322b22c",
     "sim/scaled-blitter-memory.cpp": "f7cb9623599e65323f2399dc1cc245669b24e829d66510a0513d69df7572c0a6",
     "sim/scaled-blitter-model.hpp": "fad0455908a995f9ef9d7beb96fc9befc8bb69ad4adc4c43f4d7a1f614bac16c",
     "sim/scaled-blitter.cpp": "f64dcdfc772224acd722b102a051e1ef26be190464292fb5839518e632cd3879",
     "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6",
-    "docs/research/evidence/native-graphics-2026-11-17.json": "eb6f3777fabee6d95d20d29b11948e33cb22527e699f97892c8bda880a97b25c"
+    "docs/research/evidence/native-graphics-2026-11-17.json": "a8f34a9e0ef4db6bf32d4dcba08a39e903aa63160d203e472f0383cb5dfcffba"
   },
   "media_sha256": {
     "docs/images/scaled-blitter-scene.png": "63c7c19caaff9ad7e92cb84a9fd8401b75d6bdf5107f641b171c7e5662fee3a4"

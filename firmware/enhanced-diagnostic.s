@@ -1,13 +1,14 @@
 ; Original CPU-executed enhanced graphics diagnostic; no host rendering.
 .setcpu "65C02"
 .macpack longbranch
-STATUS=$4402
-CONTROL=$4403
-ENABLE_IRQ=$4404
-ERROR=$4405
-TAG=$4406
-DATA=$4408
-SHADOW=$4440
+.include "graphics-abi.inc"           ; generated from hardware/enhanced/graphics-abi.json
+STATUS=GFX_STATUS
+CONTROL=GFX_CONTROL
+ENABLE_IRQ=GFX_IRQ_ENABLE
+ERROR=GFX_ERROR
+TAG=GFX_TAG
+DATA=GFX_DATA
+SHADOW=GFX_DESCRIPTOR
 DIAGNOSTIC=$403f
 .segment "ZEROPAGE"
 pointer: .res 2
