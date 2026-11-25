@@ -8,8 +8,8 @@ New games target **320 × 204** native rendering. Legacy Lynx games retain
 **160 × 102** rendering and receive exact 2× visual scaling. A color display with
 a **backlight** is required; the exact panel remains under investigation.
 
-For the HTML review area, run `nix run .#docs` and open
-<http://127.0.0.1:8787>. It covers the current target, architecture, decision
+The manual is published at <https://bstar.github.io/srvl/>. To read a local
+build, run `nix run .#docs` and open <http://127.0.0.1:8787>. It covers the current target, architecture, decision
 history, open tradeoffs, work plan and evidence. The
 [documentation workflow](docs/documentation.md) explains building and updating it.
 
