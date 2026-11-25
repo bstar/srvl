@@ -89,7 +89,7 @@ module tang_services_top (
         .memory_request(bus_request),.memory_ready(request_ready && memory_grant && !memory_test),
         .memory_response(response && !memory_test),.memory_read_data(read_data),
         .memory_write(bus_write),.memory_address(bus_address),.memory_data(bus_data),.memory_mask(bus_mask));
-    lynx_sdram memory (.clk(clk),.reset(reset),
+    cb_graphics_sdram memory (.clk(clk),.reset(reset),
         .request(memory_test ? test_request:(bus_request && memory_grant)),
         .request_ready(request_ready),.write(memory_test ? test_write:bus_write),
         .address(memory_test ? test_address:bus_address),

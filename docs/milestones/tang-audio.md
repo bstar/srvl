@@ -65,7 +65,7 @@ frequencies and volume, including changes after warm reload. Stop is followed by
 complete silent frames; no transport underrun occurs. Simultaneously, **23**
 complete 320×204 canvases match complete emitted Lynx frames with exact 2× pixels.
 The run covers **34,869,130 master clocks**, twelve cartridge requests/ACKs, two
-external cartridge-cache misses and **69,542 SDRAM refreshes**.
+external cartridge-cache misses and **69,547 SDRAM refreshes**.
 
 These are original diagnostics, not a compatibility result for commercial games.
 The earlier [video-only acceptance](tang-video.md) remains a separate test.
@@ -101,7 +101,7 @@ Stereo headphone circuitry, amplifier enable/reset sequencing, board I/O,
 physical clock quality and listening measurements remain unqualified.
 
 The portable audiovisual system maps to **35 block RAMs** and
-**6,209 registers**, including synchronized audio status. Complete-board
+**6,214 registers**, including synchronized audio status. Complete-board
 placement/routing and timing are still the next gate. See the
 [audio design diagram](../chip-design/audio.md),
 [open choices](../tradeoffs.md) and [roadmap](../roadmap.md).

@@ -62,6 +62,6 @@ mapping normalizes small LUTs and verifies fabric-model presence; DSP, serialize
 and external I/O timing remain open. Service simulation and the FIFO's separate block-RAM mapping are narrower
 checks; neither the portable system nor its scanout is included in that routed
 design. Both video-only and audiovisual portable systems map to 35 block RAMs;
-the audiovisual system uses 6,209 registers. The new scaled-blitter component
+the audiovisual system uses 6,214 registers. The new scaled-blitter component
 passes pixel/SDRAM-model checks and standalone synthesis; its complete enhanced
 configuration has not completed place/route or physical acceptance.

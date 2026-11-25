@@ -30,6 +30,7 @@ let
       (lib.fileset.fileFilter (file: file.hasExt "sv") ../hardware/boards/tang_nano20k)
       ../hardware/display
       ../hardware/tang
+      ../hardware/memory
       ../hardware/video
       ../hardware/audio
     ];
@@ -43,7 +44,7 @@ let
         ];
       }
       ''
-        yosys -Q -T -p 'read_verilog ${lynxHdl}/lynx-compact.v; read_verilog -sv ${source}/hardware/tang/*.sv ${source}/hardware/video/*.sv ${source}/hardware/audio/*.sv ${source}/hardware/display/*.sv ${source}/hardware/boards/tang_nano20k/*.sv; synth_gowin -family gw2a -top lynx_tang_board -json board.json; stat' \
+        yosys -Q -T -p 'read_verilog ${lynxHdl}/lynx-compact.v; read_verilog -sv ${source}/hardware/tang/*.sv ${source}/hardware/memory/*.sv ${source}/hardware/video/*.sv ${source}/hardware/audio/*.sv ${source}/hardware/display/*.sv ${source}/hardware/boards/tang_nano20k/*.sv; synth_gowin -family gw2a -top lynx_tang_board -json board.json; stat' \
           > synthesis.log 2>&1 || { tail -100 synthesis.log; exit 1; }
         mv board.json raw-board.json
         python ${../scripts/normalize-gowin-luts.py} raw-board.json board.json lut-normalization.json

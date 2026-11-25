@@ -4,8 +4,8 @@ Reviewed: **2026-11-17**. Status: **integration design**. Tang SDRAM, UART/loade
 and cartridge service checks now pass an independent command-level memory model.
 Integrated console cold/warm boot and buffered exact-2× RGB output also pass.
 Display contention is covered by a separate component test; board timing remains open.
-A separate enhanced elastic arbiter/controller now passes standalone and
-scaled-blitter contention checks. A separate native CPU/MMIO diagnostic now uses
+The elastic arbiter/controller passes standalone and scaled-blitter contention
+checks, and since 2026-11-24 also serves the legacy system. A separate native CPU/MMIO diagnostic now uses
 the same service. Complete-frame/native scanout integration, deadline
 reservations, cache sizes and the game-visible bus ABI remain open.
 
@@ -37,7 +37,8 @@ the separate [CPU diagnostic](../architecture/native-graphics-mmio.md) proves
 functional command integration. Real native scanout, layer composition, complete-frame
 ownership and enhanced board timing remain ahead.
 
-This service is separate from the unchanged legacy controller/arbiter. It has no
+This one service now serves both the legacy system and the enhanced engines;
+the earlier legacy controller/arbiter were removed. It has no
 per-client request queues, bursts, open rows or reserved scanout priority yet.
 The broader scheduler diagram above remains a proposal for complete-system
 service, rather than a claim that all of its policy blocks are implemented.

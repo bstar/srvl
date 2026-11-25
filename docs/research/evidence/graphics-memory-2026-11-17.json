@@ -60,10 +60,10 @@
   "physical_testing": false,
   "source_sha256": {
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
-    "hardware/enhanced/cb_graphics_arbiter.sv": "6d1dab63643100bae14936e07fbfd6c4b5e0191b5912f6ca0f19d164ae09e74c",
-    "hardware/enhanced/cb_graphics_sdram.sv": "2a8f83b7eba31332075f7cea9f94792a78622ae571f0b41f2a781a021e9a56b7",
+    "hardware/memory/cb_graphics_arbiter.sv": "1bfb30c0e4f13e30c73da5257d0d3039e350528f9fe8c08edf88fbc949264885",
+    "hardware/memory/cb_graphics_sdram.sv": "9c83bd17adb97c0bca767ea1fc5bbc193fec6b6d2297049a945cf9ca4046b20c",
     "hardware/tests/graphics-memory-top.sv": "5f9500047d172a038e98600b34956ba28456496d9dafe34f8907090089950524",
-    "nix/enhanced.nix": "1af998df72ed44c3a36e95365ce59f798fc12754f595c21d2c2b60bc6322b22c",
+    "nix/enhanced.nix": "1b4b0d0899c67ba3adb6f0850e42146acb5daa05063fe6afc8ef45a09334a2d3",
     "sim/graphics-memory.cpp": "cb8d1862a315c0b0f30247c877d8a4243a473e4b5a72dbcce8c7bfa8ed43f61c",
     "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6"
   }

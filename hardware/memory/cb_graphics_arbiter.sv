@@ -1,7 +1,8 @@
 // Original enhanced three-client memory arbiter. One elastic request slot:
 // bypass when the controller is ready, retain accepted work during recovery,
 // and retire an old response while accepting the next owner on the same edge.
-// The legacy arbiter remains unchanged. Responses must follow acceptance.
+// Shared by the legacy Lynx system and the enhanced engines. Responses must
+// follow acceptance.
 module cb_graphics_arbiter (
     input wire clk, reset,
     input wire [2:0] client_valid,

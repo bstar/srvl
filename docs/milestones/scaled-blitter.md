@@ -53,7 +53,7 @@ both formats and every flip combination. A full aligned fill must emit exactly
 The [integration fixture](../../hardware/tests/enhanced-blitter-memory-top.sv)
 connects the engine to the enhanced elastic round-robin arbiter and actual
 auto-precharge x32 SDRAM controller. The [memory-service acceptance](enhanced-memory.md)
-records their separate implementation and tests; legacy RTL remains unchanged.
+records their implementation and tests; the legacy system now shares them.
 Its [test](../../sim/scaled-blitter-memory.cpp) uses the independent
 physical-command [memory model](../../sim/sdram-model.hpp), uploads assets through
 the memory interface, and compares physical storage with the pixel reference.

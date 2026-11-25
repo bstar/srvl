@@ -114,6 +114,6 @@ See [provenance](provenance.md), [tradeoffs](../tradeoffs.md) and the
 - [Sipeed clock-generator and serial-console documentation](https://wiki.sipeed.com/hardware/en/tang/tang-nano-20k/example/unbox.html)
 - [Original native software architecture](software-prototype.md)
 - [Earlier standalone contract](standalone-platform.md)
-- [Current initial SDRAM RTL](../../hardware/tang/lynx_sdram.sv)
+- [Shared SDRAM controller RTL](../../hardware/memory/cb_graphics_sdram.sv)
 - [Current initial UART RTL](../../hardware/tang/lynx_uart.sv)
 - [Current initial packet RTL](../../hardware/tang/lynx_packet.sv)

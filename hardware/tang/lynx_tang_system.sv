@@ -116,7 +116,7 @@ module lynx_tang_system #(parameter integer VIDEO=0, AUDIO=0) (
             .underrun(scan_underrun),.underrun_count(video_underruns),.protocol_fault(scan_fault));
         assign {scan_ready,capture_ready,bridge_ready}=clients_ready;
         assign {scan_response,capture_response,bridge_response}=clients_response;
-        cb_memory_arbiter arbiter (.clk(clk),.reset(reset),
+        cb_graphics_arbiter arbiter (.clk(clk),.reset(reset),
             .client_valid({scan_valid,capture_valid,bridge_request}),.client_ready(clients_ready),
             .client_write({1'b0,1'b1,bridge_write}),
             .client_address({scan_address,capture_address,bridge_address}),
@@ -166,7 +166,7 @@ module lynx_tang_system #(parameter integer VIDEO=0, AUDIO=0) (
         assign audio_snapshot_right=0;
         wire _unused_audio_clock=audio_clk ^ audio_reset;
     end endgenerate
-    lynx_sdram memory (.clk(clk),.reset(reset),.request(memory_request),.request_ready(memory_ready),
+    cb_graphics_sdram memory (.clk(clk),.reset(reset),.request(memory_request),.request_ready(memory_ready),
         .write(memory_write),.address(memory_address),.write_data(memory_data),.write_mask(memory_mask),
         .response(memory_response),.read_data(memory_read_data),.initialized(memory_initialized),
         .sdram_a(sdram_a),.sdram_ba(sdram_ba),.sdram_dqm(sdram_dqm),.sdram_cke(sdram_cke),.sdram_cs_n(sdram_cs_n),

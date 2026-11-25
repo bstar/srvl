@@ -23,8 +23,8 @@ let
     root = ../.;
     fileset = lib.fileset.unions [
       ../hardware/enhanced/cb_scaled_blitter.sv
-      ../hardware/enhanced/cb_graphics_arbiter.sv
-      ../hardware/enhanced/cb_graphics_sdram.sv
+      ../hardware/memory/cb_graphics_arbiter.sv
+      ../hardware/memory/cb_graphics_sdram.sv
       ../hardware/tests/enhanced-blitter-memory-top.sv
       ../sim/scaled-blitter-model.hpp
       ../sim/scaled-blitter-memory.cpp
@@ -34,8 +34,8 @@ let
   serviceSource = lib.fileset.toSource {
     root = ../.;
     fileset = lib.fileset.unions [
-      ../hardware/enhanced/cb_graphics_arbiter.sv
-      ../hardware/enhanced/cb_graphics_sdram.sv
+      ../hardware/memory/cb_graphics_arbiter.sv
+      ../hardware/memory/cb_graphics_sdram.sv
       ../hardware/tests/graphics-memory-top.sv
       ../sim/graphics-memory.cpp
       ../sim/sdram-model.hpp
@@ -45,6 +45,7 @@ let
     root = ../.;
     fileset = lib.fileset.unions [
       ../hardware/enhanced
+      ../hardware/memory
       ../hardware/tests/native-graphics-top.sv
       ../sim/native-graphics-model.hpp
       ../sim/scaled-blitter-model.hpp
@@ -83,7 +84,7 @@ let
       ''
         verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME \
           --top-module native_graphics_top -GUSE_CPU=0 --Mdir obj -CFLAGS '-O2 -std=c++17' \
-          ${nativeSource}/hardware/enhanced/*.sv ${nativeSource}/hardware/tests/native-graphics-top.sv \
+          ${nativeSource}/hardware/enhanced/*.sv ${nativeSource}/hardware/memory/*.sv ${nativeSource}/hardware/tests/native-graphics-top.sv \
           ${nativeSource}/sim/blitter-mmio.cpp > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vnative_graphics_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
@@ -125,7 +126,7 @@ let
         # Warnings are fatal for project RTL; only the pinned upstream CPU is waived.
         printf '`verilator_config\nlint_off -file "%s"\n' ${cpuHdl}/cpu.v > upstream.vlt
         verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT --top-module native_graphics_top --Mdir obj \
-          -CFLAGS '-O2 -std=c++17' upstream.vlt ${cpuHdl}/cpu.v ${nativeSource}/hardware/enhanced/*.sv \
+          -CFLAGS '-O2 -std=c++17' upstream.vlt ${cpuHdl}/cpu.v ${nativeSource}/hardware/enhanced/*.sv ${nativeSource}/hardware/memory/*.sv \
           ${nativeSource}/hardware/tests/native-graphics-top.sv ${nativeSource}/sim/native-graphics.cpp \
           > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vnative_graphics_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
@@ -158,14 +159,14 @@ let
       ''
         verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME \
           --top-module graphics_memory_top --Mdir obj -CFLAGS '-O2 -std=c++17' \
-          ${serviceSource}/hardware/enhanced/cb_graphics_arbiter.sv \
-          ${serviceSource}/hardware/enhanced/cb_graphics_sdram.sv \
+          ${serviceSource}/hardware/memory/cb_graphics_arbiter.sv \
+          ${serviceSource}/hardware/memory/cb_graphics_sdram.sv \
           ${serviceSource}/hardware/tests/graphics-memory-top.sv ${serviceSource}/sim/graphics-memory.cpp \
           > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vgraphics_memory_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
         for module in cb_graphics_arbiter cb_graphics_sdram; do
-          yosys -Q -T -p "read_verilog -sv ${serviceSource}/hardware/enhanced/$module.sv; synth_gowin -family gw2a -top $module -noiopads -json $module.json; stat" \
+          yosys -Q -T -p "read_verilog -sv ${serviceSource}/hardware/memory/$module.sv; synth_gowin -family gw2a -top $module -noiopads -json $module.json; stat" \
             > "$module.log" 2>&1 || { tail -100 "$module.log"; exit 1; }
         done
         python - <<'PY'
@@ -233,7 +234,7 @@ let
         verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT \
           --top-module enhanced_blitter_memory_top --Mdir obj -CFLAGS '-O2 -std=c++17' \
           ${memorySource}/hardware/enhanced/cb_scaled_blitter.sv \
-          ${memorySource}/hardware/enhanced/cb_graphics_arbiter.sv ${memorySource}/hardware/enhanced/cb_graphics_sdram.sv \
+          ${memorySource}/hardware/memory/cb_graphics_arbiter.sv ${memorySource}/hardware/memory/cb_graphics_sdram.sv \
           ${memorySource}/hardware/tests/enhanced-blitter-memory-top.sv ${memorySource}/sim/scaled-blitter-memory.cpp \
           > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Venhanced_blitter_memory_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }

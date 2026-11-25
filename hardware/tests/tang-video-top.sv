@@ -55,7 +55,7 @@ module tang_video_top (
     assign {scan_response,capture_response,host_response}=clients_response;
     assign host_read_data=read_data;
     assign memory_ready=controller_ready && !memory_stall;
-    cb_memory_arbiter arbiter (.clk(clk),.reset(reset),
+    cb_graphics_arbiter arbiter (.clk(clk),.reset(reset),
         .client_valid({scan_valid,capture_valid,host_valid}),.client_ready(clients_ready),
         .client_write({1'b0,1'b1,host_write}),.client_address({scan_address,capture_address,host_address}),
         .client_data({32'b0,capture_data,host_data}),.client_mask({4'b0,capture_mask,host_mask}),
@@ -64,7 +64,7 @@ module tang_video_top (
         .memory_address(memory_address),.memory_data(memory_data),.memory_mask(memory_mask),
         .memory_response(response),.memory_read_data(host_read_data_internal));
     wire [31:0] host_read_data_internal;
-    lynx_sdram memory (.clk(clk),.reset(reset),.request(memory_valid && !memory_stall),.request_ready(controller_ready),
+    cb_graphics_sdram memory (.clk(clk),.reset(reset),.request(memory_valid && !memory_stall),.request_ready(controller_ready),
         .write(memory_write),.address(memory_address),.write_data(memory_data),.write_mask(memory_mask),
         .response(response),.read_data(host_read_data_internal),.initialized(initialized),
         .sdram_a(sdram_a),.sdram_ba(sdram_ba),.sdram_dqm(sdram_dqm),.sdram_cke(sdram_cke),.sdram_cs_n(sdram_cs_n),

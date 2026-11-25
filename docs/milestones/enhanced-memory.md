@@ -2,14 +2,16 @@
 
 Reviewed: **2026-11-17**. Status: **standalone and scaled-blitter model checks
 pass; separate CPU/MMIO diagnostics also pass, while compositor/scanout integration, timing and physical acceptance
-remain open**. This is original project logic derived from our conservative
-legacy memory service, with a separate enhanced implementation.
+remain open**. This is original project logic derived from our earlier conservative
+memory service, which it has now replaced in the legacy system as well.
 
 ## What changed
 
-The enhanced fixture now uses [cb_graphics_arbiter.sv](../../hardware/enhanced/cb_graphics_arbiter.sv)
-and [cb_graphics_sdram.sv](../../hardware/enhanced/cb_graphics_sdram.sv).
-The legacy arbiter/controller and Lynx board build retain their prior RTL.
+The enhanced fixture uses [cb_graphics_arbiter.sv](../../hardware/memory/cb_graphics_arbiter.sv)
+and [cb_graphics_sdram.sv](../../hardware/memory/cb_graphics_sdram.sv).
+Since **2026-11-24** the legacy Lynx system and board build use the same two
+modules; the earlier legacy arbiter/controller were removed after every Tang
+service, video, audio and board-route check passed on the shared service.
 The [memory chapter](../chip-design/memory.md#implemented-enhanced-service)
 provides an inspectable circuit diagram.
 

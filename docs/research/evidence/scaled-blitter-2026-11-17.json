@@ -141,16 +141,16 @@
     "docs/research/evidence/scaled-blitter-baseline-2026-11-17.json": "e500d5a55d36281944bd39153982868e48e020811dc84df91126b971c4a2b73a",
     "docs/research/evidence/scaled-blitter-legacy-memory-2026-11-17.json": "acc91ffe0050f5414a69b92242c7ef88a72ec98c2709f603507b2caa6f26b2fe",
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
-    "hardware/enhanced/cb_graphics_arbiter.sv": "6d1dab63643100bae14936e07fbfd6c4b5e0191b5912f6ca0f19d164ae09e74c",
-    "hardware/enhanced/cb_graphics_sdram.sv": "2a8f83b7eba31332075f7cea9f94792a78622ae571f0b41f2a781a021e9a56b7",
+    "hardware/memory/cb_graphics_arbiter.sv": "1bfb30c0e4f13e30c73da5257d0d3039e350528f9fe8c08edf88fbc949264885",
+    "hardware/memory/cb_graphics_sdram.sv": "9c83bd17adb97c0bca767ea1fc5bbc193fec6b6d2297049a945cf9ca4046b20c",
     "hardware/enhanced/cb_scaled_blitter.sv": "3df064b263a76c147c0c7c349805a6be95a1c61c15104d7d8f5270714593aaaa",
     "hardware/tests/enhanced-blitter-memory-top.sv": "b7fe1daeb94f75a9364f5392bf17a7bb6b3412a8d2579fada0027844b7ae1653",
-    "nix/enhanced.nix": "1af998df72ed44c3a36e95365ce59f798fc12754f595c21d2c2b60bc6322b22c",
+    "nix/enhanced.nix": "1b4b0d0899c67ba3adb6f0850e42146acb5daa05063fe6afc8ef45a09334a2d3",
     "sim/scaled-blitter-memory.cpp": "f7cb9623599e65323f2399dc1cc245669b24e829d66510a0513d69df7572c0a6",
     "sim/scaled-blitter-model.hpp": "fad0455908a995f9ef9d7beb96fc9befc8bb69ad4adc4c43f4d7a1f614bac16c",
     "sim/scaled-blitter.cpp": "f64dcdfc772224acd722b102a051e1ef26be190464292fb5839518e632cd3879",
     "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6",
-    "docs/research/evidence/native-graphics-2026-11-17.json": "a8f34a9e0ef4db6bf32d4dcba08a39e903aa63160d203e472f0383cb5dfcffba"
+    "docs/research/evidence/native-graphics-2026-11-17.json": "f7dd9ad515cc6c81d5102c49b36d2dfeb388dc75c3371d3ced7bef4a8fe597e8"
   },
   "media_sha256": {
     "docs/images/scaled-blitter-scene.png": "63c7c19caaff9ad7e92cb84a9fd8401b75d6bdf5107f641b171c7e5662fee3a4"

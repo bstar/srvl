@@ -20,6 +20,7 @@ let
     };
   source = makeSource [
     ../hardware/tang
+    ../hardware/memory
     ../hardware/video
     ../hardware/audio
     ../sim/sdram-model.hpp
@@ -31,20 +32,22 @@ let
   ];
   servicesSource = makeSource [
     ../hardware/tang
+    ../hardware/memory
     ../hardware/tests/tang-services-top.sv
     ../sim/sdram-model.hpp
     ../sim/tang-services.cpp
   ];
   videoSource = makeSource [
     ../hardware/video
-    ../hardware/tang/cb_memory_arbiter.sv
-    ../hardware/tang/lynx_sdram.sv
+    ../hardware/memory/cb_graphics_arbiter.sv
+    ../hardware/memory/cb_graphics_sdram.sv
     ../hardware/tests/tang-video-top.sv
     ../sim/sdram-model.hpp
     ../sim/video-pipeline.cpp
   ];
   rtlSource = makeSource [
     ../hardware/tang
+    ../hardware/memory
     ../hardware/video
     ../hardware/audio
   ];
@@ -102,7 +105,7 @@ let
         # FPGA declaration initialization is intentional; test fixture names follow
         # the repository's hyphenated filenames. All other warnings are fatal.
         verilator --cc --exe --build -j 4 -Wall -Wno-PROCASSINIT -Wno-DECLFILENAME --top-module tang_services_top --Mdir obj \
-          -CFLAGS '-O2 -std=c++17' ${servicesSource}/hardware/tang/*.sv \
+          -CFLAGS '-O2 -std=c++17' ${servicesSource}/hardware/tang/*.sv ${servicesSource}/hardware/memory/*.sv \
           ${servicesSource}/hardware/tests/tang-services-top.sv ${servicesSource}/sim/tang-services.cpp \
           > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vtang_services_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
@@ -155,7 +158,7 @@ let
         # Warnings are fatal for project RTL; only the translated upstream core is waived.
         printf '`verilator_config\nlint_off -file "%s"\n' ${lynxHdl}/lynx-compact.v > upstream.vlt
         verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT -Wno-ALWNEVER ${lib.optionalString video "-GVIDEO=1"} ${lib.optionalString audio "-GAUDIO=1"} --top-module lynx_tang_system --Mdir obj \
-          -CFLAGS '-O2 -std=c++17 ${lib.optionalString video "-DVIDEO_CHECK"} ${lib.optionalString audio "-DAUDIO_CHECK"}' upstream.vlt ${lynxHdl}/lynx-compact.v ${source}/hardware/tang/*.sv ${source}/hardware/video/*.sv ${source}/hardware/audio/*.sv \
+          -CFLAGS '-O2 -std=c++17 ${lib.optionalString video "-DVIDEO_CHECK"} ${lib.optionalString audio "-DAUDIO_CHECK"}' upstream.vlt ${lynxHdl}/lynx-compact.v ${source}/hardware/tang/*.sv ${source}/hardware/memory/*.sv ${source}/hardware/video/*.sv ${source}/hardware/audio/*.sv \
           ${source}/sim/lynx-tang.cpp > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vlynx_tang_system diagnostic.bin evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
@@ -251,7 +254,7 @@ let
       ''
         verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT --top-module tang_video_top --Mdir obj \
           -CFLAGS '-O2 -std=c++17' ${videoSource}/hardware/video/*.sv \
-          ${videoSource}/hardware/tang/cb_memory_arbiter.sv ${videoSource}/hardware/tang/lynx_sdram.sv \
+          ${videoSource}/hardware/memory/cb_graphics_arbiter.sv ${videoSource}/hardware/memory/cb_graphics_sdram.sv \
           ${videoSource}/hardware/tests/tang-video-top.sv ${videoSource}/sim/video-pipeline.cpp \
           > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vtang_video_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
@@ -285,7 +288,7 @@ let
         ];
       }
       ''
-        yosys -Q -T -p 'read_verilog ${lynxHdl}/lynx-compact.v; read_verilog -sv ${rtlSource}/hardware/tang/*.sv ${rtlSource}/hardware/video/*.sv ${rtlSource}/hardware/audio/*.sv; chparam -set VIDEO 1 -set AUDIO ${if audio then "1" else "0"} lynx_tang_system; synth_gowin -family gw2a -top lynx_tang_system -noiopads -json system.json; stat' \
+        yosys -Q -T -p 'read_verilog ${lynxHdl}/lynx-compact.v; read_verilog -sv ${rtlSource}/hardware/tang/*.sv ${rtlSource}/hardware/memory/*.sv ${rtlSource}/hardware/video/*.sv ${rtlSource}/hardware/audio/*.sv; chparam -set VIDEO 1 -set AUDIO ${if audio then "1" else "0"} lynx_tang_system; synth_gowin -family gw2a -top lynx_tang_system -noiopads -json system.json; stat' \
           > synthesis.log 2>&1 || { tail -100 synthesis.log; exit 1; }
         python - <<'PY'
         import collections,json

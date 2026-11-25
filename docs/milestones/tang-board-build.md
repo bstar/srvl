@@ -19,9 +19,9 @@ handheld-panel driver in this image.
 | Mapped resource | Count | Scope |
 | --- | --- | --- |
 | Block RAM | 35 of 46 | Original work RAM plus buffering; includes video and audio services |
-| Registers | 6,229 of 15,552 | Complete bench top, including reset/control |
-| LUT4 cells after normalization | 9,524 | Combinational LUT cells; ALU carry resources are additional |
-| ALU cells before packing | 3,620 | Do not add this blindly to a final place/route utilization figure |
+| Registers | 6,234 of 15,552 | Complete bench top, including reset/control |
+| LUT4 cells after normalization | 9,534 | Combinational LUT cells; ALU carry resources are additional |
+| ALU cells before packing | 3,615 | Do not add this blindly to a final place/route utilization figure |
 | System/video PLLs | 2 of 2 | Mapped and accepted by the packer; electrical clock quality untested |
 | CLKDIV | 1 | Pixel clock derived from the serializer clock |
 | OSER10 | 4 | Three data lanes and one forwarded clock lane |
@@ -34,15 +34,18 @@ the exact artifacts and distinguishes mapping, packing, routing and timing cover
 ## Current routed result and image
 
 The corrected true-LVDS top places, routes and packs successfully. Final routed
-utilization is **13,414 / 20,736 logic sites**, **6,229 / 15,552 registers** and
-**35 / 46 block RAMs**. The earlier pack-only figure was 13,752 logic sites;
-keep the stages distinct when comparing resources.
+utilization is **13,460 / 20,736 logic sites**, **6,234 / 15,552 registers** and
+**35 / 46 block RAMs**. The pack-only figure is 13,754 logic sites;
+keep the stages distinct when comparing resources. These **2026-11-24** results
+use the [shared memory service](enhanced-memory.md); the last build with the
+separate legacy controller and arbiter routed to 13,414 logic sites, 6,229
+registers and 69.382 MHz, and is kept as a historical run in the evidence.
 
 | Reported clock domain | Target | Tool-estimated maximum |
 | --- | --- | --- |
-| System | 64 MHz | 69.382 MHz |
-| Pixel | 25.2 MHz | 80.978 MHz |
-| Audio | 12.288 MHz | 207.598 MHz |
+| System | 64 MHz | 69.238 MHz |
+| Pixel | 25.2 MHz | 79.586 MHz |
+| Audio | 12.288 MHz | 194.818 MHz |
 
 All eight explicit targets were applied. The three reported sequential clock
 domains pass their scoped frequency checks. The 126 MHz serializer target does
@@ -120,7 +123,7 @@ through those cells.
 
 The [normalization pass](../../scripts/normalize-gowin-luts.py) represents each
 small LUT as an equivalent physical LUT4, ties unused inputs low and replicates
-its truth table. It checks **28,632 original input combinations** across all
+its truth table. It checks **29,030 original input combinations** across all
 converted cells. Registers, memories, DSPs, I/O and existing LUT4 cells are
 unchanged. This closes the missing small-LUT model boundary for the new board
 build; it does not retroactively change the historical core-only probe.

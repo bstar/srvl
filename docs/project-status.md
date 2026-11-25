@@ -53,14 +53,16 @@ partial timing-model coverage. The new [complete-board build](milestones/tang-bo
 normalizes the small LUTs to equivalent LUT4s and checks the actual binary
 database; DSP, serializer and I/O timing remain unqualified.
 
-The complete bench top currently packs to **13,752 / 20,736 logic sites**,
-**6,229 / 15,552 registers** and **35 / 46 block RAMs**. These newer quantities
+The complete bench top currently packs to **13,754 / 20,736 logic sites**,
+**6,234 / 15,552 registers** and **35 / 46 block RAMs**. These newer quantities
 include board services and I/O; they are not enhanced-engine allocations or
 complete timing signoff.
 
-After placement/routing, the corrected true-LVDS build uses **13,414 logic
-sites**, the same **6,229 registers** and **35 block RAMs**, and produces a
-bench bitstream. Its modeled system paths report **69.382 MHz** against 64 MHz.
+After placement/routing, the corrected true-LVDS build uses **13,460 logic
+sites**, the same **6,234 registers** and **35 block RAMs**, and produces a
+bench bitstream. Its modeled system paths report **69.238 MHz** against 64 MHz.
+Since **2026-11-24** the legacy system uses the same SDRAM controller and arbiter
+as the enhanced engines, so one memory service needs hardware qualification.
 See the [board-build result](milestones/tang-board-build.md#current-routed-result-and-image)
 for all clock targets, image checksum and exclusions.
 
@@ -73,11 +75,11 @@ Read the [complete audit](research/lynx-tang20k-compatibility.md) and its
 [machine-readable snapshot](research/evidence/lynx-tang20k-2026-11-17.json) for the
 methods, exclusions, pins, source revision and reproducible commands.
 
-The **video-only portable system** maps to **35 block RAMs** and **5,814
+The **video-only portable system** maps to **35 block RAMs** and **5,819
 registers**, including serial loading, SDRAM services, capture and RGB scanout.
 The combined **stereo audiovisual system** maps to **35 block RAMs** and
-**6,209 registers**. Audio adds no block RAM or multipliers. Its 9,653 LUT1–4
-cells and 3,533 ALU cells are mapped primitive counts, not routed logic-site use.
+**6,214 registers**. Audio adds no block RAM or multipliers. Its 9,563 LUT1–4
+cells and 3,504 ALU cells are mapped primitive counts, not routed logic-site use.
 See the [audio milestone](milestones/tang-audio.md). The separate complete bench
 top has the routed/fuse-packed result above; complete board timing coverage and
 physical audiovisual output remain unqualified.
