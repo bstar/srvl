@@ -79,6 +79,20 @@ int main(int argc, char **argv) {
   run(false, 0x0f0);
   run(true, 0xf00);
   run(false, 0x0f0);
+  // Reload while retaining the same FPGA instance/RAM, as a real launcher must.
+  // This catches pending bus strobes that survive warm reset and steal the first
+  // opcode fetch. The entire console is never reconstructed between boots.
+  core.reset_in = 1;
+  for (int n = 0; n < 128; ++n) tick();
+  for (unsigned n = 0; n < image.size(); n += 2) {
+    core.romwrite_addr = n;
+    core.romwrite_data = image[n] | (image[n+1] << 8);
+    core.romwrite_wren = 1; tick(); core.romwrite_wren = 0;
+    for (int j = 0; j < 15; ++j) tick();
+  }
+  for (int n = 0; n < 128; ++n) tick();
+  core.reset_in = 0;
+  run(false, 0x0f0);
   core.final();
   std::cout << "PASS: translated Lynx CPU/RAM, Suzy multiply, Mikey timers/display and input diagnostic\n";
 }

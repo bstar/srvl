@@ -78,6 +78,12 @@ end architecture;
 
 # Quartus accepts these mismatched formal integer subtypes; GHDL synthesis does
 # not. Narrow formals to the ranges already guaranteed by their only callers.
+# Warm reset also needs to quiesce bus strobes: the upstream CPU held a pending
+# request across reset, so memorymux serviced the old address alongside the first
+# new opcode fetch. The first decoded byte could be stale (observed BRK instead
+# of SEI at $0200). Clear handshakes/write enables only in reset; normal execution
+# timing and original algorithms are unchanged. Keep these corrections in the
+# exported adaptation patch and verify cold/warm boot on the actual translated RTL.
 for name, replacements in {
     "overlay.vhd": [("i_pixel_out_x          : in  integer range 0 to 2047;",
                      "i_pixel_out_x          : in  integer range 0 to 159;"),
@@ -85,6 +91,12 @@ for name, replacements in {
                      "i_pixel_out_y          : in  integer range 0 to 101;")],
     "statemanager.vhd": [("savestate_number    : in    integer;",
                           "savestate_number    : in    integer range 0 to 3;")],
+    "cpu.vhd": [("            load_savestate_buffer <= '0';\n",
+                 "            bus_request <= '0';\n            irqfinish <= '0';\n            load_savestate_buffer <= '0';\n")],
+    "memorymux.vhd": [("            state           <= IDLE;\n",
+                       "            state           <= IDLE;\n            bus_done <= '0';\n            RAM_WE <= '0';\n            RAMShadowA_WE <= '0';\n            RegBus_wren <= '0';\n            RAMaccess <= '0';\n            wait_cnt <= 0;\n")],
+    "cart.vhd": [("            readqueue      <= '0';  \n",
+                  "            cart_wait <= '0';\n            readqueue      <= '0';  \n")],
 }.items():
     text = (rtl / name).read_text()
     for before, after in replacements:
