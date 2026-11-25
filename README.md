@@ -25,8 +25,8 @@ every result below is simulation, mapping or open-tool routing.
   buffered 2× video and stereo audio passes software checks, and the complete
   bench top routes and packs. See the [integration architecture](docs/architecture/tang-prototype.md).
 - **Enhanced console.** A first [enhanced top](docs/milestones/enhanced-skeleton.md)
-  runs a CPU-drawn demo through the scaled blitter and native scanout in
-  simulation, and routes on Tang. The compositor, input, audio and a game are ahead.
+  runs a CPU-drawn demo with scaled sprites and two scrolling tile planes in
+  simulation, and routes on Tang. Input, audio and a game are ahead.
 - **Circuit Courier.** An original 65C02 game running against earlier custom
   tile/sprite/audio hardware in a desktop simulator; it is the regression baseline.
 

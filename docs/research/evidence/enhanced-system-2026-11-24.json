@@ -1,15 +1,15 @@
 {
   "reviewed_date": "2026-11-24",
   "kind": "enhanced-system-skeleton",
-  "scope": "first enhanced top: pinned R65C02, block-RAM memory, MMIO blitter, video control, native scanout and shared SDRAM service; demo ROM in digital simulation plus open-tool mapping/route of the Tang bench top; no compositor, audio, input, loader, bitstream or physical test",
+  "scope": "first enhanced top: pinned R65C02, block-RAM memory, MMIO blitter, video control, two tile planes, native scanout and shared SDRAM service; demo ROM in digital simulation plus open-tool mapping/route of the Tang bench top; no audio, input, loader, bitstream or physical test",
   "simulation": {
-    "scope": "actual pinned R65C02 runs the demo ROM on the enhanced system skeleton: block-RAM memory, MMIO blitter, video control, native scanout and one shared SDRAM service against unchanged pin/pixel models; digital simulation only, no compositor, audio, input or physical test",
+    "scope": "actual pinned R65C02 runs the demo ROM on the enhanced system skeleton: block-RAM memory, MMIO blitter, video control, native scanout and one shared SDRAM service against unchanged pin/pixel models; digital simulation only, no audio, input or physical test",
     "clock_configurations": 2,
     "complete_frames_checked": 14,
     "distinct_frames": 14,
     "repeated_frames": 0,
-    "blank_frames_before_first_present": 4,
-    "system_cycles": 19050290,
+    "blank_frames_before_first_present": 7,
+    "system_cycles": 22254574,
     "torn_frames": 0,
     "underruns": 0,
     "ownership_faults": 0,
@@ -24,49 +24,50 @@
   "board": {
     "scope": "enhanced skeleton bench top placed and routed with open tools; frequency estimates for three clock nets only, no serializer/DSP/I/O timing model, no cross-domain analysis and no physical test",
     "mapping": {
-      "scope": "enhanced skeleton bench top: R65C02, block-RAM memory and demo ROM, MMIO blitter, video control, native scanout, shared SDRAM service, clock/reset, serializer primitives and I/O; mapped only",
+      "scope": "enhanced skeleton bench top: R65C02, block-RAM memory and demo ROM, MMIO blitter, video control, tile planes, native scanout, shared SDRAM service, clock/reset, serializer primitives and I/O; mapped only",
       "mapped_cells": {
-        "$scopeinfo": 22,
+        "$scopeinfo": 23,
         "IBUF": 3,
         "rPLL": 2,
         "CLKDIV": 2,
-        "LUT4": 6123,
+        "LUT4": 6522,
         "DFFP": 6,
-        "DFFNRE": 551,
+        "DFFNRE": 662,
+        "MUX2_LUT7": 66,
+        "MUX2_LUT6": 153,
+        "MUX2_LUT5": 812,
         "TLVDS_OBUF": 4,
         "DFFR": 234,
-        "MUX2_LUT5": 770,
-        "ALU": 1527,
+        "ALU": 1629,
         "DFFS": 33,
         "OSER10": 4,
-        "DFFRE": 1587,
+        "DFFRE": 1727,
         "OBUF": 37,
         "IOBUF": 32,
         "DFFSE": 5,
-        "DFF": 20,
-        "SP": 4,
-        "MUX2_LUT6": 164,
-        "MUX2_LUT7": 65,
-        "MUX2_LUT8": 25,
-        "GND": 1,
-        "DFFNR": 14,
-        "DFFNPE": 1,
+        "DFF": 28,
+        "DFFE": 90,
+        "DPB": 4,
+        "DPX9B": 5,
         "DFFNC": 28,
         "DFFNCE": 114,
-        "DFFNP": 9,
+        "MUX2_LUT8": 22,
+        "SP": 4,
+        "GND": 1,
+        "DFFNR": 14,
         "DFFNE": 288,
         "SPX9": 15,
+        "DFFNPE": 1,
+        "DFFNP": 9,
         "VCC": 1,
-        "DFFE": 16,
-        "SDPX9B": 1,
-        "DPX9B": 1
+        "SDPX9B": 1
       },
-      "block_rams": 21,
-      "registers": 2906,
-      "falling_edge_registers": 1005,
-      "lut1_to_lut4_cells": 6123,
-      "alu_cells": 1527,
-      "clock_pins_checked": 2937,
+      "block_rams": 29,
+      "registers": 3239,
+      "falling_edge_registers": 1116,
+      "lut1_to_lut4_cells": 6522,
+      "alu_cells": 1629,
+      "clock_pins_checked": 3286,
       "logic_driven_clock_pins": 0,
       "place_and_route_passed": false,
       "board_timing_signoff": false,
@@ -83,7 +84,7 @@
         "available": 384
       },
       "LUT4": {
-        "used": 7885,
+        "used": 8396,
         "available": 20736
       },
       "IOLOGICO": {
@@ -91,23 +92,23 @@
         "available": 384
       },
       "MUX2_LUT5": {
-        "used": 770,
+        "used": 812,
         "available": 10368
       },
       "MUX2_LUT6": {
-        "used": 164,
+        "used": 153,
         "available": 5184
       },
       "MUX2_LUT7": {
-        "used": 65,
+        "used": 66,
         "available": 2592
       },
       "MUX2_LUT8": {
-        "used": 25,
+        "used": 22,
         "available": 2592
       },
       "ALU": {
-        "used": 1762,
+        "used": 1874,
         "available": 15552
       },
       "GND": {
@@ -115,11 +116,11 @@
         "available": 1
       },
       "DFF": {
-        "used": 2906,
+        "used": 3239,
         "available": 15552
       },
       "BSRAM": {
-        "used": 21,
+        "used": 29,
         "available": 46
       },
       "GSR": {
@@ -141,17 +142,17 @@
     },
     "clocks": {
       "memory_clk": {
-        "estimated_mhz": 20.79,
+        "estimated_mhz": 22.13,
         "target_mhz": 8.0,
         "passed": true
       },
       "clocks.sys_clk": {
-        "estimated_mhz": 66.36,
+        "estimated_mhz": 74.67,
         "target_mhz": 64.0,
         "passed": true
       },
       "clocks.pixel_clk": {
-        "estimated_mhz": 83.85,
+        "estimated_mhz": 73.27,
         "target_mhz": 25.2,
         "passed": true
       }
@@ -164,33 +165,34 @@
   "bitstream_packaged": false,
   "physical_testing": false,
   "source_sha256": {
-    "firmware/enhanced-demo.s": "a700d07d519a0b11a0bbd2269b28fcfd05977259d9d42d88733f731fa4421cdd",
-    "firmware/graphics-abi.inc": "1c0964027628bd5005c5ec9e1ec7a5ba973232f015e2c79e9c080dd4261099d5",
+    "firmware/enhanced-demo.s": "766c87c759774fb53e466b31a98229fc4fc32e349074d2259eb8c2a428cd89a0",
+    "firmware/graphics-abi.inc": "bc137585c9f8c156d9471b6d34a2e2af082128a2763eab80bab975963cd66fbe",
     "firmware/rom.cfg": "a8640e35b542d6f9b6d1a3c8422a07c08a9cdd84b300120a55577a80ef084eed",
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
     "hardware/boards/tang_nano20k/cb_reset_sync.sv": "f871d621c4aa5bbef091198636f1e0133ec422995fe14925246ffeffeda18099",
     "hardware/boards/tang_nano20k/gowin_board_clocks.sv": "31212baaee9eaf2fa90fbc98c9c126622ceb1a4132debb7e9eeac6290a6d661b",
     "hardware/boards/tang_nano20k/pins.json": "7a2885224cc74c417861b04e79f9b12afe43881a198ea402e87b127cfc639f44",
-    "hardware/enhanced/cb_abi_pkg.sv": "ad9f766727512ab10d863d19b3fb8151885be79afe7fbef7f0bf3a3c1df28f1f",
+    "hardware/enhanced/cb_abi_pkg.sv": "2bb0381babc3563f90f72305db6692537ef58f32efe08df588f3c52a5b5f36eb",
     "hardware/enhanced/cb_blitter_mmio.sv": "9308c2599756ca1a9e37a187ffd9041e48ec568f9d72b7242fd4c7a340b71213",
-    "hardware/enhanced/cb_native_scanout.sv": "d5f71184b868962e24223a79fb7d119458135a40c2df794f84881548911a3791",
-    "hardware/enhanced/cb_scaled_blitter.sv": "3df064b263a76c147c0c7c349805a6be95a1c61c15104d7d8f5270714593aaaa",
-    "hardware/enhanced/cb_video_control.sv": "d0fa2014f406faa2ce4c2c7a8008df7e4270e13ff2d2ac88d626392cd0f13de9",
-    "hardware/enhanced/graphics-abi.json": "6f382337d4471f03965746f6ce5f06a6cca4d4cd1643847f5f411a590e5c0b56",
-    "hardware/enhanced/system/cb_enhanced_system.sv": "1a11580de98456c877c8531093e5a69d95f5b66ff235929a6bedf7468b9e8585",
+    "hardware/enhanced/cb_native_scanout.sv": "971d47ec25c9ee813bd9dc05f2ff445e49736d75c1dfc0abec7251e73656a845",
+    "hardware/enhanced/cb_scaled_blitter.sv": "971bbb6570c1f285a8cbf3b54f150d933ce248b1e3df0485375b6c5e52ce0098",
+    "hardware/enhanced/cb_tile_planes.sv": "fdf40682ea65a22b6bd988e19784ff7082187e6b9944eb416e9b1c0c6c1f3094",
+    "hardware/enhanced/cb_video_control.sv": "150d052dea132d98409d627f18e60795463eb52d0c6cae39fea426cdf0e180e1",
+    "hardware/enhanced/graphics-abi.json": "7e358b95bbcf2c4cc317b5428573dfe52339cb5f99e34b097f67c142921475b6",
+    "hardware/enhanced/system/cb_enhanced_system.sv": "efe80f29a29ca59f4f1aa527091bc982102e769e0f9403a68f753a32b34cb70b",
     "hardware/enhanced/system/cb_enhanced_tang_board.sv": "5c4f42f9308ed89eb2f27f6eae9c29394955ecc0e13bdeae999495afdc5b2e4d",
     "hardware/memory/cb_graphics_arbiter.sv": "1bfb30c0e4f13e30c73da5257d0d3039e350528f9fe8c08edf88fbc949264885",
     "hardware/memory/cb_graphics_sdram.sv": "9c83bd17adb97c0bca767ea1fc5bbc193fec6b6d2297049a945cf9ca4046b20c",
-    "nix/enhanced-system.nix": "48c3874647e2100422be03d4044acf2d8f5b2c8caa73a6641c607d594b1e36ac",
+    "nix/enhanced-system.nix": "2eee8cfafef998802ebaf7c1406a02d8d65e6326797d3f3b0ee70a612ab5abeb",
     "patches/r65c02-corrections.patch": "e0ff2532a998c5c891429276596ae705a3ff69452adc74f1e3f013aaf87f98f3",
     "scripts/generate-cpu.py": "c004f7dede211cc7c6be31ba521ba26c01d0d03450d7b6aac7aa910aa9c3a756",
     "scripts/normalize-gowin-luts.py": "c106ad3437b171cc24cc18ac027faf60e0acae0308b4b0c19e73b639ae126166",
     "scripts/prepare-enhanced-board.py": "dedc6a7fc50fe7dd17138c5fb69f12669dbf9975753210882527996447ce5c1b",
-    "sim/enhanced-system.cpp": "8cc41e882e7d4f3e38e83969c8c8831a84d25256b0498aa60499f6f67b0a7b59",
+    "sim/enhanced-system.cpp": "1fbb357cc5ed4eb53f1a337041f3396c2ef16593d7691b1b11279cea5c62e12a",
     "sim/scaled-blitter-model.hpp": "fad0455908a995f9ef9d7beb96fc9befc8bb69ad4adc4c43f4d7a1f614bac16c",
     "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6"
   },
   "media_sha256": {
-    "docs/images/enhanced-demo.png": "a6961e90149e92b89572c782e1ea1ae75a2bc6ab0db9bc78be224a28ad238526"
+    "docs/images/enhanced-demo.png": "6e99936e63622ee8a1fd406a410e05c8a3b068322005ea058b833df4bbb98157"
   }
 }

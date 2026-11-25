@@ -32,8 +32,8 @@ Using the FPGA as custom logic does not require an ARM/Linux processor to render
 or emulate games.
 
 For compatibility mode, much of that logic is the reused upstream Lynx design.
-For the enhanced configuration, the planned blitter, compositor and flat-triangle
-engine are project work. See [component provenance](architecture/provenance.md).
+For the enhanced configuration, the blitter, tile planes and scanout are project work, as the planned
+flat-triangle engine will be. See [component provenance](architecture/provenance.md).
 
 ## What ordinary external parts should do
 

@@ -1,6 +1,7 @@
 // Enhanced console skeleton: R65C02, block-RAM work RAM and ROM, the graphics
-// MMIO/blitter, native video control and scanout, all sharing one SDRAM service.
-// No compositor, audio, input or loader yet.
+// MMIO/blitter, native video control, two block-RAM tile planes and scanout.
+// The blitter, CPU byte port and scanout share one SDRAM service.
+// No audio, input or loader yet.
 //
 // Clocks: clk is the 64 MHz graphics/SDRAM clock, memory_clk a real slower
 // clock (not a gated one) and video_clk the 25.2 MHz pixel clock. The three
@@ -101,7 +102,19 @@ module cb_enhanced_system #(
     wire [7:0] palette_index;
     wire [11:0] palette_rgb;
     wire [15:0] _unused_underruns;
+    wire tile_write, tile_start, tile_valid, tile_take;
+    wire [12:0] tile_address;
+    wire [31:0] tile_data;
+    wire [1:0] plane_enable;
+    wire [8:0] plane_x0, plane_x1, tile_back, tile_front;
+    wire [7:0] plane_y0, plane_y1, tile_line;
+    cb_tile_planes planes (.write_clk(memory_clk),.write_enable(tile_write),.write_address(tile_address),.write_data(tile_data),
+        .clk(clk),.reset(reset),.enable(plane_enable),.scroll_x0(plane_x0),.scroll_x1(plane_x1),
+        .scroll_y0(plane_y0),.scroll_y1(plane_y1),.start(tile_start),.line(tile_line),
+        .valid(tile_valid),.take(tile_take),.back(tile_back),.front(tile_front));
     cb_video_control video_control (.cpu_clk(cpu_clk),.cpu_reset(cpu_reset),
+        .tile_write(tile_write),.tile_address(tile_address),.tile_data(tile_data),
+        .plane_enable(plane_enable),.plane_x0(plane_x0),.plane_x1(plane_x1),.plane_y0(plane_y0),.plane_y1(plane_y1),
         .bus_address(address[7:0]),.bus_write_data(write_data),.bus_write(bus_write && select_video),
         .bus_read_data(video_data),.palette_write(palette_write),.palette_index(palette_index),.palette_rgb(palette_rgb),
         .clk(clk),.reset(reset),.present(present),.display_valid(display_valid),.display_bank(display_bank),
@@ -113,6 +126,8 @@ module cb_enhanced_system #(
         .display_valid(display_valid),.display_bank(display_bank),.present(present),
         .read_valid(scan_valid),.read_ready(scan_ready),.read_response(scan_response),
         .read_address(scan_address),.read_data(shared_read_data),
+        .tile_start(tile_start),.tile_line(tile_line),.tile_valid(tile_valid),.tile_take(tile_take),
+        .tile_back(tile_back),.tile_front(tile_front),
         .palette_clk(memory_clk),.palette_write(palette_write),.palette_index(palette_index),.palette_rgb(palette_rgb),
         .video_rgb(video_rgb),.video_de(video_de),.video_hsync(video_hsync),.video_vsync(video_vsync),
         .video_x(video_x),.video_y(video_y),.video_frame_valid(video_frame_valid),

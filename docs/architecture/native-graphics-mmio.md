@@ -142,26 +142,46 @@ partially written back surface before publishing it.
 
 This component does not enforce front/back ownership or publish a display frame.
 Callers still choose a surface not being displayed and immutable draw sources.
-There is no automatic timeout/abort. Since 2026-11-24 the separate video-control
-block below provides swap, palette and ownership-fault detection.
+There is no automatic timeout/abort. The separate video-control block below
+provides swap, palette, tile planes and ownership-fault detection.
 
 ## Video control at $4500
 
-[cb_video_control.sv](../../hardware/enhanced/cb_video_control.sv) is generated
-from the same ABI source. Reads have no side effects. The
-[skeleton milestone](../milestones/enhanced-skeleton.md) describes the ownership rule.
+[cb_video_control.sv](../../hardware/enhanced/cb_video_control.sv) takes its
+offsets from the same ABI source. Reads have no side effects. Offsets not
+listed read zero and ignore writes.
 
 | Offset | Read | Write |
 | --- | --- | --- |
-| `$00` | Status: bit 0 swap pending, 1 enabled, 2 front surface, 6 underrun, 7 ownership fault | Ignored |
-| `$01` | Bit 0 enable | Bit 0 enable; bit 1 requests a swap, ignored while one is pending |
+| `$00` | Status: bit 0 swap pending, 1 enabled, 2 front surface, 3 plane latch pending, 6 underrun, 7 ownership fault | Ignored |
+| `$01` | Bit 0 enable | Bit 0 enable; bit 1 swap surfaces; bit 2 latch plane settings |
 | `$02` | Presented transport frames, wraps at 256 | Ignored |
 | `$04` | Palette index | Set palette index |
 | `$05` | Zero | Hold RGB444 bits 7:0 (green, blue) |
 | `$06` | Zero | Write entry with red from bits 3:0, then increment the index |
+| `$08` | Zero | Plane enables: bit 0 back plane, bit 1 front plane |
+| `$09`, `$0A` | Zero | Back plane scroll X, low byte then bit 8 |
+| `$0B` | Zero | Back plane scroll Y |
+| `$0C`, `$0D` | Zero | Front plane scroll X, low byte then bit 8 |
+| `$0E` | Zero | Front plane scroll Y |
+| `$10`, `$11` | Zero | Tile memory word pointer, 13 bits |
+| `$12`–`$15` | Zero | Tile data bytes 0–3 |
+
+Swap and latch are one request. A control write with either bit set is taken at
+the next frame boundary, and when both are set both apply to the same frame.
+The two pending bits clear together, at the moment `FRONT` changes. A request
+written while one is pending is dropped, so wait for the pending bits first.
+The plane registers at `$08`–`$0E` are staging values: they do nothing until
+latched.
+
+Tile data writes go straight to [tile memory](../chip-design/compositor.md#what-a-plane-is),
+with no frame synchronization. Below pointer `$1000` a word is a four-byte
+pattern row and writing `$15` stores it. From `$1000` up a word is a two-byte
+map entry and writing `$13` stores it. Either way the pointer then advances by
+one word.
 
 Front surface 0 is `$100000` and 1 is `$140000`. Underrun and ownership fault are
-sticky until reset. Layers and a compositor are still ahead.
+sticky until reset.
 
 ## Independent acceptance
 

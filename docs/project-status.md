@@ -35,7 +35,7 @@ complete enhanced-graphics fit on Tang has been demonstrated.
 | Original Lynx feasibility audit | Pinned upstream CPU/Suzy/Mikey, adapted memory, diagnostic simulation and a registered core-only routed design | Baseline console fits Tang resources and the core-only timing model passes 64 MHz | Add real clocks, SDRAM, loading, display, input and audio |
 | Tang playable port | UART/CRC loader, cartridge bridge/cache, x32 SDRAM, frame capture, RGB scanout and stereo filter/mailbox/I²S | Serial cold/warm boot, patterned input-dependent video and actual Mikey audio pass; component contention/reset/overflow/deadline checks pass | Complete board pin/clock constraints, verify primitive serialization and timing, then physical acceptance and filter/analog qualification |
 | Complete bench-board top | Original TMDS encoders, reset/activity control, clock/serializer wrappers and all pin assignments | Complete mapping and pin/clock packing checks pass; encoding/control tests pass | Complete timing-model and I/O coverage, then physical output |
-| Custom scaled blitter | Original 4/8-bit scaler/fill, clipping, coverage/index/band surface, cache, masks and fences | Pixel reference, real-SDRAM model integration and standalone synthesis pass | Compositor integration and dense workloads on the [enhanced skeleton](milestones/enhanced-skeleton.md) |
+| Custom scaled blitter | Original 4/8-bit scaler/fill, clipping, coverage/index/band surface, cache, masks and fences | Pixel reference, real-SDRAM model integration and standalone synthesis pass | Dense workloads on the [enhanced skeleton](milestones/enhanced-skeleton.md) |
 
 The existing MiSTer RBF is an earlier display/input/audio bring-up circuit. It is
 not the Circuit Courier game or a Tang Lynx port.
@@ -96,11 +96,11 @@ The [native CPU/MMIO diagnostic](architecture/native-graphics-mmio.md) separatel
 passes six cold/warm boots and 654 CPU submissions, with CPU-uploaded source data
 and real completion IRQ handling. The register-driver suite checks another 399
 results. The [enhanced skeleton](milestones/enhanced-skeleton.md) is the first
-real enhanced top: CPU, block-RAM memory, MMIO blitter, native scanout and
-front/back ownership on the shared memory service. Its demo ROM presents whole
-frames in simulation, and the board top routes with open tools at 7,885 of 20,736
-logic sites and 21 of 46 block RAMs, with a 66.36 MHz estimate against 64 MHz.
-The compositor, input, audio and physical timing remain open; renderer-only
+real enhanced top: CPU, block-RAM memory, MMIO blitter, two tile planes, native
+scanout and front/back ownership on the shared memory service. Its demo ROM
+presents whole frames in simulation, and the board top routes with open tools at
+8,396 of 20,736 logic sites and 29 of 46 block RAMs, with a 74.67 MHz estimate
+against 64 MHz. Input, audio and physical timing remain open; renderer-only
 budgets and this light demo do not prove a complete 60 fps game.
 
 ## What is settled and what needs a decision

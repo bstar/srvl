@@ -30,7 +30,7 @@ and manufacturer lifecycle statements must be rechecked before procurement.
 - [Current Tang prototype](architecture/tang-prototype.md)
 - [Current enhanced graphics target and its limits](architecture/enhanced-target.md)
 - [Original versus reused components](architecture/provenance.md)
-- [Overview and open questions](architecture/overview.md)
+- [System architecture: both configurations, clocks, memory and the path of a frame](architecture/overview.md)
 - [Selected standalone development platform and hardware tradeoffs](architecture/standalone-platform.md)
 - [Decision-record index and conventions](architecture/decisions/README.md)
 - [Prototype simulation, controls, and optional MiSTer build](../hardware/README.md)

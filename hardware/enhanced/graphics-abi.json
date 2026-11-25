@@ -25,14 +25,19 @@
     "CLIP_X0": 27, "CLIP_Y0": 29, "CLIP_X1": 31, "CLIP_Y1": 33, "BYTE_VALUE": 35
   },
   "video": {
-    "description": "Native scanout control: front/back surface ownership, frame count and RGB444 palette.",
+    "description": "Native scanout control: front/back surface ownership, frame count, RGB444 palette and two block-RAM tile planes.",
     "base": "0x4500",
     "registers": {
       "STATUS": "0x00", "CONTROL": "0x01", "FRAME": "0x02",
-      "PALETTE_INDEX": "0x04", "PALETTE_LOW": "0x05", "PALETTE_HIGH": "0x06"
+      "PALETTE_INDEX": "0x04", "PALETTE_LOW": "0x05", "PALETTE_HIGH": "0x06",
+      "PLANE_ENABLE": "0x08", "PLANE0_X_LOW": "0x09", "PLANE0_X_HIGH": "0x0a", "PLANE0_Y": "0x0b",
+      "PLANE1_X_LOW": "0x0c", "PLANE1_X_HIGH": "0x0d", "PLANE1_Y": "0x0e",
+      "TILE_ADDRESS_LOW": "0x10", "TILE_ADDRESS_HIGH": "0x11",
+      "TILE_DATA0": "0x12", "TILE_DATA1": "0x13", "TILE_DATA2": "0x14", "TILE_DATA3": "0x15"
     },
-    "status_bits": { "SWAP_PENDING": 0, "ENABLED": 1, "FRONT": 2, "UNDERRUN": 6, "OWNERSHIP_FAULT": 7 },
-    "control_bits": { "ENABLE": 0, "SWAP": 1 },
+    "status_bits": { "SWAP_PENDING": 0, "ENABLED": 1, "FRONT": 2, "PLANES_PENDING": 3, "UNDERRUN": 6, "OWNERSHIP_FAULT": 7 },
+    "control_bits": { "ENABLE": 0, "SWAP": 1, "LATCH_PLANES": 2 },
+    "tile_memory": { "PATTERNS": "0x0000", "MAP0": "0x1000", "MAP1": "0x1800" },
     "surfaces": ["0x100000", "0x140000"]
   }
 }

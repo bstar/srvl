@@ -19,8 +19,8 @@ mode has its own [separate diagram and timing boundary](legacy.md).
 
 | Design area | What you can inspect | Implementation state |
 | --- | --- | --- |
-| [Scaled sprite engine](sprites.md) | Exact sampling, clipping, packed source cache, transparency, masked writes and fences | Component, memory workload and native CPU/MMIO diagnostic tests pass; frame ownership/compositor/scanout remain open |
-| [Parallax compositor](compositor.md) | Independent scrolling, tile fetches, palette/priority decisions and scanline buffering | Proposed; current native prototype has a smaller tile renderer |
+| [Scaled sprite engine](sprites.md) | Exact sampling, clipping, packed source cache, transparency, masked writes and fences | Component, memory workload and native CPU/MMIO diagnostic tests pass; it draws the sprites on the [enhanced top](../milestones/enhanced-skeleton.md) |
+| [Tile planes and composition](compositor.md) | Two scrolling tile planes in block RAM, priority against the object surface, line buffering | Implemented with two planes; passes the system test and routes; per-line scroll and more planes are not built |
 | [Geometry and triangles](geometry.md) | CPU scene preparation, fixed-point assistance, edge setup, coverage and flat filling | Proposed; no new 3D engine implemented |
 | [Memory and timing](memory.md) | CPU stalls, queues, arbitration, refresh, complete-frame ownership and clock crossings | Legacy service/video tests pass; enhanced elastic arbiter/SDRAM and bounded blitter workloads pass models; full native scheduler/ownership integration remains open |
 | [System and boot control](system.md) | Bitstream configuration, safe reset, boot monitor, loading, game handoff and recovery | HDL loader and original CPU-driven graphics diagnostic pass; shared monitor/launcher and frame handoff proposed |
@@ -67,10 +67,9 @@ layer count is not useful without the scene size, source format and memory-servi
 conditions that make the count achievable.
 
 The complete legacy bench top now routes and fuse-packs; its remaining timing
-coverage and physical output still need qualification. Enhanced work continues
-with complete-frame ownership and combined traffic before compositor/scanout
-integration. The native MMIO/CPU diagnostic and scaled blitter have scoped
-RTL evidence; the remaining engine diagrams retain their implementation states.
+coverage and physical output still need qualification. The enhanced top has the blitter, two tile planes, whole-frame ownership and
+native scanout working together in simulation; its next steps are input, audio
+and a real game to measure the combined load.
 
 ## Source and upkeep
 

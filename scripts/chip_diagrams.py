@@ -146,23 +146,23 @@ def definitions(evidence):
     d.note(425,607,"clipping must preserve the sample phase")
     diagrams.append(d)
 
-    d = Diagram("compositor", "Parallax · independent planes to one visible line", "Three illustrated planes are examples, not a maximum or measured layer budget", 760)
-    for key,x,y,title,scroll in [("far",45,135,"Distant plane","small scroll offset"),("middle",70,265,"Middle plane","independent X / Y"),("near",95,395,"Near plane","larger visible motion")]:
-        d.node(key,x,y,280,title,scroll,"Each proposed tile plane has independent map/scroll and palette state. Depth comes from different offsets; this diagram does not set a layer count.","Plane map, scroll, palette and raster state","Line-specific fetch state","Independent offsets, wrapping and state-latch tests")
-    d.node("tiles",480,220,245,"Map + pattern fetch","Fetch ahead of the beam","Resolve tile row data with bounded caches/queues. The first map and pattern formats remain to be specified.","Latched plane state, memory responses","Plane pixel candidates","Tile-edge, format and randomized-latency tests")
-    d.node("priority",820,220,255,"Priority resolver","Transparent samples fall through","Select visible candidates deterministically, including equal-priority ties and object insertion bands.","Plane and object candidates","Winning color/index and palette state","Unique-color overlap and transparent-tie cases")
-    d.node("objects",820,390,255,"Object candidates","Completed surface or buffer","Choose a representation that avoids unnecessary destination reads. Surface/band encoding is not finalized.","Completed object data and ownership","Object pixel with priority/band","Ownership and combined sprite/layer stress")
-    d.node("palette",480,575,245,"Palette expansion","Native color-latch contract","Expand selected native indices under a defined palette timing rule; legacy RGB capture is separate.","Winning index and palette selection","RGB sample","Raster palette changes and exact output colors")
-    d.node("line",820,575,255,"Completed line buffer","Scanout never waits for tiles","Switch buffers only after coherent fill completion. Underflow needs an explicit status and output policy.","RGB samples and fill-complete token","Stable line for display transport","Deadline pressure, CDC/reset and underrun checks", "integration", "Integration planned")
-    for x,y in [(325,185),(350,315),(375,445)]:
+    d = Diagram("compositor", "Tile planes · two scrolling maps merged into each line", "Implemented: two planes in block RAM, merged with the object surface during scanout · simulation and open-tool route only", 760)
+    for key,x,y,title,scroll in [("far",45,135,"Back plane","behind the object surface"),("near",95,395,"Front plane","in front, below bands 8-15")]:
+        d.node(key,x,y,280,title,scroll,"A 64 x 32 map of 8 x 8 tiles that wraps, with its own X/Y scroll. Each entry carries a tile number, two flips and a palette bank.","Map, scroll and enable, latched at the frame boundary","World position for the row being fetched","Flip, wrap, palette-bank and scroll checks in the system test")
+    d.node("tiles",480,220,245,"Map + pattern fetch","Block RAM, four cycles per tile","Read the map entry, then the pattern row, one plane at a time. No SDRAM traffic, so a plane can never be late.","Row number, scroll, tile memory","One 4-bit pixel per plane","Refill at every tile boundary under both flips")
+    d.node("priority",820,220,255,"Priority","First opaque candidate wins","Front plane unless the object pixel is covered with band 8 or more; then the object pixel; then the back plane; otherwise black.","Plane pixels and the object pixel","Winning palette index","Sprites in bands on both sides of the front plane")
+    d.node("objects",820,390,255,"Object surface","Front surface row from SDRAM","The blitter's completed frame: coverage, band and palette index per pixel, read 160 words per row.","Front surface chosen at the frame boundary","Object pixel with coverage and band","Whole-frame ownership and swap checks")
+    d.node("palette",480,575,245,"Line buffer","Two rows, alternating","Holds final palette indices. A row becomes visible only when it is complete; a late row is shown black and flagged.","Winning index per pixel","Stable row for the pixel clock","Exact 2x replication and underrun checks")
+    d.node("line",820,575,255,"Palette and output","Pixel clock domain","Look up RGB444 in the shared 256-entry palette and repeat each pixel and row twice.","Palette index","640 x 480 video","Every output pixel compared with the reference", "integration", "Shared with sprites")
+    for x,y in [(325,185),(375,445)]:
         d.wire([(x,y),(430,y),(430,270),(480,270)])
-    d.wire([(725,270),(820,270)],"candidates",(730,255))
+    d.wire([(725,270),(820,270)],"plane pixels",(730,255))
     d.wire([(948,390),(948,320)],"objects",(963,359))
-    d.wire([(1075,270),(1090,270),(1090,540),(603,540),(603,575)],"selected pixel",(685,530))
-    d.wire([(725,625),(820,625)],"RGB",(750,611),kind="integration")
-    d.note(45,589,"depth is a scroll relationship")
-    d.note(45,610,"every active plane costs fetch service")
-    d.note(45,631,"scanout has a fixed service deadline")
+    d.wire([(1075,270),(1090,270),(1090,540),(603,540),(603,575)],"palette index",(685,530))
+    d.wire([(725,625),(820,625)],"row",(750,611),kind="integration")
+    d.note(45,589,"planes use no SDRAM bandwidth")
+    d.note(45,610,"scroll changes only with the frame swap")
+    d.note(45,631,"256 shared tiles, 16 colors per tile")
     diagrams.append(d)
 
     d = Diagram("geometry", "Basic 3D · prepare, cover, fill", "Proposed flat-shaded path · CPU geometry setup and painter ordering first", 720)

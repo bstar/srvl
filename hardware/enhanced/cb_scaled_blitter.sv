@@ -54,10 +54,15 @@ module cb_scaled_blitter (
     reg [9:0] left, right, top, bottom, x, y;
     reg visible;
     reg [10:0] skip_x, skip_y, remainder_x, remainder_y, initial_remainder_x;
-    reg [8:0] source_x, initial_source_x, source_rows_left;
+    // Source column after flip, stepped directly so that sampling does not
+    // recompute it: it counts down from the last column when flipped.
+    reg [8:0] mapped_x, initial_mapped_x, source_rows_left;
     reg [7:0] destination_row_index;
     reg [25:0] source_last_row, source_end, destination_last_row, destination_end, destination_row;
-    reg [22:0] source_row, destination_address;
+    // The byte address of the current sample and of the row's first sample
+    // are registers stepped alongside mapped_x, so sampling compares the cache
+    // tag against a register instead of the output of an adder.
+    reg [22:0] source_address, row_address, destination_address;
     reg cache_valid, write_buffer_valid, finishing_write;
     reg [20:0] cache_tag;
     reg [31:0] cache_data, write_buffer_data;
@@ -79,8 +84,10 @@ module cb_scaled_blitter (
     wire signed [13:0] clipped_right=minimum(minimum(origin_x+$signed({3'b0,q.w}),14'sd320),$signed({4'b0,q.cx1}));
     wire signed [13:0] clipped_bottom=minimum(minimum(origin_y+$signed({3'b0,q.h}),14'sd204),$signed({4'b0,q.cy1}));
     wire [9:0] source_row_bytes=q.bpp4 ? ({1'b0,q.sw}+10'd1)>>1:{1'b0,q.sw};
-    wire [8:0] mapped_x=q.flip_x ? q.sw-9'd1-source_x:source_x;
-    wire [22:0] source_address=source_row+(q.bpp4 ? {15'b0,mapped_x[8:1]}:{14'b0,mapped_x});
+    wire [8:0] stepped_x=q.flip_x ? mapped_x-1'b1:mapped_x+1'b1;
+    wire address_step=!q.bpp4 || (q.flip_x ? !mapped_x[0]:mapped_x[0]);
+    wire [22:0] stepped_address=q.flip_x ? source_address-{22'b0,address_step}:source_address+{22'b0,address_step};
+    wire [22:0] stepped_row=q.flip_y ? row_address-{7'b0,q.source_stride}:row_address+{7'b0,q.source_stride};
     wire [7:0] source_byte=cache_data[source_address[1:0]*8 +: 8];
     wire [3:0] source_nibble=mapped_x[0] ? source_byte[7:4]:source_byte[3:0];
     wire [7:0] source_index=q.bpp4 ? {4'b0,source_nibble}:source_byte;
@@ -114,13 +121,14 @@ module cb_scaled_blitter (
             if(x==right-1'b1) begin
                 if(y==bottom-1'b1) state<=FINISH;
                 else begin
-                    y<=y+1'b1; x<=left; source_x<=initial_source_x; remainder_x<=initial_remainder_x;
+                    y<=y+1'b1; x<=left; mapped_x<=initial_mapped_x; remainder_x<=initial_remainder_x;
+                    source_address<=row_address;
                     destination_row<=destination_row+{10'b0,q.destination_stride};
                     destination_address<=destination_row[22:0]+{7'b0,q.destination_stride};
                     if({2'b0,q.sh}<=q.h) begin
                         if(next_remainder_y>=q.h) begin
                             remainder_y<=next_remainder_y-q.h;
-                            source_row<=q.flip_y ? source_row-{7'b0,q.source_stride}:source_row+{7'b0,q.source_stride};
+                            row_address<=stepped_row; source_address<=stepped_row;
                         end else remainder_y<=next_remainder_y;
                         state<=SAMPLE;
                     end else begin remainder_y<=next_remainder_y; state<=STEP_Y_CARRY; end
@@ -129,7 +137,7 @@ module cb_scaled_blitter (
                 x<=x+1'b1; destination_address<=destination_address+23'd2;
                 if({2'b0,q.sw}<=q.w) begin
                     if(next_remainder_x>=q.w) begin
-                        remainder_x<=next_remainder_x-q.w; source_x<=source_x+1'b1;
+                        remainder_x<=next_remainder_x-q.w; mapped_x<=stepped_x; source_address<=stepped_address;
                     end else remainder_x<=next_remainder_x;
                     state<=SAMPLE;
                 end else begin remainder_x<=next_remainder_x; state<=STEP_X_CARRY; end
@@ -167,9 +175,9 @@ module cb_scaled_blitter (
             command_cycles<=0; sampled_pixels<=0; written_pixels<=0; read_requests<=0; write_requests<=0; memory_stalls<=0;
             left<=0; right<=0; top<=0; bottom<=0; x<=0; y<=0; visible<=0;
             skip_x<=0; skip_y<=0; remainder_x<=0; remainder_y<=0; initial_remainder_x<=0;
-            source_x<=0; initial_source_x<=0; source_rows_left<=0; destination_row_index<=0;
+            mapped_x<=0; initial_mapped_x<=0; source_rows_left<=0; destination_row_index<=0;
             source_last_row<=0; source_end<=0; destination_last_row<=0; destination_end<=0; destination_row<=0;
-            source_row<=0; destination_address<=0; cache_valid<=0; cache_tag<=0; cache_data<=0;
+            source_address<=0; row_address<=0; destination_address<=0; cache_valid<=0; cache_tag<=0; cache_data<=0;
             write_buffer_valid<=0; finishing_write<=0; read_address<=0; write_buffer_address<=0;
             write_buffer_data<=0; write_buffer_mask<=0; pixel<=0; fill_step<=0;
         end else begin
@@ -189,7 +197,7 @@ module cb_scaled_blitter (
                     q.cx0<=command_clip_x0; q.cy0<=command_clip_y0; q.cx1<=command_clip_x1; q.cy1<=command_clip_y1;
                     completion_tag<=command_tag; completion_error<=0; cache_valid<=0; write_buffer_valid<=0;
                     command_cycles<=1; sampled_pixels<=0; written_pixels<=0; read_requests<=0; write_requests<=0; memory_stalls<=0;
-                    source_x<=0; remainder_x<=0; remainder_y<=0;
+                    mapped_x<=command_flip_x ? command_source_width-1'b1:9'd0; remainder_x<=0; remainder_y<=0;
                     state<=VALIDATE;
                 end
                 VALIDATE: begin
@@ -213,7 +221,8 @@ module cb_scaled_blitter (
                         source_last_row<=source_last_row+{10'b0,q.source_stride}; source_rows_left<=source_rows_left-1'b1;
                     end else begin
                         source_end<=source_last_row+{16'b0,source_row_bytes};
-                        source_row<=q.flip_y ? source_last_row[22:0]:q.source;
+                        source_address<=(q.flip_y ? source_last_row[22:0]:q.source)+
+                            (q.bpp4 ? {15'b0,mapped_x[8:1]}:{14'b0,mapped_x});
                         state<=DESTINATION_SPAN;
                     end
                 end
@@ -237,11 +246,11 @@ module cb_scaled_blitter (
                     end
                 end
                 SKIP_X_ADD: begin
-                    if(skip_x==0) begin initial_source_x<=source_x; initial_remainder_x<=remainder_x; state<=SKIP_Y_ADD; end
+                    if(skip_x==0) begin initial_mapped_x<=mapped_x; row_address<=source_address; initial_remainder_x<=remainder_x; state<=SKIP_Y_ADD; end
                     else begin skip_x<=skip_x-1'b1; remainder_x<=remainder_x+{2'b0,q.sw}; state<=SKIP_X_CARRY; end
                 end
                 SKIP_X_CARRY: begin
-                    if(remainder_x>=q.w) begin remainder_x<=remainder_x-q.w; source_x<=source_x+1'b1; end
+                    if(remainder_x>=q.w) begin remainder_x<=remainder_x-q.w; mapped_x<=stepped_x; source_address<=stepped_address; end
                     else state<=SKIP_X_ADD;
                 end
                 SKIP_Y_ADD: begin
@@ -251,7 +260,7 @@ module cb_scaled_blitter (
                 SKIP_Y_CARRY, STEP_Y_CARRY: begin
                     if(remainder_y>=q.h) begin
                         remainder_y<=remainder_y-q.h;
-                        source_row<=q.flip_y ? source_row-{7'b0,q.source_stride}:source_row+{7'b0,q.source_stride};
+                        row_address<=stepped_row; source_address<=stepped_row;
                     end else state<=state==SKIP_Y_CARRY ? SKIP_Y_ADD:SAMPLE;
                 end
                 SAMPLE: begin
@@ -268,7 +277,7 @@ module cb_scaled_blitter (
                     cache_valid<=1; cache_tag<=read_address[22:2]; cache_data<=memory_read_data; state<=SAMPLE;
                 end
                 STEP_X_CARRY: begin
-                    if(remainder_x>=q.w) begin remainder_x<=remainder_x-q.w; source_x<=source_x+1'b1; end
+                    if(remainder_x>=q.w) begin remainder_x<=remainder_x-q.w; mapped_x<=stepped_x; source_address<=stepped_address; end
                     else state<=SAMPLE;
                 end
                 WRITE_REQUEST: if(memory_ready) begin

@@ -34,7 +34,7 @@ all masks/bank boundaries, strict fairness, refresh, stalls, resets and fault
 recovery, and records the measured renderer workloads on this service. Both
 60 Hz renderer budgets are checked across front-read phases. Those workload timings exclude CPU staging;
 the separate [CPU diagnostic](../architecture/native-graphics-mmio.md) proves
-functional command integration. Layer composition, scanout under dense
+functional command integration. Scanout under dense
 workloads and physical board timing remain ahead.
 
 This one service now serves both the legacy system and the enhanced engines;

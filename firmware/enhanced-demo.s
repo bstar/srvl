@@ -1,6 +1,7 @@
-; Original enhanced-console skeleton demo: the CPU programs the palette,
-; uploads one sprite, then each frame clears the back surface, draws four
-; scaled sprites into it and hands it to scanout. Nothing is rendered by a host.
+; Original enhanced-console skeleton demo: the CPU programs the palette, the
+; tile patterns and two tile maps, uploads one sprite, then each frame clears
+; the back surface, draws four scaled sprites into it, scrolls both planes and
+; hands the frame to scanout. Nothing is rendered by a host.
 ; Assemble with -D BAD_OWNER=1 for the negative ownership test, which draws
 ; into the displayed surface from the fourth frame on.
 .setcpu "65C02"
@@ -15,6 +16,7 @@ frame: .res 1
 sprite: .res 1
 back_bank: .res 1
 enabled: .res 1
+scratch: .res 1
 
 .segment "CODE"
 reset:
@@ -28,16 +30,81 @@ reset:
     sta DIAGNOSTIC
     stz VID_CONTROL
     stz VID_PALETTE_INDEX
-    ldx #0
-load_palette:
-    lda palette,x
+    ldy #0
+load_palette:                         ; entry = base[index & 15] ^ ($111 * bank)
+    tya
+    and #15
+    asl
+    tax
+    tya
+    lsr
+    lsr
+    lsr
+    lsr
+    sta scratch
+    tya
+    and #$f0
+    ora scratch
+    eor palette,x
     sta VID_PALETTE_LOW
-    inx
-    lda palette,x
+    lda scratch
+    eor palette+1,x
     sta VID_PALETTE_HIGH              ; commits the entry and advances the index
-    inx
-    cpx #32
+    iny
     bne load_palette
+    stz VID_TILE_ADDRESS_LOW          ; patterns start at word 0
+    stz VID_TILE_ADDRESS_HIGH
+    ldx #0
+load_patterns:
+    txa
+    and #3
+    tay
+    lda tile_patterns,x
+    sta VID_TILE_DATA0,y              ; the fourth byte stores the row
+    inx
+    cpx #128
+    bne load_patterns
+    ; Both maps are contiguous: entries 0..2047 are the back plane, the rest
+    ; the front plane. pointer counts entries.
+    stz VID_TILE_ADDRESS_LOW
+    lda #>VID_TILE_MAP0
+    sta VID_TILE_ADDRESS_HIGH
+    stz pointer
+    stz pointer+1
+load_maps:
+    lda pointer+1
+    cmp #8
+    bcs front_entry
+    lda pointer                       ; back plane: tiles 0..3 repeating
+    and #3
+    bra store_entry
+front_entry:
+    lda pointer                       ; front plane: mostly empty
+    and #7
+    tax
+    lda front_tiles,x
+store_entry:
+    sta VID_TILE_DATA0
+    lda pointer                       ; flips from column bits 4 and 5
+    lsr
+    lsr
+    and #$0c
+    sta scratch
+    lda pointer+1                     ; palette bank changes every four rows
+    asl
+    asl
+    asl
+    asl
+    ora scratch
+    sta VID_TILE_DATA1                ; stores the entry
+    inc pointer
+    bne load_maps
+    inc pointer+1
+    lda pointer+1
+    cmp #$10
+    bne load_maps
+    lda #3
+    sta VID_PLANE_ENABLE
     ldx #GFX_DESCRIPTOR_BYTES-1
 clear_shadow:
     stz SHADOW,x
@@ -94,7 +161,9 @@ next_sprite:
     asl
     asl
     asl
-    sta SHADOW+GFX_FIELD_COLORS       ; band = sprite number, palette row 0
+    asl
+    asl
+    sta SHADOW+GFX_FIELD_COLORS       ; band = 4*sprite: two below the front plane, two above
     stx SHADOW+GFX_FIELD_TAG
     lda frame                         ; x = 3*frame + offset, modulo 256
     asl
@@ -122,9 +191,24 @@ next_sprite:
     cmp #4
     bne next_sprite
     ; Every command above has completed, so the back surface is whole.
+    ; Plane scroll for this frame is committed by the same request as the swap.
+    lda frame
+    sta VID_PLANE0_X_LOW
+    stz VID_PLANE0_X_HIGH
+    sta VID_PLANE0_Y
+    asl
+    clc
+    adc frame
+    sta VID_PLANE1_X_LOW
+    lda #1
+    sta VID_PLANE1_X_HIGH
+    lda #0
+    sec
+    sbc frame
+    sta VID_PLANE1_Y
     ; The first swap happens with the display still disabled.
     lda enabled
-    ora #VID_CONTROL_SWAP
+    ora #(VID_CONTROL_SWAP | VID_CONTROL_LATCH_PLANES)
     sta VID_CONTROL
 wait_swap:
     lda VID_STATUS
@@ -186,13 +270,47 @@ fail:
     .word sw,sh,ss,640,0,0,w,h,0,0,320,204
     .byte 0
 .endmacro
-clear_template:  descriptor $05,1,0,1,1,1,320,204
+clear_template:  descriptor $01,0,0,1,1,1,320,204     ; uncovered, so the planes show through
 sprite_template: descriptor $40,0,SPRITE_SOURCE,8,8,8,16,16
 sprite_x: .byte 0,61,122,183
 sprite_y: .byte 8,54,100,146
 palette:                              ; low byte G,B then high nibble R
     .word $000,$113,$f00,$0f0,$00f,$ff0,$f0f,$0ff
     .word $fff,$f80,$8f0,$08f,$f08,$80f,$888,$444
+tile_patterns:                        ; four 8x8 tiles; each byte is two pixels, left one in the low nibble
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $11,$11,$11,$01
+    .byte $21,$22,$22,$00
+    .byte $21,$33,$03,$00
+    .byte $21,$43,$00,$00
+    .byte $21,$03,$00,$00
+    .byte $21,$00,$00,$00
+    .byte $01,$00,$00,$00
+    .byte $00,$00,$00,$00
+    .byte $65,$87,$a9,$cb
+    .byte $87,$a9,$cb,$65
+    .byte $a9,$cb,$65,$87
+    .byte $cb,$65,$87,$a9
+    .byte $65,$87,$a9,$cb
+    .byte $87,$a9,$cb,$65
+    .byte $a9,$cb,$65,$87
+    .byte $cb,$65,$87,$a9
+    .byte $ff,$ff,$ff,$ff
+    .byte $0f,$00,$00,$e0
+    .byte $0f,$00,$00,$e0
+    .byte $0f,$09,$00,$e0
+    .byte $0f,$00,$00,$e0
+    .byte $0f,$00,$00,$e0
+    .byte $0f,$00,$00,$e0
+    .byte $ef,$ee,$ee,$ee
+front_tiles: .byte 3,0,0,0,0,1,0,0
 sprite_pixels:
     .byte 0,0,2,2,2,2,0,0
     .byte 0,2,3,3,3,3,2,0

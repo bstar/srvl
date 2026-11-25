@@ -2,7 +2,7 @@
 
 Reviewed: **2026-11-17**. Status: **original v1 component implemented and
 verified against pixel/memory models**. Experimental native MMIO and an actual
-CPU diagnostic now pass; compositor, frame ownership and complete enhanced-system fit/timing remain open. Circuit
+CPU diagnostic now pass, and the [enhanced top](../milestones/enhanced-skeleton.md) uses it with frame ownership and tile planes; dense-scene timing on the complete system remains open. Circuit
 Courier still uses its eight fixed-size sprites; reused Suzy supplies legacy
 behavior in the separate compatibility path.
 
@@ -43,7 +43,7 @@ it is concrete development code, not a frozen SDK.
 | Flips | Independent X/Y reversal after exact source sampling |
 | Transparency | Optional suppression of **raw source index zero**, before palette banking |
 | Palette bank | Four bits prepended to a 4-bit index; ignored for 8-bit sources and fill |
-| Insertion band | Four bits stored per pixel; composition ordering remains an integration contract |
+| Insertion band | Four bits stored per pixel; [composition](compositor.md#priority) uses the top bit to place a pixel behind or in front of the front tile plane |
 | Fill value | Eight-bit index plus covered/clear flag; uncovered fill writes canonical zero and ignores index/band |
 | Tag | Caller-supplied 16-bit value returned with completion |
 
@@ -150,8 +150,9 @@ integrated logic-site totals or a clock-speed guarantee.
 ## Integration still required
 
 The native CPU command/status adapter and original diagnostic ROM now pass their
-separate checks. Add bounded batch storage, front/back-surface ownership, palette/compositor consumption,
-native-resolution scanout and frame-level completion/deadline handling.
+separate checks, and the enhanced top adds surface ownership, palette, tile
+composition and native scanout. Still to add: bounded batch storage and
+frame-level deadline handling.
 Improve shared memory service and pipeline overlap against the dense/contended
 benchmarks, then synthesize and route the complete enhanced configuration.
 Row stretch/tilt, affine rotation, alpha blending and collision rules remain

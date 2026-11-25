@@ -143,14 +143,14 @@
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
     "hardware/memory/cb_graphics_arbiter.sv": "1bfb30c0e4f13e30c73da5257d0d3039e350528f9fe8c08edf88fbc949264885",
     "hardware/memory/cb_graphics_sdram.sv": "9c83bd17adb97c0bca767ea1fc5bbc193fec6b6d2297049a945cf9ca4046b20c",
-    "hardware/enhanced/cb_scaled_blitter.sv": "3df064b263a76c147c0c7c349805a6be95a1c61c15104d7d8f5270714593aaaa",
+    "hardware/enhanced/cb_scaled_blitter.sv": "971bbb6570c1f285a8cbf3b54f150d933ce248b1e3df0485375b6c5e52ce0098",
     "hardware/tests/enhanced-blitter-memory-top.sv": "b7fe1daeb94f75a9364f5392bf17a7bb6b3412a8d2579fada0027844b7ae1653",
     "nix/enhanced.nix": "1b4b0d0899c67ba3adb6f0850e42146acb5daa05063fe6afc8ef45a09334a2d3",
     "sim/scaled-blitter-memory.cpp": "f7cb9623599e65323f2399dc1cc245669b24e829d66510a0513d69df7572c0a6",
     "sim/scaled-blitter-model.hpp": "fad0455908a995f9ef9d7beb96fc9befc8bb69ad4adc4c43f4d7a1f614bac16c",
     "sim/scaled-blitter.cpp": "f64dcdfc772224acd722b102a051e1ef26be190464292fb5839518e632cd3879",
     "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6",
-    "docs/research/evidence/native-graphics-2026-11-17.json": "f7dd9ad515cc6c81d5102c49b36d2dfeb388dc75c3371d3ced7bef4a8fe597e8"
+    "docs/research/evidence/native-graphics-2026-11-17.json": "2f383377fd28fb830b1ccb4ea0a307f7acc301b40a622a6ff899e8c2ee7cfd18"
   },
   "media_sha256": {
     "docs/images/scaled-blitter-scene.png": "63c7c19caaff9ad7e92cb84a9fd8401b75d6bdf5107f641b171c7e5662fee3a4"

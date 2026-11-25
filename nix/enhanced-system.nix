@@ -130,7 +130,7 @@ let
                 for bit in cell['connections'].get(port,[]):
                     clock_pins+=1
                     assert driver.get(bit) in ['rPLL','CLKDIV'], f'{name}.{port} is clocked by {driver.get(bit)}'
-        result={'scope':'enhanced skeleton bench top: R65C02, block-RAM memory and demo ROM, MMIO blitter, video control, native scanout, shared SDRAM service, clock/reset, serializer primitives and I/O; mapped only',
+        result={'scope':'enhanced skeleton bench top: R65C02, block-RAM memory and demo ROM, MMIO blitter, video control, tile planes, native scanout, shared SDRAM service, clock/reset, serializer primitives and I/O; mapped only',
                 'mapped_cells':dict(cells),'block_rams':brams,'registers':registers,
                 'falling_edge_registers':sum(n for t,n in cells.items() if t.startswith('DFFN')),
                 'lut1_to_lut4_cells':sum(cells[f'LUT{i}'] for i in range(1,5)),

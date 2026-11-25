@@ -92,7 +92,7 @@ corners need focused tests before broad claims of compatibility.
 Acceptance: repeatable real-board boots and a named compatibility matrix.
 ComLynx and physical cartridges are additional gates, not implied capabilities.
 
-## 6. Enhanced graphics configuration — skeleton routes; engines and budget open
+## 6. Enhanced graphics configuration — sprites and tile planes route; game and budget open
 
 Gate: Enhanced engines · Active
 
@@ -105,13 +105,13 @@ The [first scaled-blitter component](milestones/scaled-blitter.md) now passes
 independent pixel/memory tests, real-controller contention/reset checks and
 standalone synthesis. The [native MMIO and CPU diagnostic](architecture/native-graphics-mmio.md)
 now pass six cold/warm boots, CPU asset uploads, completion IRQs and three clock
-configurations. A first [enhanced top](milestones/enhanced-skeleton.md) now adds
-native scanout and front/back ownership, runs a CPU-drawn demo in simulation and
-routes on Tang with open tools; the compositor, input, audio and a game remain
-open. With the [enhanced elastic memory service](milestones/enhanced-memory.md),
+configurations. The [enhanced top](milestones/enhanced-skeleton.md) adds native scanout,
+front/back ownership and two [tile planes](chip-design/compositor.md), runs a
+CPU-drawn demo in simulation and routes on Tang with open tools; input, audio
+and a game remain open. With the [enhanced elastic memory service](milestones/enhanced-memory.md),
 the renderer-only frame budgets pass across front-read phases and are regression
 limits; [project status](project-status.md) carries the current figures. Complete-system throughput and enhanced timing remain unqualified;
-preserve both baselines and measure the new CPU/compositor/scanout workload.
+preserve both baselines and measure the combined CPU, blitter and scanout workload.
 
 Acceptance: native 320 × 204 scenes meet the stated 60 fps workloads with measured
 memory service and resource/timing reports. Descriptor count is not a guarantee

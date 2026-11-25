@@ -2,9 +2,15 @@
 // 640x480/60 transport. Derived from this project's legacy scanout: SYS and
 // VIDEO are independent clocks, a one-request mailbox transfers stable
 // metadata, and two 160-word line buffers alternate ownership.
-// A surface word holds two 16-bit pixels: coverage in bit 12, palette index in
-// 7:0. Uncovered pixels show black. The 256-entry RGB444 palette is written
-// from its own clock and read in the video domain.
+// A surface word holds two 16-bit pixels: coverage in bit 12, band in 11:8,
+// palette index in 7:0. Each pixel is merged with the two tile planes as the
+// line is filled, so the line buffer holds final palette indices:
+//   front plane, unless the object pixel is covered with band >= 8
+//   covered object pixel
+//   back plane
+//   otherwise uncovered, shown black
+// The 256-entry RGB444 palette is written from its own clock and read in the
+// video domain.
 // Both resets must be asserted together; release each in its own clock domain.
 module cb_native_scanout #(
     parameter [22:0] SURFACE_BASE=23'h100000
@@ -18,6 +24,12 @@ module cb_native_scanout #(
     input wire read_ready, read_response,
     output wire [22:0] read_address,
     input wire [31:0] read_data,
+    // Tile-plane pixel stream for the row being filled; see cb_tile_planes.
+    output wire tile_start,
+    output wire [7:0] tile_line,
+    input wire tile_valid,
+    output wire tile_take,
+    input wire [8:0] tile_back, tile_front,
     input wire palette_clk, palette_write,
     input wire [7:0] palette_index,
     input wire [11:0] palette_rgb,
@@ -39,7 +51,7 @@ module cb_native_scanout #(
     reg [11:0] palette_word;
     reg sample_odd, sample_valid, pixel_valid;
     wire [15:0] sample=sample_odd ? line_word[31:16]:line_word[15:0];
-    wire _unused_sample=^{sample[15:13],sample[11:8]};
+    wire _unused_sample=^{sample[15:13],sample[11:8]};   // always zero after composition
     assign video_rgb=pixel_valid ? palette_word:12'b0;
     always @(posedge palette_clk) if(palette_write) palette[palette_index]<=palette_rgb;
 
@@ -61,8 +73,26 @@ module cb_native_scanout #(
         else begin ack_meta<=ack_toggle; ack_sync<=ack_meta; end
     end
 
-    localparam IDLE=0, PRESENT=1, SNAPSHOT=2, FETCH=3, WAIT=4, ACK=5;
-    reg [2:0] state;
+    localparam IDLE=0, PRESENT=1, SNAPSHOT=2, START=3, FETCH=4, WAIT=5, LOW=6, HIGH=7, ACK=8;
+    reg [3:0] state;
+    reg [31:0] object;
+    reg [15:0] low;
+    wire _unused_object=^{object[31:29],object[26:24],object[15:13],object[10:8]};
+    function automatic [15:0] compose(input object_covered, input above, input [7:0] object_index);
+        reg covered;
+        reg [7:0] index;
+        begin
+            covered=1'b1;
+            if(tile_front[8] && !(object_covered && above)) index=tile_front[7:0];
+            else if(object_covered) index=object_index;
+            else if(tile_back[8]) index=tile_back[7:0];
+            else begin covered=1'b0; index=8'b0; end
+            compose={3'b0,covered,4'b0,index};
+        end
+    endfunction
+    assign tile_start=state==START;
+    assign tile_line=fill_line;
+    assign tile_take=tile_valid && (state==LOW || state==HIGH);
     reg frame_valid, frame_bank, fill_bank;
     reg [7:0] fill_line, fill_word;
     assign present=state==PRESENT;
@@ -71,12 +101,12 @@ module cb_native_scanout #(
                        +23'(fill_line)*23'd640+{13'b0,fill_word,2'b0};
     // Keep RAM data ports free of reset so synthesis can infer block RAM.
     always @(posedge clk)
-        if(state==WAIT && read_response) lines[{fill_bank,fill_word}]<=read_data;
+        if(state==HIGH && tile_valid) lines[{fill_bank,fill_word}]<={compose(object[28],object[27],object[23:16]),low};
     always @(posedge clk) begin
         if(reset) begin
             state<=IDLE; seen_request<=0; ack_toggle<=0; ack_valid<=0;
             frame_valid<=0; frame_bank<=0; fill_bank<=0; fill_line<=0; fill_word<=0;
-            protocol_fault<=0;
+            protocol_fault<=0; object<=0; low<=0;
         end else begin
             if(read_response && state!=WAIT) protocol_fault<=1;
             case(state)
@@ -86,7 +116,7 @@ module cb_native_scanout #(
                     seen_request<=request_sync;
                     fill_line<=request_line; fill_bank<=request_bank; fill_word<=0;
                     if(request_frame) state<=PRESENT;
-                    else if(frame_valid) state<=FETCH;
+                    else if(frame_valid) state<=START;
                     else begin ack_valid<=0; state<=ACK; end
                 end
                 // The frame owner may change the front bank during PRESENT;
@@ -94,11 +124,16 @@ module cb_native_scanout #(
                 PRESENT: state<=SNAPSHOT;
                 SNAPSHOT: begin
                     frame_bank<=display_bank; frame_valid<=display_valid;
-                    if(display_valid) state<=FETCH;
+                    if(display_valid) state<=START;
                     else begin ack_valid<=0; state<=ACK; end
                 end
+                // The planes latch this row and their scroll values here,
+                // after the frame owner has applied them at PRESENT.
+                START: state<=FETCH;
                 FETCH: if(read_ready) state<=WAIT;
-                WAIT: if(read_response) begin
+                WAIT: if(read_response) begin object<=read_data; state<=LOW; end
+                LOW: if(tile_valid) begin low<=compose(object[12],object[11],object[7:0]); state<=HIGH; end
+                HIGH: if(tile_valid) begin
                     if(fill_word==LAST_WORD) begin ack_valid<=1; state<=ACK; end
                     else begin fill_word<=fill_word+1'b1; state<=FETCH; end
                 end

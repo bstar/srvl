@@ -59,9 +59,9 @@
         },
         {
           "source": "docs/chip-design/compositor.md",
-          "label": "Parallax & composition",
-          "state": "Proposed",
-          "summary": "Independent tile planes, object bands, priority, palette and completed scanlines."
+          "label": "Tile planes & composition",
+          "state": "Scoped evidence",
+          "summary": "Two scrolling tile planes in block RAM and how they are merged with sprites on each line."
         },
         {
           "source": "docs/chip-design/geometry.md",
@@ -111,6 +111,12 @@
       "title": "System design",
       "pages": [
         {
+          "source": "docs/architecture/overview.md",
+          "label": "System architecture",
+          "state": "Current",
+          "summary": "Both configurations, the enhanced machine's clocks, memory map and the path of one frame."
+        },
+        {
           "source": "docs/hardware.md",
           "label": "Hardware choices",
           "state": "Current",
@@ -125,8 +131,8 @@
         {
           "source": "docs/architecture/enhanced-target.md",
           "label": "Enhanced graphics",
-          "state": "Proposed",
-          "summary": "Scaled sprites, parallax, dense objects and basic 3D: desired behavior and bounded workloads."
+          "state": "In progress",
+          "summary": "What the enhanced console is meant to do, what is built, and what limits it."
         },
         {
           "source": "docs/architecture/native-graphics-mmio.md",
@@ -221,7 +227,7 @@
           "source": "docs/milestones/enhanced-skeleton.md",
           "label": "Enhanced skeleton",
           "state": "Scoped evidence",
-          "summary": "First real enhanced top: CPU, blitter, native scanout, frame ownership, first fit and clock estimates."
+          "summary": "The enhanced top: CPU, blitter, tile planes, native scanout and frame ownership, with fit and clock estimates."
         },
         {
           "source": "docs/documentation.md",

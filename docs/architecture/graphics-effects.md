@@ -94,6 +94,10 @@ be committed with the same fence so the displayed frame remains coherent.
 
 ## Layer compositor and raster effects
 
+Two planes with a fixed priority order are built; [tile planes and
+composition](../chip-design/compositor.md) describes them. What follows is the
+target.
+
 Target eight independent 4-bpp tile planes, with 8×8 tiles, 16 palette banks and
 independent map/tile bases. A starting map size of 64×32 cells per plane costs
 4 KiB per map, or 32 KiB for all eight. Tile patterns can be shared. Each plane

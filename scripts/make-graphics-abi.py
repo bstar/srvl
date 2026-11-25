@@ -39,6 +39,8 @@ asm += [f"VID_{name} = ${video_base + number(offset):04x}" for name, offset in v
 asm += [f"VID_STATUS_{name} = ${1 << number(bit):02x}" for name, bit in video["status_bits"].items()]
 asm += [f"VID_CONTROL_{name} = ${1 << number(bit):02x}" for name, bit in video["control_bits"].items()]
 asm += [f"VID_SURFACE{index} = ${value:06x}" for index, value in enumerate(surfaces)]
+tile_memory = {name: number(value) for name, value in video["tile_memory"].items()}
+asm += [f"VID_TILE_{name} = ${value:04x}" for name, value in tile_memory.items()]
 (destination / "graphics-abi.inc").write_text("\n".join(asm) + "\n")
 
 sv = [f"// {notice}",
@@ -70,3 +72,6 @@ if (video_base & 0xff or video_base == base or len(surfaces) != 2 or bank_step !
         or bank_step < 320 * 204 * 2 or surfaces[0] % bank_step or surfaces[0] & bank_step
         or surfaces[1] + bank_step > 1 << 23):
     raise SystemExit("Video registers need their own page; the two surfaces must differ in exactly one address bit")
+# cb_tile_planes decodes these word addresses directly.
+if tile_memory != {"PATTERNS": 0x0000, "MAP0": 0x1000, "MAP1": 0x1800}:
+    raise SystemExit("Tile memory layout differs from the one cb_tile_planes decodes")

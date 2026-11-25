@@ -16,27 +16,50 @@
 static void require(bool ok,const std::string &why) { if(!ok) throw std::runtime_error(why); }
 using Image=std::vector<uint16_t>;                 // 320x204 RGB444
 // Independent literals: these deliberately do not include the generated ABI.
-static const std::array<uint16_t,16> palette{0x000,0x113,0xf00,0x0f0,0x00f,0xff0,0xf0f,0x0ff,
+static const std::array<uint16_t,16> base_palette{0x000,0x113,0xf00,0x0f0,0x00f,0xff0,0xf0f,0x0ff,
                                               0xfff,0xf80,0x8f0,0x08f,0xf08,0x80f,0x888,0x444};
 static const std::array<uint8_t,64> sprite{0,0,2,2,2,2,0,0, 0,2,3,3,3,3,2,0, 2,3,4,5,5,4,3,2, 2,3,5,8,9,5,3,2,
                                            2,3,5,10,11,5,3,2, 2,3,4,5,5,4,3,2, 0,2,6,7,12,13,2,0, 0,0,14,15,15,14,0,0};
+static const uint8_t tiles[4][8][8]={
+  {{0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}},
+  {{1,1,1,1,1,1,1,0}, {1,2,2,2,2,2,0,0}, {1,2,3,3,3,0,0,0}, {1,2,3,4,0,0,0,0}, {1,2,3,0,0,0,0,0}, {1,2,0,0,0,0,0,0}, {1,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}},
+  {{5,6,7,8,9,10,11,12}, {7,8,9,10,11,12,5,6}, {9,10,11,12,5,6,7,8}, {11,12,5,6,7,8,9,10}, {5,6,7,8,9,10,11,12}, {7,8,9,10,11,12,5,6}, {9,10,11,12,5,6,7,8}, {11,12,5,6,7,8,9,10}},
+  {{15,15,15,15,15,15,15,15}, {15,0,0,0,0,0,0,14}, {15,0,0,0,0,0,0,14}, {15,0,9,0,0,0,0,14}, {15,0,0,0,0,0,0,14}, {15,0,0,0,0,0,0,14}, {15,0,0,0,0,0,0,14}, {15,14,14,14,14,14,14,14}}};
+static const uint8_t front_tiles[8]={3,0,0,0,0,1,0,0};
+// The demo loads 256 colors: sixteen banks derived from the base row.
+static uint16_t color(unsigned index) { return uint16_t(base_palette.at(index&15)^(0x111*(index>>4))); }
+// What the demo's maps and scroll values put at canvas (x,y) of frame n:
+// -1 where the plane is transparent, otherwise a palette index.
+static int plane_pixel(unsigned plane,unsigned x,unsigned y,unsigned n) {
+  const unsigned scroll_x=plane ? 256+((3*n)&255):(n&255), scroll_y=plane ? (256-(n&255))&255:(n&255);
+  const unsigned world_x=(x+scroll_x)&511, world_y=(y+scroll_y)&255;
+  const unsigned entry=plane*2048+(world_y/8)*64+world_x/8, low=entry&255, high=entry>>8;
+  const unsigned tile=plane ? front_tiles[low&7]:(low&3);
+  const bool flip_x=low&0x10, flip_y=low&0x20;
+  const unsigned pixel=tiles[tile][flip_y ? 7-world_y%8:world_y%8][flip_x ? 7-world_x%8:world_x%8];
+  return pixel ? int(high*16+pixel):-1;
+}
 static const uint32_t surface_address[2]={0x100000,0x140000};
 // Frame n is drawn into the surface that is not displayed: the first into 1.
 static Image expected_frame(std::vector<uint32_t> &scratch,unsigned n) {
   const uint32_t destination=surface_address[(n+1)%2];
-  BlitCommand clear;clear.fill=true;clear.fill_covered=true;clear.transparent=false;clear.fill_index=1;
+  BlitCommand clear;clear.fill=true;clear.fill_covered=false;clear.transparent=false;
   clear.destination=destination;clear.width=320;clear.height=204;
   require(blit_reference(scratch,clear).error==0,"reference clear rejected");
   for(unsigned i=0;i<4;++i) {
     BlitCommand c;c.source=0x4000;c.source_width=c.source_height=8;c.source_stride=8;c.destination=destination;
-    c.band=uint8_t(i);c.x=uint8_t(3*n+61*i);c.y=int(8+46*i);c.width=c.height=16+2*((n+4*i)&15);
+    c.band=uint8_t(4*i);c.x=uint8_t(3*n+61*i);c.y=int(8+46*i);c.width=c.height=16+2*((n+4*i)&15);
     require(blit_reference(scratch,c).error==0,"reference sprite rejected");
   }
   Image image(320*204);
   for(unsigned y=0;y<204;++y) for(unsigned x=0;x<320;++x) {
     const uint32_t address=destination+y*640+x*2;
     const unsigned word=blit_byte(scratch,address)|(unsigned(blit_byte(scratch,address+1))<<8);
-    image[y*320+x]=(word&0x1000) ? palette.at(word&255):0;
+    const bool covered=word&0x1000;
+    const int front=plane_pixel(1,x,y,n), back=plane_pixel(0,x,y,n);
+    if(front>=0 && !(covered && (word&0x800))) image[y*320+x]=color(unsigned(front));
+    else if(covered) image[y*320+x]=color(word&255);
+    else image[y*320+x]=back>=0 ? color(unsigned(back)):0;
   }
   return image;
 }
@@ -131,7 +154,7 @@ static Result run_demo(uint64_t video_half,uint64_t video_offset,unsigned divide
   while(r.distinct<wanted) {
     const Image image=m.next_frame();
     require(m.dut.diagnostic!=0xe0,"demo ROM reported failure");
-    if(image.empty()) { require(last<0,"display went blank after the first presented frame");++r.blank;require(r.blank<6,"demo never presented a frame");continue; }
+    if(image.empty()) { require(last<0,"display went blank after the first presented frame");++r.blank;require(r.blank<10,"demo never presented a frame");continue; }
     ++r.shown;
     // A transport frame must be exactly one completed frame: the previous
     // one again, or the next. Anything else is a torn or skipped frame.
@@ -181,7 +204,7 @@ int main(int argc,char **argv) {
     for(const Result &r:{a,b}) require(r.repeated<=1,"demo did not sustain one new frame per transport frame");
     if(argc>1) {
       std::ofstream out(argv[1]);
-      out<<"{\n  \"scope\": \"actual pinned R65C02 runs the demo ROM on the enhanced system skeleton: block-RAM memory, MMIO blitter, video control, native scanout and one shared SDRAM service against unchanged pin/pixel models; digital simulation only, no compositor, audio, input or physical test\",\n"
+      out<<"{\n  \"scope\": \"actual pinned R65C02 runs the demo ROM on the enhanced system skeleton: block-RAM memory, MMIO blitter, video control, native scanout and one shared SDRAM service against unchanged pin/pixel models; digital simulation only, no audio, input or physical test\",\n"
          <<"  \"clock_configurations\": 2,\n  \"complete_frames_checked\": "<<a.shown+b.shown
          <<",\n  \"distinct_frames\": "<<a.distinct+b.distinct<<",\n  \"repeated_frames\": "<<a.repeated+b.repeated
          <<",\n  \"blank_frames_before_first_present\": "<<a.blank+b.blank

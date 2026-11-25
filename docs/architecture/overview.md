@@ -1,88 +1,179 @@
-# Architecture overview
+# System architecture
 
-**Current direction, 2026-11-15:** the next standalone prototype uses Tang Nano
-20K with the upstream Lynx CPU inside the FPGA under
-[ADR 0009](decisions/0009-tang-prototype.md). See the
-[current architecture](tang-prototype.md) and [project summary](../project-status.md).
-The earlier ECP5 requirements below preserve design history; their resource and
-throughput figures require a fresh Tang budget.
+Chipbuilder is a handheld console built in an FPGA: an imagined mid-1990s
+successor to the Atari Lynx. It has to do two things. It runs original Lynx
+software unchanged at 160 × 102, shown as exact 2 × 2 blocks. And it runs new
+games at 320 × 204 on a faster 65C02 with graphics hardware of our own design:
+a scaling blitter, scrolling tile planes and, later, flat-shaded triangles.
 
-Status: requirements and exploration, with a CPU-driven software prototype and
-a separate MiSTer display/input/audio bring-up circuit. Physical verification
-and Lynx compatibility remain ahead.
+Everything currently targets one board, the Tang Nano 20K (GW2AR-18 with 8 MiB
+of SDRAM in the package). Nothing has run on the board yet. All results quoted
+in these pages come from simulation and from the open place-and-route tools.
 
-## Agreed direction
+## Two configurations, one board
 
-- A plausible 1993–1995 Lynx successor, using modern development tools while
-  keeping explicit limits on computation, memory, and bandwidth.
-- Original graphics, audio, and system hardware designs with a reused CPU core.
-  R65C02 is selected for the software prototype under ADRs 0005/0006; the Tang
-  legacy configuration retains the separate upstream Lynx CPU implementation.
-- Existing retro chips may accompany the FPGA where they improve the design.
-  The [physical CPU option](hybrid-hardware.md) was evaluated; the first standalone
-  development target retains the CPU inside the Tang FPGA to avoid external-bus
-  complexity. See the [current hardware choices](../hardware.md).
-- FPGA development first, using the owner's existing MiSTer. First major outcome:
-  a playable bench prototype, before custom handheld integration.
-- Native enhanced-game resolution of 320 × 204. Legacy software renders at
-  160 × 102 and receives exact 2× visual scaling, with each pixel becoming a
-  2×2 block. Initial Lynx support targets unmodified game images;
-  decompilation/recompilation and enhanced ports are deferred possibilities.
-- Lynx software compatibility is a goal; game images precede physical cartridges.
-  Compatibility milestones, completeness, and implementation order remain open.
-- A color LCD with a backlight. Transflective LCDs are the leading research
-  direction; no exact display panel is approved.
-- Eventual custom PCB, controls, screen, and 3D-printed enclosure. Custom silicon
-  is a possible later stage, not a prerequisite for the first playable prototype.
-- Development tools and dependencies managed through project Nix shells.
-- The current standalone prototype is Tang Nano 20K under
-  [ADR 0009](decisions/0009-tang-prototype.md), with 64 KiB local Lynx work RAM and
-  proposed SDRAM-backed cartridge/presentation storage. The earlier ECP5/x16
-  contract is [preserved as history](standalone-platform.md). A complete BOM
-  budget is open; the US$275 ULX3S option remains rejected.
-- Software-first validation for current development. Physical MiSTer testing is
-  deferred under [ADR 0004](decisions/0004-software-first-validation.md).
-- A CPU-driven original-ROM prototype under
-  [ADR 0005](decisions/0005-prototype-cpu-and-peripherals.md), with a documented
-  [temporary memory map](software-prototype.md).
-- The current maze revision carries those CPU/system choices forward under
-  [ADR 0006](decisions/0006-maze-game-and-sprite-budget.md), expanding the fixed
-  sprite budget to eight and implementing lane movement and multiple guards.
-- The owner requested scaled sprites, many parallax layers, dense objects and
-  basic 3D. The [current enhanced target](enhanced-target.md) explains those
-  engines and their limits. The ECP5 workload calculations need a fresh Tang
-  budget; full implementation and measured acceptance remain ahead.
+The two jobs are separate FPGA images. They share the SDRAM controller, the
+memory arbiter, the video output stage and the clock and reset blocks, and
+nothing else.
 
-## Proposed functional boundaries
+| | Legacy | Enhanced |
+| --- | --- | --- |
+| CPU | Upstream Lynx core: its CPU, Suzy and Mikey | Pinned R65C02 core at 8 MHz |
+| CPU memory | 64 KiB work RAM in block RAM | 8 KiB RAM and 32 KiB ROM in block RAM |
+| Graphics | The original Lynx hardware, as translated upstream | Our blitter, tile planes and scanout |
+| SDRAM holds | Cartridge image, three captured RGB frames | Sprite sources, two indexed surfaces |
+| Top level | [lynx_tang_system.sv](../../hardware/tang/lynx_tang_system.sv) | [cb_enhanced_system.sv](../../hardware/enhanced/system/cb_enhanced_system.sv) |
+| Detail | [Tang prototype](tang-prototype.md) | This page, then the [chip design handbook](../chip-design/overview.md) |
 
-The console logic should expose video pixels/timing, audio samples, controls,
-reset/clock enables, and game-loading interfaces through an adapter for MiSTer.
-MiSTer's menus, file loading, controller integration, and video output are
-development infrastructure. Keep console behavior independent of those services
-where practical so it can move to a custom board.
+They are separate because they do not fit together. The legacy image uses 35 of
+the 46 block RAMs and the enhanced one 29. They also use different CPU cores,
+and the Lynx core's bus timing is part of what makes old games behave correctly.
+A single image that switches modes would need a different FPGA or a different
+memory plan; neither is being pursued now.
 
-The first circuit follows this boundary: [portable demo RTL](../../hardware/rtl/chipbuilder_demo.sv)
-and a [MiSTer adapter](../../hardware/mister/Chipbuilder.sv). Its 50.4 MHz clock
-and 640 × 480 transport raster are bring-up choices, not a console CPU frequency
-or a requirement for the eventual LCD. See the
-[acceptance record](../milestones/first-mister-prototype.md) for actual validation.
+## The enhanced machine
 
-Legacy mode must reproduce relevant timing and behavior, not merely CPU opcodes.
-Enhanced mode requires a new Tang resource/memory contract. The native enhanced
-register window is reserved at `$4400–$44FF`; bit fields and legacy activation
-will be specified with the respective engines.
+```
+            8 MHz                               64 MHz                         25.2 MHz
+   ┌─────────────────────┐        ┌──────────────────────────────┐      ┌────────────────────┐
+   │ R65C02              │        │ scaled blitter               │      │                    │
+   │ RAM  $0000-$1FFF    │ $4400  │   draws into the back surface│      │                    │
+   │ ROM  $8000-$FFFF    ├───────►│                              │      │                    │
+   │                     │        │ tile planes (block RAM)      │      │                    │
+   │                     │ $4500  │   two scrolling 8x8 maps     │      │                    │
+   │                     ├───────►│          │                   │      │                    │
+   └─────────────────────┘        │          ▼                   │      │                    │
+                                  │ scanout line fill            │ line │ palette, 2x repeat │
+                                  │   surface row + planes ──────┼─────►│ 640x480 timing     ├──► TMDS
+                                  │          ▲                   │ bufs │                    │
+                                  │ arbiter ─┴─ SDRAM controller │      │                    │
+                                  └──────────────┬───────────────┘      └────────────────────┘
+                                                 ▼
+                                         8 MiB SDRAM, 32-bit
+```
 
-## Open decisions
+### Clocks
 
-- Legacy CPU instruction/bus equivalence, arbitrary memory stalls and IRQ corners.
-- Legacy compatibility test corpus, hardware oracle, milestones, and acceptance.
-- SDRAM arbiter implementation and measured throughput; selected clocks need timing closure.
-- Full graphics resource fit and legacy collision/storage behavior.
-- Exact display, verified 60 Hz operation, motion quality, orientation/scanout,
-  availability, backlight driver, and power budget.
-- Audio design, game format, boot code, SDK, and eventual cartridge interface.
-- Handheld size, battery, electrical interfaces, and ASIC feasibility/budget.
+| Domain | Rate | What runs in it |
+| --- | --- | --- |
+| System | 64 MHz | SDRAM controller, arbiter, blitter, tile-plane fetch, scanout line fill |
+| CPU | 8 MHz, divided from the system clock | CPU, its RAM and ROM, register files, palette and tile memory write ports |
+| Pixel | 25.2 MHz, with a 5× serializer clock | Video timing, line-buffer read, palette lookup, TMDS |
 
-Consult the [decision index](decisions/README.md) and current Tang architecture
-for development requirements. This is not a procurement-ready schematic or proof
-that the target has passed physical acceptance. The exact LCD remains open.
+The three are treated as unrelated. Single bits cross through two flops as
+toggles; anything wider is held still by its sender until the toggle has been
+acknowledged. There are no asynchronous FIFOs on the enhanced side.
+
+Block RAM on this part has rising-edge clocks only, so the CPU's memories use
+the rising edge of the 8 MHz clock and the CPU's own registers the falling edge
+of the same net. An address settles for half a cycle, the RAM samples it, and
+the CPU captures the data half a cycle later. The earlier software prototype
+used a gated clock for the CPU; that cannot be built and is gone from this path.
+
+### What the CPU sees
+
+| Address | Size | Contents |
+| --- | --- | --- |
+| `$0000` | 8 KiB | Work RAM |
+| `$4400` | one page | Graphics commands: a 36-byte descriptor, submit, status, counters |
+| `$4500` | one page | Video: swap, palette, plane scroll, tile memory port |
+| `$8000` | 32 KiB | ROM |
+
+Both register pages are generated from
+[graphics-abi.json](../../hardware/enhanced/graphics-abi.json) into the assembler
+include and the SystemVerilog package, and the build fails if the checked-in
+copies drift. The [register reference](native-graphics-mmio.md) has the bit
+fields. The CPU has no direct view of SDRAM. It uploads bytes through a command
+and never waits on memory: registers answer in the same cycle and commands
+complete in the background.
+
+### Where pixels live
+
+SDRAM holds two 320 × 204 surfaces at `$100000` and `$140000`. A surface pixel
+is 16 bits, two to a memory word:
+
+```
+ 15      13   12     11       8   7            0
+ ┌─────────┬───────┬───────────┬───────────────┐
+ │    0    │covered│   band    │ palette index │
+ └─────────┴───────┴───────────┴───────────────┘
+```
+
+The blitter writes whole pixels and never reads the destination. A fill can
+write uncovered pixels, which is how a frame is cleared so the planes show.
+
+Tile planes do not touch SDRAM at all. Patterns (256 tiles of 8 × 8 pixels at
+4 bits) and two 64 × 32 maps sit in eight block RAMs. That costs block RAM we
+could have spent elsewhere, but it means adding planes took nothing from the
+memory bandwidth the blitter needs, and a plane fetch can never be late.
+
+### One frame
+
+1. The CPU reads which surface is in front and draws into the other one:
+   a clear, then sprites, each a descriptor written to `$4400` and submitted.
+2. It writes the plane scroll values for this frame, then one control write
+   that asks for a swap and a latch of the plane settings together.
+3. At the end of the visible raster the scanout takes the request. Front
+   surface and plane settings change in the same cycle and then hold for all
+   204 rows. The CPU sees `SWAP_PENDING` clear and `FRONT` flip together.
+4. For each row, the line fill reads 160 words of the front surface. For each
+   pixel it picks, in order: the front plane unless the surface pixel is
+   covered with band 8 or above; the covered surface pixel; the back plane;
+   otherwise black. The winning palette index goes into a line buffer.
+5. The pixel domain reads the line buffer, looks up RGB444 in the palette and
+   shows each row twice and each pixel twice: 640 × 408, centered in 640 × 480.
+
+A row is fetched while the one before it is on screen, so the fill has two
+output lines to finish: about 4,060 system clock cycles. A memory read takes
+roughly 6 cycles when the bus is free and 12 when the blitter is also working,
+which puts a row between 1,300 and 2,300 cycles. That figure is an estimate
+from the controller's timing, not a measurement under heavy drawing. If a row
+is late it is shown black, both copies, and an underrun flag is set.
+
+### Rules the design holds to
+
+- **Whole frames only.** Nothing the CPU does mid-frame reaches the screen
+  until the next swap. Drawing into the surface that is on screen sets a sticky
+  fault the program can read. It is detected, not prevented.
+- **One owner of the SDRAM pins.** The CPU byte port, the blitter and scanout
+  are equal clients of one round-robin arbiter. Scanout has no priority yet.
+- **No clock made from logic.** The mapping check fails if any clock pin is
+  driven by anything but a PLL or a clock divider.
+- **Tests draw nothing.** The system test only supplies clocks and an SDRAM pin
+  model. The CPU runs a ROM, and every captured frame must equal one frame of a
+  separately written model of what that ROM draws.
+
+## The legacy machine
+
+The Lynx core is taken from upstream at a pinned revision and used as it is.
+Around it we replaced what was MiSTer-specific: work RAM is a local 64 KiB
+block RAM, the cartridge is read from SDRAM through a small byte cache, and a
+loader on the board's USB serial port writes images in.
+
+Video is captured, not re-rendered. Lynx games change palettes mid-frame, so
+the RGB that the core emits is written to SDRAM as it appears, into one of
+three frame banks, and only complete frames are handed to the scanout. Audio
+goes through a low-pass filter to 48 kHz I²S on a third clock. The
+[Tang prototype](tang-prototype.md) page covers this in detail.
+
+## Not built
+
+- Input, audio and a game loader on the enhanced side. Its only program is a
+  demo ROM compiled into the image.
+- Triangles and fixed-point math. See [geometry](../chip-design/geometry.md).
+- Per-line scroll, more than two planes, tile maps larger than 64 × 32.
+- Display priority at the memory arbiter, and any measurement of the scanout
+  deadline under a dense scene.
+- Everything physical: board bring-up, the LCD, power, the PCB and the case.
+  The [roadmap](../roadmap.md) orders that work and
+  [open decisions](../tradeoffs.md) lists what is waiting on a choice.
+
+## Earlier designs
+
+The project began on MiSTer and then planned an ECP5 board before settling on
+the Tang. The [software prototype](software-prototype.md), a playable maze game
+with fixed-size sprites, still runs in simulation and is kept as a regression.
+The [ECP5 contract](standalone-platform.md) and the
+[external CPU study](hybrid-hardware.md) are history. Their numbers do not
+describe this machine. The [decision records](decisions/README.md) say why each
+turn was taken.
