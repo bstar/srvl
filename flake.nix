@@ -95,6 +95,24 @@
             cp compile.log simulation.log "$out/"
             python ${./scripts/preview-to-png.py} preview.ppm "$out/preview.png"
           '';
+      # Strict lint for prototype RTL that no other check builds with -Wall.
+      # Only the pinned upstream CPU is waived.
+      rtlLint =
+        pkgs.runCommand "chipbuilder-rtl-lint"
+          {
+            nativeBuildInputs = [ pkgs.verilator ];
+          }
+          ''
+            export HOME="$TMPDIR"
+            lint() { verilator --lint-only -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT "$@" >> lint.log 2>&1 || { cat lint.log; exit 1; }; }
+            printf '`verilator_config\nlint_off -file "%s"\n' ${software.cpu-hdl}/cpu.v > upstream.vlt
+            lint --top-module chipbuilder_demo ${./hardware/rtl/chipbuilder_demo.sv}
+            lint --top-module chipbuilder_peripherals ${./hardware/rtl/chipbuilder_peripherals.sv}
+            lint --top-module chipbuilder_soc upstream.vlt ${software.cpu-hdl}/cpu.v \
+              ${./hardware/rtl/chipbuilder_cpu.sv} ${./hardware/rtl/chipbuilder_peripherals.sv} ${./hardware/rtl/chipbuilder_soc.sv}
+            mkdir "$out"
+            cp lint.log "$out/"
+          '';
     in
     {
       devShells.${system} = {
@@ -287,6 +305,9 @@
         lynx-diagnostic = lynxAudit.smoke;
         standalone-budget = self.packages.${system}.standalone-cpu-sizing;
         cpu = software.cpu-directed;
+        cpu-functional = software.cpu-functional;
+        simulator-equivalence = software.simulator-equivalence;
+        rtl-lint = rtlLint;
         peripherals = software.peripheral-check;
         game = software.game-check;
         prototype = simulation false;

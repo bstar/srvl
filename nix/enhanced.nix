@@ -108,8 +108,10 @@ let
         assert len(data)==32768
         Path('native-graphics.hex').write_text("".join(f'{b:02x}\n' for b in data))
         PY
-        verilator --cc --exe --build -j 4 -Wno-fatal --top-module native_graphics_top --Mdir obj \
-          -CFLAGS '-O2 -std=c++17' ${cpuHdl}/cpu.v ${nativeSource}/hardware/enhanced/*.sv \
+        # Warnings are fatal for project RTL; only the pinned upstream CPU is waived.
+        printf '`verilator_config\nlint_off -file "%s"\n' ${cpuHdl}/cpu.v > upstream.vlt
+        verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT --top-module native_graphics_top --Mdir obj \
+          -CFLAGS '-O2 -std=c++17' upstream.vlt ${cpuHdl}/cpu.v ${nativeSource}/hardware/enhanced/*.sv \
           ${nativeSource}/hardware/tests/native-graphics-top.sv ${nativeSource}/sim/native-graphics.cpp \
           > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vnative_graphics_top evidence.json > test.log 2>&1 || { cat test.log; exit 1; }

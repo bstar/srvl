@@ -125,8 +125,10 @@ let
         ];
       }
       ''
-        verilator --cc --exe --build -j 4 -Wno-fatal --top-module lynx_audit --Mdir obj \
-          -CFLAGS -O2 ${hdl}/lynx-compact.v ${../sim/lynx-audit.cpp} > compile.log 2>&1 || { tail -80 compile.log; exit 1; }
+        # Warnings are fatal for the project wrapper; only the translated upstream core is waived.
+        printf '`verilator_config\nlint_off -file "%s"\n' ${hdl}/lynx-compact.v > upstream.vlt
+        verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT -Wno-ALWNEVER --top-module lynx_audit --Mdir obj \
+          -CFLAGS -O2 upstream.vlt ${hdl}/lynx-compact.v ${../sim/lynx-audit.cpp} > compile.log 2>&1 || { tail -80 compile.log; exit 1; }
         ./obj/Vlynx_audit ${diagnostic}/diagnostic.bin > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
         mkdir "$out"

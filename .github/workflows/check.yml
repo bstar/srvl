@@ -1,0 +1,16 @@
+name: check
+on:
+  push:
+  pull_request:
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      # Default checks use no Quartus, vendor archives or attached hardware.
+      - run: nix flake check -L

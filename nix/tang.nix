@@ -152,8 +152,10 @@ let
         ca65 -D TANG_CHECK_CART=1 ${lib.optionalString video "-D TANG_CHECK_VIDEO=1"} ${lib.optionalString audio "-D TANG_CHECK_AUDIO=1"} ${source}/hardware/tests/lynx-audit.s -o diagnostic.o
         printf 'MEMORY { RAM: start = $0200, size = $1000, file = %%O; }\nSEGMENTS { CODE: load = RAM, type = ro; }\n' > diagnostic.cfg
         ld65 -C diagnostic.cfg diagnostic.o -o diagnostic.bin
-        verilator --cc --exe --build -j 4 -Wno-fatal ${lib.optionalString video "-GVIDEO=1"} ${lib.optionalString audio "-GAUDIO=1"} --top-module lynx_tang_system --Mdir obj \
-          -CFLAGS '-O2 -std=c++17 ${lib.optionalString video "-DVIDEO_CHECK"} ${lib.optionalString audio "-DAUDIO_CHECK"}' ${lynxHdl}/lynx-compact.v ${source}/hardware/tang/*.sv ${source}/hardware/video/*.sv ${source}/hardware/audio/*.sv \
+        # Warnings are fatal for project RTL; only the translated upstream core is waived.
+        printf '`verilator_config\nlint_off -file "%s"\n' ${lynxHdl}/lynx-compact.v > upstream.vlt
+        verilator --cc --exe --build -j 4 -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT -Wno-ALWNEVER ${lib.optionalString video "-GVIDEO=1"} ${lib.optionalString audio "-GAUDIO=1"} --top-module lynx_tang_system --Mdir obj \
+          -CFLAGS '-O2 -std=c++17 ${lib.optionalString video "-DVIDEO_CHECK"} ${lib.optionalString audio "-DAUDIO_CHECK"}' upstream.vlt ${lynxHdl}/lynx-compact.v ${source}/hardware/tang/*.sv ${source}/hardware/video/*.sv ${source}/hardware/audio/*.sv \
           ${source}/sim/lynx-tang.cpp > compile.log 2>&1 || { tail -100 compile.log; exit 1; }
         ./obj/Vlynx_tang_system diagnostic.bin evidence.json > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
