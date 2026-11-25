@@ -58,7 +58,7 @@ let
     ../sim/i2s-decoder.hpp
   ];
   audioCheck =
-    runCommand "chipbuilder-audio-output-check"
+    runCommand "srvl-audio-output-check"
       {
         nativeBuildInputs = [
           verilator
@@ -92,7 +92,7 @@ let
         yosys -V > "$out/yosys-version.txt"
       '';
   servicesCheck =
-    runCommand "chipbuilder-tang-services-check"
+    runCommand "srvl-tang-services-check"
       {
         nativeBuildInputs = [
           verilator
@@ -115,7 +115,7 @@ let
         ln -s ${servicesSource} "$out/source"
         verilator --version > "$out/tool-version.txt"
       '';
-  hostCheck = runCommand "chipbuilder-lynx-link-check" { nativeBuildInputs = [ python3 ]; } ''
+  hostCheck = runCommand "srvl-lynx-link-check" { nativeBuildInputs = [ python3 ]; } ''
     cp ${../tools/test_lynx_link.py} test_lynx_link.py
     cp ${../tools/lynx_link.py} lynx_link.py
     python test_lynx_link.py ${servicesCheck}/wire-fixtures.tsv > test.log 2>&1 || { cat test.log; exit 1; }
@@ -125,7 +125,7 @@ let
     ln -s ${servicesCheck} "$out/rtl-evidence"
   '';
   host = writeShellApplication {
-    name = "chipbuilder-lynx-link";
+    name = "srvl-lynx-link";
     runtimeInputs = [ (python3.withPackages (ps: [ ps.pyserial ])) ];
     text = ''
       exec python ${../tools/lynx_link.py} "$@"
@@ -134,7 +134,7 @@ let
   coreIntegration =
     video: audio:
     runCommand
-      "chipbuilder-lynx-tang-${
+      "srvl-lynx-tang-${
         if audio then
           "av"
         else if video then
@@ -183,7 +183,7 @@ let
   videoCoreCheck = coreIntegration true false;
   avCoreCheck = coreIntegration true true;
   videoFifoCheck =
-    runCommand "chipbuilder-video-fifo-check"
+    runCommand "srvl-video-fifo-check"
       {
         nativeBuildInputs = [
           verilator
@@ -219,7 +219,7 @@ let
         verilator --version > "$out/verilator-version.txt"
       '';
   frameCaptureCheck =
-    runCommand "chipbuilder-frame-capture-check"
+    runCommand "srvl-frame-capture-check"
       {
         nativeBuildInputs = [
           verilator
@@ -241,7 +241,7 @@ let
         verilator --version > "$out/verilator-version.txt"
       '';
   videoPipelineCheck =
-    runCommand "chipbuilder-video-pipeline-check"
+    runCommand "srvl-video-pipeline-check"
       {
         nativeBuildInputs = [
           verilator
@@ -280,7 +280,7 @@ let
       '';
   systemMapping =
     audio:
-    runCommand "chipbuilder-tang-portable-${if audio then "av" else "system"}-sizing"
+    runCommand "srvl-tang-portable-${if audio then "av" else "system"}-sizing"
       {
         nativeBuildInputs = [
           yosys

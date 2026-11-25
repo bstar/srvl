@@ -1,4 +1,4 @@
-# Run with quartus_sta -t scripts/check-timing.tcl Chipbuilder after fitting.
+# Run with quartus_sta -t scripts/check-timing.tcl SRVL after fitting.
 package require ::quartus::project
 package require ::quartus::sta
 project_open [lindex $quartus(args) 0]

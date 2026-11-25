@@ -12,7 +12,7 @@ module demo_tb;
     wire [31:0] frame_count;
     wire [8:0] marker_x;
     wire [7:0] marker_y;
-    chipbuilder_demo dut(.*);
+    srvl_demo dut(.*);
 
     integer px = 0, py = 0, frames = 0, active_pixels = 0;
     integer tone_edges = 0, samples_since_edge = 0;

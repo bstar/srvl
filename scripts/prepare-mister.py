@@ -15,14 +15,14 @@ shutil.copytree(template / "rtl", dest / "rtl")
 for path in dest.rglob("*"):
     path.chmod(path.stat().st_mode | stat.S_IWUSR)
 shutil.copy(template / "LICENSE", dest / "LICENSE.MiSTer")
-qsf = (template / "Template.qsf").read_text().replace("Template.sdc", "Chipbuilder.sdc")
+qsf = (template / "Template.qsf").read_text().replace("Template.sdc", "SRVL.sdc")
 # Bound parallelism and placement seed rather than inheriting host CPU count.
 qsf = qsf.replace("NUM_PARALLEL_PROCESSORS ALL", "NUM_PARALLEL_PROCESSORS 4")
-(dest / "Chipbuilder.qsf").write_text(qsf)
-(dest / "Chipbuilder.qpf").write_text('QUARTUS_VERSION = "17.0"\nPROJECT_REVISION = "Chipbuilder"\n')
-shutil.copy(template / "Template.sdc", dest / "Chipbuilder.sdc")
-shutil.copy(project / "hardware/mister/Chipbuilder.sv", dest / "Chipbuilder.sv")
-shutil.copy(project / "hardware/rtl/chipbuilder_demo.sv", dest / "rtl/chipbuilder_demo.sv")
+(dest / "SRVL.qsf").write_text(qsf)
+(dest / "SRVL.qpf").write_text('QUARTUS_VERSION = "17.0"\nPROJECT_REVISION = "SRVL"\n')
+shutil.copy(template / "Template.sdc", dest / "SRVL.sdc")
+shutil.copy(project / "hardware/mister/SRVL.sv", dest / "SRVL.sv")
+shutil.copy(project / "hardware/rtl/srvl_demo.sv", dest / "rtl/srvl_demo.sv")
 # A project-specific PLL replaces the template's 20 MHz configuration.
 # Keep the sys framework byte-for-byte unchanged.
 pll = dest / "rtl/pll/pll_0002.v"
@@ -34,13 +34,13 @@ pll.write_text(text.replace('20.000000 MHz', '50.400000 MHz'))
 set_global_assignment -library pll -name VERILOG_FILE [file join $::quartus(qip_path) "pll/pll_0002.v"]
 set_global_assignment -library pll -name QIP_FILE [file join $::quartus(qip_path) "pll/pll_0002.qip"]
 ''')
-(dest / "files.qip").write_text('''set_global_assignment -name SYSTEMVERILOG_FILE rtl/chipbuilder_demo.sv
-set_global_assignment -name SYSTEMVERILOG_FILE Chipbuilder.sv
-set_global_assignment -name SDC_FILE Chipbuilder.sdc
+(dest / "files.qip").write_text('''set_global_assignment -name SYSTEMVERILOG_FILE rtl/srvl_demo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE SRVL.sv
+set_global_assignment -name SDC_FILE SRVL.sdc
 ''')
 # Replace the wall-clock hook with a deterministic hook, leaving sys/ intact.
-qsf_path = dest / "Chipbuilder.qsf"
-qsf_path.write_text(qsf_path.read_text() + '\nset_global_assignment -name PRE_FLOW_SCRIPT_FILE "quartus_sh:chipbuilder_build_id.tcl"\n')
-(dest / "chipbuilder_build_id.tcl").write_text('post_message "Using pinned Chipbuilder build ID"\n')
+qsf_path = dest / "SRVL.qsf"
+qsf_path.write_text(qsf_path.read_text() + '\nset_global_assignment -name PRE_FLOW_SCRIPT_FILE "quartus_sh:srvl_build_id.tcl"\n')
+(dest / "srvl_build_id.tcl").write_text('post_message "Using pinned SRVL build ID"\n')
 (dest / "build_id.v").write_text('`define BUILD_DATE "20261028"\n')
 print(dest)

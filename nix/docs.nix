@@ -48,30 +48,30 @@ let
       ../scripts
     ];
   };
-  site = runCommand "chipbuilder-html-docs" { nativeBuildInputs = [ python ]; } ''
+  site = runCommand "srvl-html-docs" { nativeBuildInputs = [ python ]; } ''
     python ${source}/scripts/build-docs.py ${source} "$out"
   '';
-  check = runCommand "chipbuilder-html-docs-check" { nativeBuildInputs = [ python3 ]; } ''
+  check = runCommand "srvl-html-docs-check" { nativeBuildInputs = [ python3 ]; } ''
     python ${source}/scripts/check-docs.py ${source}
     python ${source}/scripts/check-docsite.py ${site} ${source}
     touch "$out"
   '';
   server = writeShellApplication {
-    name = "chipbuilder-docs";
+    name = "srvl-docs";
     runtimeInputs = [ python3 ];
     text = ''
       port=8787
       if [[ $# -eq 2 && "$1" == "--port" && "$2" =~ ^[0-9]+$ ]]; then
         port="$2"
       elif [[ $# -ne 0 ]]; then
-        echo "Usage: chipbuilder-docs [--port PORT]" >&2
+        echo "Usage: srvl-docs [--port PORT]" >&2
         exit 2
       fi
       if (( port < 1 || port > 65535 )); then
         echo "PORT must be between 1 and 65535" >&2
         exit 2
       fi
-      echo "Chipbuilder documentation: http://127.0.0.1:$port"
+      echo "SRVL documentation: http://127.0.0.1:$port"
       echo "Repository snapshot; stop and rerun after source changes. Ctrl-C stops the server."
       exec python -m http.server "$port" --bind 127.0.0.1 --directory ${site}
     '';

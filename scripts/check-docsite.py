@@ -81,7 +81,7 @@ def check(root, source):
                 errors.append(f"{path.relative_to(root)}: missing anchor {target}")
     manifest = json.loads((root / "manifest.json").read_text())
     search_js = (root / "assets/search-index.js").read_text()
-    prefix = "window.CHIPBUILDER_SEARCH = "
+    prefix = "window.SRVL_SEARCH = "
     if not search_js.startswith(prefix):
         errors.append("Missing bundled search index")
         search = []
@@ -135,7 +135,7 @@ def check(root, source):
         raw = root / "sources" / doc["source"]
         if not raw.exists() or raw.read_bytes() != (source / doc["source"]).read_bytes():
             errors.append(f"Raw source missing or changed: {doc['source']}")
-    chip_prefix = "window.CHIPBUILDER_CHIPS = "
+    chip_prefix = "window.SRVL_CHIPS = "
     chip_data = json.loads((root / "assets/chip-design-data.js").read_text().removeprefix(chip_prefix).strip().removesuffix(";"))
     exports = {path.stem: path for path in (root / "assets/chips").glob("*.svg")}
     if set(exports) != set(chip_data):

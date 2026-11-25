@@ -139,17 +139,17 @@ def home_dashboard(evidence, routes):
         <div class="target-cell"><span class="target-label">CPU location</span><div class="target-value">In FPGA</div><span class="target-sub">External CPU deferred</span></div>
         <div class="target-cell"><span class="target-label">Prototype board</span><div class="target-value">Tang 20K</div><span class="target-sub">Board port in progress</span></div>
       </div>
-      <div class="section-label"><h2>Where we stand</h2><span>THREE DISTINCT WORKSTREAMS</span></div>
+      <div class="section-label"><h2>Where we stand</h2><span>Three separate workstreams</span></div>
       <div class="status-grid">
-        <section class="status-card"><span class="step">01 / ORIGINAL SYSTEM</span><span class="badge software-verified">Software verified</span><h2>A working game &amp; machine</h2><p>Circuit Courier runs on an HDL CPU with custom graphics, timers, controls and sound.</p><a href="{link('docs/architecture/software-prototype.md')}">Explore the prototype ↗</a></section>
-        <section class="status-card"><span class="step">02 / LEGACY FEASIBILITY</span><span class="badge scoped-evidence">Scoped core evidence</span><h2>The Lynx core fits</h2><p>The registered console probe fits. Its 64 MHz timing report has partial model coverage and excludes board services.</p><a href="{link('docs/research/lynx-tang20k-compatibility.md')}">Review the evidence ↗</a></section>
-        <section class="status-card"><span class="step">03 / BOARD INTEGRATION</span><span class="badge in-progress">In progress</span><h2>A playable Tang port</h2><p>Memory, loading, display, audio, clocks and controls must become one verified board build.</p><a href="{link('docs/roadmap.md')}">See the next gates ↗</a></section>
+        <section class="status-card"><span class="step">01 / ORIGINAL SYSTEM</span><span class="badge software-verified">Software verified</span><h2>A working game &amp; machine</h2><p>Circuit Courier runs on an HDL CPU with custom graphics, timers, controls and sound.</p><a href="{link('docs/architecture/software-prototype.md')}">Explore the prototype</a></section>
+        <section class="status-card"><span class="step">02 / LEGACY FEASIBILITY</span><span class="badge scoped-evidence">Scoped core evidence</span><h2>The Lynx core fits</h2><p>The registered console probe fits. Its 64 MHz timing report has partial model coverage and excludes board services.</p><a href="{link('docs/research/lynx-tang20k-compatibility.md')}">Review the evidence</a></section>
+        <section class="status-card"><span class="step">03 / BOARD INTEGRATION</span><span class="badge in-progress">In progress</span><h2>A playable Tang port</h2><p>Memory, loading, display, audio, clocks and controls must become one verified board build.</p><a href="{link('docs/roadmap.md')}">See the next gates</a></section>
       </div>
-      <div class="section-label"><h2>Measured FPGA baseline</h2><span>REGISTERED CORE PROBE ONLY</span></div>
+      <div class="section-label"><h2>Measured FPGA baseline</h2><span>Registered core probe only</span></div>
       <section class="resource-panel" aria-label="Audited core resources"><p>Final routed figures from the checked-in Lynx feasibility audit. Real board peripherals still need headroom.</p><div class="resource-grid">{''.join(bars)}</div>
-        <p class="resource-note"><strong>{achieved:.3f} MHz</strong> historical tool estimate with partial timing models · <strong>0</strong> commercial games tested · <strong>0</strong> physical Tang runs. <a href="{link('docs/milestones/tang-board-build.md')}">New board build and timing coverage ↗</a></p>
+        <p class="resource-note"><strong>{achieved:.3f} MHz</strong> historical tool estimate with partial timing models · <strong>0</strong> commercial games tested · <strong>0</strong> physical Tang runs. <a href="{link('docs/milestones/tang-board-build.md')}">New board build and timing coverage</a></p>
       </section>
-      <div class="read-next"><a href="{link('docs/tradeoffs.md')}"><b>What still needs a decision →</b><small>Panel, enhanced budget, storage, audio and cost</small></a><a href="{link('docs/architecture/provenance.md')}"><b>What is original, and what is reused →</b><small>CPUs, Lynx logic, custom engines and tooling</small></a></div>
+      <div class="read-next"><a href="{link('docs/tradeoffs.md')}"><b>What still needs a decision</b><small>Panel, enhanced budget, storage, audio and cost</small></a><a href="{link('docs/architecture/provenance.md')}"><b>What is original, and what is reused</b><small>CPUs, Lynx logic, custom engines and tooling</small></a></div>
     '''
 
 
@@ -203,7 +203,7 @@ def decisions_panel(documents):
 
 def chip_handbook_panel(routes, diagrams):
     chapters = sum(source.startswith("docs/chip-design/") for source in routes)
-    return f'<div class="chip-handbook-intro"><div><strong>{chapters}</strong><span>DESIGN CHAPTERS</span></div><div><strong>{len(diagrams)}</strong><span>INSPECTABLE SVG DIAGRAMS</span></div><div><strong>Explicit</strong><span>INTERFACES + ACCEPTANCE</span></div></div>'
+    return f'<div class="chip-handbook-intro"><div><strong>{chapters}</strong><span>design chapters</span></div><div><strong>{len(diagrams)}</strong><span>block diagrams</span></div><div><strong>Explicit</strong><span>interfaces and acceptance</span></div></div>'
 
 
 def build(root, out):
@@ -267,11 +267,11 @@ def build(root, out):
                 current = ' aria-current="page"' if item["source"] == doc["source"] else ""
                 links.append(f'<a class="nav-link" href="{routes[item["source"]]}"{current}>{esc(item["label"])}</a>')
             navigation.append(f'<div class="nav-group"><p class="nav-title">{esc(group["title"])}</p>{"".join(links)}</div>')
-        navigation.append('<div class="nav-group"><p class="nav-title">Explore everything</p><a class="nav-link" href="library.html">Reference library ↗</a></div>')
+        navigation.append('<div class="nav-group"><p class="nav-title">Explore everything</p><a class="nav-link" href="library.html">Reference library</a></div>')
         extra = ""
         if doc["source"] == "docs/project-status.md":
             extra = home_dashboard(evidence, routes)
-            extra += f'<div class="read-next"><a href="{routes["docs/chip-design/overview.md"]}"><b>Chip design handbook →</b><small>Detailed engine diagrams, interfaces and acceptance</small></a><a href="{routes["docs/chip-design/system.md"]}"><b>System control and boot ROM →</b><small>Circuits, firmware, loading and recovery boundaries</small></a></div>'
+            extra += f'<div class="read-next"><a href="{routes["docs/chip-design/overview.md"]}"><b>Chip design handbook</b><small>Detailed engine diagrams, interfaces and acceptance</small></a><a href="{routes["docs/chip-design/system.md"]}"><b>System control and boot ROM</b><small>Circuits, firmware, loading and recovery boundaries</small></a></div>'
         elif doc["source"] == "docs/chip-design/overview.md":
             extra = chip_handbook_panel(routes, diagrams)
         elif doc["source"] == "docs/architecture/tang-prototype.md":
@@ -311,7 +311,7 @@ def build(root, out):
     write_page(library)
     search = [{k: doc[k] for k in ["title", "label", "summary", "group", "state", "url", "source", "text"]} for doc in documents]
     (out / "assets").mkdir(exist_ok=True)
-    (out / "assets/search-index.js").write_text("window.CHIPBUILDER_SEARCH = " + json.dumps(search, ensure_ascii=False) + ";\n")
+    (out / "assets/search-index.js").write_text("window.SRVL_SEARCH = " + json.dumps(search, ensure_ascii=False) + ";\n")
     for name in ["site.css", "site.js", "chip.svg", "chip-design.css", "chip-design.js"]:
         shutil.copyfile(site / name, out / "assets" / name)
     for rel in sorted(assets):

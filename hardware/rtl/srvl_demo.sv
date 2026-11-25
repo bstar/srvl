@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Prototype display/input/audio circuit; not the final console graphics engine.
 `timescale 1ns/1ps
-module chipbuilder_demo (
+module srvl_demo (
     input wire clk,                    // 50.4 MHz
     input wire reset,
     input wire [5:0] joystick,          // Right, Left, Down, Up, A, B

@@ -31,7 +31,7 @@ let
   };
   # The demo ROM, and a negative ROM that draws into the displayed surface.
   roms =
-    runCommand "chipbuilder-enhanced-demo-rom"
+    runCommand "srvl-enhanced-demo-rom"
       {
         nativeBuildInputs = [
           cc65
@@ -56,7 +56,7 @@ let
         PY
       '';
   systemCheck =
-    runCommand "chipbuilder-enhanced-system-check"
+    runCommand "srvl-enhanced-system-check"
       {
         nativeBuildInputs = [
           verilator
@@ -94,7 +94,7 @@ let
         verilator --version > "$out/tool-version.txt"
       '';
   mapping =
-    runCommand "chipbuilder-enhanced-board-mapping"
+    runCommand "srvl-enhanced-board-mapping"
       {
         nativeBuildInputs = [
           yosys
@@ -146,13 +146,11 @@ let
         ln -s ${cpuHdl} "$out/cpu-source"
         yosys -V > "$out/yosys-version.txt"
       '';
-  constraints =
-    runCommand "chipbuilder-enhanced-board-constraints" { nativeBuildInputs = [ python3 ]; }
-      ''
-        python ${source}/scripts/prepare-enhanced-board.py ${mapping}/board.json \
-          ${source}/hardware/boards/tang_nano20k/pins.json "$out"
-      '';
-  route = runCommand "chipbuilder-enhanced-board-route" { nativeBuildInputs = [ nextpnr ]; } ''
+  constraints = runCommand "srvl-enhanced-board-constraints" { nativeBuildInputs = [ python3 ]; } ''
+    python ${source}/scripts/prepare-enhanced-board.py ${mapping}/board.json \
+      ${source}/hardware/boards/tang_nano20k/pins.json "$out"
+  '';
+  route = runCommand "srvl-enhanced-board-route" { nativeBuildInputs = [ nextpnr ]; } ''
     mkdir "$out"
     set +e
     nextpnr-himbaechel --device GW2AR-LV18QN88C8/I7 -o family=GW2A-18C \
@@ -169,7 +167,7 @@ let
   '';
   # Open-flow route and clock-frequency estimates only. The pinned tools have
   # no serializer or I/O timing model, and nothing here is a physical result.
-  routeCheck = runCommand "chipbuilder-enhanced-board-check" { nativeBuildInputs = [ python3 ]; } ''
+  routeCheck = runCommand "srvl-enhanced-board-check" { nativeBuildInputs = [ python3 ]; } ''
     test "$(cat ${route}/exit-code.txt)" = 0 || { tail -60 ${route}/route.log; exit 1; }
     mkdir "$out"
     python - ${route} ${mapping} "$out/evidence.json" <<'PY'

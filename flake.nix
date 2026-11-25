@@ -1,5 +1,5 @@
 {
-  description = "Chipbuilder: tools for a Lynx-inspired custom handheld";
+  description = "SRVL: tools for a Lynx-inspired custom handheld";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.mister-template = {
@@ -35,8 +35,8 @@
         config.allowUnfreePredicate =
           pkg:
           builtins.elem (nixpkgs.lib.getName pkg) [
-            "chipbuilder-quartus-lite"
-            "chipbuilder-quartus-runtime"
+            "srvl-quartus-lite"
+            "srvl-quartus-runtime"
             "Quartus-lite"
           ];
       };
@@ -77,7 +77,7 @@
       ];
       simulation =
         long:
-        pkgs.runCommand "chipbuilder-prototype-simulation${pkgs.lib.optionalString long "-full"}"
+        pkgs.runCommand "srvl-prototype-simulation${pkgs.lib.optionalString long "-full"}"
           {
             nativeBuildInputs = [
               pkgs.verilator
@@ -89,7 +89,7 @@
           ''
             export HOME="$TMPDIR"
             verilator --binary --timing --top-module demo_tb \
-              --Mdir obj_dir ${./hardware/rtl/chipbuilder_demo.sv} ${./hardware/tests/demo_tb.sv} > compile.log 2>&1 || { cat compile.log; exit 1; }
+              --Mdir obj_dir ${./hardware/rtl/srvl_demo.sv} ${./hardware/tests/demo_tb.sv} > compile.log 2>&1 || { cat compile.log; exit 1; }
             ./obj_dir/Vdemo_tb ${pkgs.lib.optionalString long "+long"} > simulation.log 2>&1 || { cat simulation.log; exit 1; }
             cat simulation.log
             mkdir -p "$out"
@@ -99,7 +99,7 @@
       # Strict lint for prototype RTL that no other check builds with -Wall.
       # Only the pinned upstream CPU is waived.
       rtlLint =
-        pkgs.runCommand "chipbuilder-rtl-lint"
+        pkgs.runCommand "srvl-rtl-lint"
           {
             nativeBuildInputs = [ pkgs.verilator ];
           }
@@ -107,10 +107,10 @@
             export HOME="$TMPDIR"
             lint() { verilator --lint-only -Wall -Wno-DECLFILENAME -Wno-PROCASSINIT "$@" >> lint.log 2>&1 || { cat lint.log; exit 1; }; }
             printf '`verilator_config\nlint_off -file "%s"\n' ${software.cpu-hdl}/cpu.v > upstream.vlt
-            lint --top-module chipbuilder_demo ${./hardware/rtl/chipbuilder_demo.sv}
-            lint --top-module chipbuilder_peripherals ${./hardware/rtl/chipbuilder_peripherals.sv}
-            lint --top-module chipbuilder_soc upstream.vlt ${software.cpu-hdl}/cpu.v \
-              ${./hardware/rtl/chipbuilder_cpu.sv} ${./hardware/rtl/chipbuilder_peripherals.sv} ${./hardware/rtl/chipbuilder_soc.sv}
+            lint --top-module srvl_demo ${./hardware/rtl/srvl_demo.sv}
+            lint --top-module srvl_peripherals ${./hardware/rtl/srvl_peripherals.sv}
+            lint --top-module srvl_soc upstream.vlt ${software.cpu-hdl}/cpu.v \
+              ${./hardware/rtl/srvl_cpu.sv} ${./hardware/rtl/srvl_peripherals.sv} ${./hardware/rtl/srvl_soc.sv}
             mkdir "$out"
             cp lint.log "$out/"
           '';
@@ -120,9 +120,9 @@
         default = pkgs.mkShell {
           packages = tools;
           shellHook = ''
-            export CHIPBUILDER_ROOT="$PWD"
+            export SRVL_ROOT="$PWD"
             export XDG_CACHE_HOME="$PWD/.cache"
-            echo "Chipbuilder: HDL simulation and 65C02 tools (Nix)."
+            echo "SRVL: HDL simulation and 65C02 tools (Nix)."
           '';
         };
         quartus = pkgs.mkShell {
@@ -132,7 +132,7 @@
           ];
           shellHook = ''
             export XDG_CACHE_HOME="$PWD/.cache"
-            echo "Chipbuilder: Quartus Lite 17.0.2.602, Cyclone V."
+            echo "SRVL: Quartus Lite 17.0.2.602, Cyclone V."
           '';
         };
         ecp5 = pkgs.mkShell {
@@ -142,9 +142,9 @@
             pkgs.openfpgaloader
           ];
           shellHook = ''
-            export CHIPBUILDER_ROOT="$PWD"
+            export SRVL_ROOT="$PWD"
             export XDG_CACHE_HOME="$PWD/.cache"
-            echo "Chipbuilder: ECP5-12F development tools; no board is programmed automatically."
+            echo "SRVL: ECP5-12F development tools; no board is programmed automatically."
           '';
         };
         tang = pkgs.mkShell {
@@ -154,9 +154,9 @@
             pkgs.openfpgaloader
           ];
           shellHook = ''
-            export CHIPBUILDER_ROOT="$PWD"
+            export SRVL_ROOT="$PWD"
             export XDG_CACHE_HOME="$PWD/.cache"
-            echo "Chipbuilder: Gowin/Tang audit tools; no board is programmed automatically."
+            echo "SRVL: Gowin/Tang audit tools; no board is programmed automatically."
           '';
         };
       };
@@ -206,7 +206,7 @@
         lynx-audit-ram-check = lynxAudit.ramCheck;
         lynx-compatibility-audit = lynxAudit.audit;
         standalone-cpu-sizing =
-          pkgs.runCommand "chipbuilder-standalone-cpu-sizing"
+          pkgs.runCommand "srvl-standalone-cpu-sizing"
             {
               nativeBuildInputs = [
                 pkgs.yosys
@@ -223,7 +223,7 @@
             '';
         simulation-full = simulation true;
         prototype =
-          pkgs.runCommand "chipbuilder-mister-prototype"
+          pkgs.runCommand "srvl-mister-prototype"
             {
               nativeBuildInputs = [
                 quartus
@@ -232,8 +232,8 @@
               project = pkgs.lib.fileset.toSource {
                 root = ./.;
                 fileset = pkgs.lib.fileset.unions [
-                  ./hardware/rtl/chipbuilder_demo.sv
-                  ./hardware/mister/Chipbuilder.sv
+                  ./hardware/rtl/srvl_demo.sv
+                  ./hardware/mister/SRVL.sv
                   ./scripts/prepare-mister.py
                   ./scripts/check-timing.tcl
                 ];
@@ -244,44 +244,44 @@
               mkdir -p "$HOME"
               python "$project/scripts/prepare-mister.py" ${mister-template} "$project" "$TMPDIR/mister-build"
               cd "$TMPDIR/mister-build"
-              if ! quartus_sh --flow compile Chipbuilder > quartus.log 2>&1; then
+              if ! quartus_sh --flow compile SRVL > quartus.log 2>&1; then
                 tail -100 quartus.log
                 exit 1
               fi
-              if ! quartus_sta -t "$project/scripts/check-timing.tcl" Chipbuilder > timing-check.log 2>&1; then
+              if ! quartus_sta -t "$project/scripts/check-timing.tcl" SRVL > timing-check.log 2>&1; then
                 cat timing-check.log
                 exit 1
               fi
-              test -s output_files/Chipbuilder.rbf
+              test -s output_files/SRVL.rbf
               mkdir -p "$out/reports"
-              cp output_files/Chipbuilder.rbf "$out/Chipbuilder.rbf"
+              cp output_files/SRVL.rbf "$out/SRVL.rbf"
               cp output_files/*.rpt "$out/reports/"
               cp quartus.log "$out/reports/"
               cp timing-check.log prototype-*.rpt "$out/reports/"
               cp LICENSE.MiSTer "$out/"
               cd "$out"
-              sha256sum Chipbuilder.rbf > sha256.txt
+              sha256sum SRVL.rbf > sha256.txt
             '';
       };
       apps.${system} = {
         lynx-link = {
           type = "app";
-          program = "${tang.host}/bin/chipbuilder-lynx-link";
+          program = "${tang.host}/bin/srvl-lynx-link";
           meta.description = "Inspect or explicitly upload owner-supplied Lynx images to the Tang UART";
         };
         sim = {
           type = "app";
-          program = "${software.simulator}/bin/chipbuilder-sim";
-          meta.description = "Play Circuit Courier on the Chipbuilder HDL prototype";
+          program = "${software.simulator}/bin/srvl-sim";
+          meta.description = "Play Circuit Courier on the SRVL HDL prototype";
         };
         docs = {
           type = "app";
-          program = "${documentation.server}/bin/chipbuilder-docs";
+          program = "${documentation.server}/bin/srvl-docs";
           meta.description = "Review the local console architecture, decisions and work plan";
         };
       };
       formatter.${system} = pkgs.writeShellApplication {
-        name = "chipbuilder-fmt";
+        name = "srvl-fmt";
         runtimeInputs = [ pkgs.nixfmt ];
         text = ''
           exec nixfmt "$@" flake.nix nix/quartus.nix nix/software.nix nix/lynx-audit.nix nix/docs.nix nix/tang.nix nix/tang-board.nix nix/tang-bitstream.nix nix/enhanced.nix nix/enhanced-system.nix
@@ -321,7 +321,7 @@
         game = software.game-check;
         prototype = simulation false;
         toolchain =
-          pkgs.runCommand "chipbuilder-toolchain-check"
+          pkgs.runCommand "srvl-toolchain-check"
             {
               nativeBuildInputs = tools ++ [ pkgs.stdenv.cc ];
             }
@@ -335,7 +335,7 @@
               touch "$out"
             '';
         documentation =
-          pkgs.runCommand "chipbuilder-documentation-check"
+          pkgs.runCommand "srvl-documentation-check"
             {
               nativeBuildInputs = [ pkgs.python3 ];
             }

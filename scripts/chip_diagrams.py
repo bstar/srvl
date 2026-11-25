@@ -10,7 +10,9 @@ from pathlib import Path
 import textwrap
 
 
-COLORS = {"project": "#b9e48c", "reused": "#91cce4", "integration": "#efc17e"}
+COLORS = {"project": "#000000", "reused": "#000000", "integration": "#000000"}
+# Monochrome line art: the kind of a block or wire is shown by its line style.
+DASHES = {"project": "", "reused": ' stroke-dasharray="7 3"', "integration": ' stroke-dasharray="2 3"'}
 
 
 def e(value):
@@ -42,15 +44,15 @@ class Diagram:
         prefix = "chip-" + self.key
         parts = [f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 {self.height}" role="group" aria-labelledby="{prefix}-title {prefix}-desc" class="chip-svg">
           <title id="{prefix}-title">{e(self.title)}</title><desc id="{prefix}-desc">{e(self.subtitle)}. Logical architecture; inspectable blocks describe scope and acceptance.</desc>
-          <defs><pattern id="{prefix}-grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#59735f" opacity=".32"/></pattern>''']
+          <defs>''']
         for kind, color in COLORS.items():
             parts.append(f'<marker id="{prefix}-arrow-{kind}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 1 1 L 8 5 L 1 9" fill="none" stroke="{color}" stroke-width="1.5"/></marker>')
-        parts.append(f'''</defs><rect width="1120" height="{self.height}" fill="#15271f"/><rect width="1120" height="{self.height}" fill="url(#{prefix}-grid)"/>
-          <path d="M24 69H1096" stroke="#405846"/><text x="30" y="34" fill="#e4f0da" font-family="sans-serif" font-size="20" font-weight="600">{e(self.title)}</text>
-          <text x="30" y="55" fill="#a9bea0" font-family="monospace" font-size="10">{e(self.subtitle)}</text>
-          <text x="1090" y="34" text-anchor="end" fill="#9db98c" font-family="monospace" font-size="10">CB / {e(self.key.upper())}</text>''')
+        parts.append(f'''</defs><rect width="1120" height="{self.height}" fill="#ffffff"/>
+          <path d="M24 69H1096" stroke="#000000"/><text x="30" y="34" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="bold">{e(self.title)}</text>
+          <text x="30" y="55" fill="#000000" font-family="Courier, monospace" font-size="12">{e(self.subtitle)}</text>
+          <text x="1090" y="34" text-anchor="end" fill="#000000" font-family="Courier, monospace" font-size="12">SRVL / {e(self.key.upper())}</text>''')
         for x, y, w, h, label in self.zones:
-            parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#223a2a" fill-opacity=".35" stroke="#607b53" stroke-dasharray="5 5"/><text x="{x+14}" y="{y+20}" fill="#a6bf95" font-family="monospace" font-size="9" letter-spacing="1">{e(label)}</text>')
+            parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="none" stroke="#000000" stroke-width=".7" stroke-dasharray="1 4"/><text x="{x+14}" y="{y+20}" fill="#000000" font-family="Courier, monospace" font-size="11.5" letter-spacing="1">{e(label)}</text>')
         for wire in self.wires:
             points = wire["points"]
             path = "M " + " L ".join(f"{x} {y}" for x, y in points)
@@ -60,35 +62,34 @@ class Diagram:
                 attrs += f' marker-start="url(#{prefix}-arrow-{kind})"'
             if wire["dashed"]:
                 attrs += ' stroke-dasharray="5 5"'
-            parts.append(f'<path d="{path}" fill="none" stroke="{color}" stroke-width="1.7" stroke-linejoin="round"{attrs}/>')
+            parts.append(f'<path d="{path}" fill="none" stroke="{color}" stroke-width="1.2" stroke-linejoin="miter"{attrs}/>')
         # Put labels above wires, so their background masks crossings cleanly.
         for wire in self.wires:
             if wire["label"] and wire["at"]:
                 x, y = wire["at"]
-                width = len(wire["label"]) * 6.1 + 12
-                parts.append(f'<rect x="{x-6}" y="{y-11}" width="{width}" height="17" fill="#15271f"/><text x="{x}" y="{y}" fill="{COLORS[wire["kind"]]}" font-family="monospace" font-size="10">{e(wire["label"])}</text>')
+                width = len(wire["label"]) * 7.3 + 12
+                parts.append(f'<rect x="{x-6}" y="{y-11}" width="{width}" height="17" fill="#ffffff"/><text x="{x}" y="{y}" fill="{COLORS[wire["kind"]]}" font-family="Courier, monospace" font-size="12">{e(wire["label"])}</text>')
         for n in self.nodes:
             x, y, w, h = (n[k] for k in ["x", "y", "w", "h"])
             color = COLORS[n["kind"]]
             title_lines = textwrap.wrap(n["title"], max(18, int((w-32)/10.2)))
             parts.append(f'''<g data-chip-node="{e(n['key'])}" role="button" tabindex="0" aria-label="{e(n['title'] + ': ' + n['state'])}" aria-pressed="false">
               <title>{e(n['title'])}</title><desc>{e(n['detail'])}</desc>
-              <rect class="node-box" x="{x}" y="{y}" width="{w}" height="{h}" fill="#233b2b" stroke="{color}" stroke-opacity=".65"/>
-              <path d="M{x} {y+14}V{y+h-14}" stroke="{color}" stroke-width="3"/>
-              <text x="{x+15}" y="{y+18}" fill="{color}" font-family="monospace" font-size="8" letter-spacing=".7">{e(n['state'].upper())}</text>''')
+              <rect class="node-box" x="{x}" y="{y}" width="{w}" height="{h}" fill="#ffffff" stroke="{color}"{DASHES[n["kind"]]}/>
+              <text x="{x+15}" y="{y+18}" fill="{color}" font-family="Courier, monospace" font-size="11" >{e(n['state'].upper())}</text>''')
             for i, line in enumerate(title_lines[:2]):
-                parts.append(f'<text x="{x+15}" y="{y+43+i*19}" fill="#e4eedc" font-family="sans-serif" font-size="17" font-weight="550">{e(line)}</text>')
+                parts.append(f'<text x="{x+15}" y="{y+43+i*19}" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="bold">{e(line)}</text>')
             subtitle_y = y + h - 15
-            parts.append(f'<text x="{x+15}" y="{subtitle_y}" fill="#b0c4a2" font-family="monospace" font-size="9">{e(n["subtitle"])}</text>')
+            parts.append(f'<text x="{x+15}" y="{subtitle_y}" fill="#000000" font-family="Courier, monospace" font-size="11.5">{e(n["subtitle"])}</text>')
             for dy in [30, 43, 56]:
-                parts.append(f'<path d="M{x-5} {y+dy}h5m{w} 0h5" stroke="{color}" opacity=".65"/>')
+                parts.append(f'<path d="M{x-5} {y+dy}h5m{w} 0h5" stroke="{color}"/>')
             parts.append('</g>')
         for x, y, text in self.notes:
-            parts.append(f'<text x="{x}" y="{y}" fill="#b4c7aa" font-family="monospace" font-size="10">{e(text)}</text>')
+            parts.append(f'<text x="{x}" y="{y}" fill="#000000" font-family="Courier, monospace" font-size="12">{e(text)}</text>')
         legend_y = self.height - 24
-        parts.append(f'<path d="M24 {legend_y-19}H1096" stroke="#405846"/>')
-        for x, kind, label in [(30, "project", "PROJECT LOGIC / PROPOSAL"), (365, "reused", "REUSED IMPLEMENTATION"), (700, "integration", "INTEGRATION / QUALIFICATION")]:
-            parts.append(f'<rect x="{x}" y="{legend_y-8}" width="7" height="7" fill="{COLORS[kind]}"/><text x="{x+15}" y="{legend_y}" fill="#b3c5aa" font-family="monospace" font-size="9">{label}</text>')
+        parts.append(f'<path d="M24 {legend_y-19}H1096" stroke="#000000"/>')
+        for x, kind, label in [(30, "project", "PROJECT LOGIC OR PROPOSAL"), (365, "reused", "REUSED IMPLEMENTATION"), (700, "integration", "INTEGRATION OR QUALIFICATION")]:
+            parts.append(f'<path d="M{x-6} {legend_y-4}h16" stroke="#000000" stroke-width="1.2"{DASHES[kind]}/><text x="{x+15}" y="{legend_y}" fill="#000000" font-family="Courier, monospace" font-size="11.5">{label}</text>')
         parts.append('</svg>')
         return "".join(parts)
 
@@ -148,11 +149,11 @@ def definitions(evidence):
 
     d = Diagram("compositor", "Tile planes · two scrolling maps merged into each line", "Implemented: two planes in block RAM, merged with the object surface during scanout · simulation and open-tool route only", 760)
     for key,x,y,title,scroll in [("far",45,135,"Back plane","behind the object surface"),("near",95,395,"Front plane","in front, below bands 8-15")]:
-        d.node(key,x,y,280,title,scroll,"A 64 x 32 map of 8 x 8 tiles that wraps, with its own X/Y scroll. Each entry carries a tile number, two flips and a palette bank.","Map, scroll and enable, latched at the frame boundary","World position for the row being fetched","Flip, wrap, palette-bank and scroll checks in the system test")
-    d.node("tiles",480,220,245,"Map + pattern fetch","Block RAM, four cycles per tile","Read the map entry, then the pattern row, one plane at a time. No SDRAM traffic, so a plane can never be late.","Row number, scroll, tile memory","One 4-bit pixel per plane","Refill at every tile boundary under both flips")
-    d.node("priority",820,220,255,"Priority","First opaque candidate wins","Front plane unless the object pixel is covered with band 8 or more; then the object pixel; then the back plane; otherwise black.","Plane pixels and the object pixel","Winning palette index","Sprites in bands on both sides of the front plane")
-    d.node("objects",820,390,255,"Object surface","Front surface row from SDRAM","The blitter's completed frame: coverage, band and palette index per pixel, read 160 words per row.","Front surface chosen at the frame boundary","Object pixel with coverage and band","Whole-frame ownership and swap checks")
-    d.node("palette",480,575,245,"Line buffer","Two rows, alternating","Holds final palette indices. A row becomes visible only when it is complete; a late row is shown black and flagged.","Winning index per pixel","Stable row for the pixel clock","Exact 2x replication and underrun checks")
+        d.node(key,x,y,280,title,scroll,"A 64 x 32 map of 8 x 8 tiles that wraps, with its own X/Y scroll. Each entry carries a tile number, two flips and a palette bank.","Map, scroll and enable, latched at the frame boundary","World position for the row being fetched","Flip, wrap, palette-bank and scroll checks in the system test", state="Simulated")
+    d.node("tiles",480,220,245,"Map + pattern fetch","Block RAM, four cycles per tile","Read the map entry, then the pattern row, one plane at a time. No SDRAM traffic, so a plane can never be late.","Row number, scroll, tile memory","One 4-bit pixel per plane","Refill at every tile boundary under both flips", state="Simulated")
+    d.node("priority",820,220,255,"Priority","First opaque candidate wins","Front plane unless the object pixel is covered with band 8 or more; then the object pixel; then the back plane; otherwise black.","Plane pixels and the object pixel","Winning palette index","Sprites in bands on both sides of the front plane", state="Simulated")
+    d.node("objects",820,390,255,"Object surface","Front surface row from SDRAM","The blitter's completed frame: coverage, band and palette index per pixel, read 160 words per row.","Front surface chosen at the frame boundary","Object pixel with coverage and band","Whole-frame ownership and swap checks", state="Simulated")
+    d.node("palette",480,575,245,"Line buffer","Two rows, alternating","Holds final palette indices. A row becomes visible only when it is complete; a late row is shown black and flagged.","Winning index per pixel","Stable row for the pixel clock","Exact 2x replication and underrun checks", state="Simulated")
     d.node("line",820,575,255,"Palette and output","Pixel clock domain","Look up RGB444 in the shared 256-entry palette and repeat each pixel and row twice.","Palette index","640 x 480 video","Every output pixel compared with the reference", "integration", "Shared with sprites")
     for x,y in [(325,185),(375,445)]:
         d.wire([(x,y),(430,y),(430,270),(480,270)])
@@ -418,16 +419,16 @@ def build_chip_diagrams(out, evidence):
         (assets / f"{key}.svg").write_text(diagram.svg())
         data[key] = dict(title=diagram.title, subtitle=diagram.subtitle,
                          nodes={n["key"]: {k: n[k] for k in ["title", "detail", "inputs", "outputs", "gate", "kind", "state"]} for n in diagram.nodes})
-    (out / "assets/chip-design-data.js").write_text("window.CHIPBUILDER_CHIPS = " + json.dumps(data, ensure_ascii=False) + ";\n")
+    (out / "assets/chip-design-data.js").write_text("window.SRVL_CHIPS = " + json.dumps(data, ensure_ascii=False) + ";\n")
     return diagrams
 
 
 def diagram_figure(diagram):
     key = diagram.key
     return f'''<figure class="chip-diagram" data-chip-diagram="{key}" aria-label="{e(diagram.title)}">
-      <div class="chip-figure-heading"><span class="chip-figure-number">DESIGN / {e(key.upper())}</span><span>LOGICAL ARCHITECTURE</span></div>
-      <div class="chip-toolbar"><span class="chip-interaction-hint">Inspect a block · scroll to explore</span><div class="chip-zoom" hidden><button type="button" data-zoom="out" aria-label="Zoom out diagram">−</button><output aria-label="Diagram zoom">100%</output><button type="button" data-zoom="in" aria-label="Zoom in diagram">+</button><button type="button" data-zoom="fit">Fit</button></div><a href="assets/chips/{key}.svg" target="_blank" rel="noopener">Open SVG ↗</a><a href="assets/chips/{key}.svg" download="chipbuilder-{key}.svg">Download SVG ↓</a></div>
+      <div class="chip-figure-heading"><span class="chip-figure-number">Figure {e(key.upper())}</span><span>Block diagram</span></div>
+      <div class="chip-toolbar"><span class="chip-interaction-hint">Select a block for its description</span><div class="chip-zoom" hidden><button type="button" data-zoom="out" aria-label="Zoom out diagram">−</button><output aria-label="Diagram zoom">100%</output><button type="button" data-zoom="in" aria-label="Zoom in diagram">+</button><button type="button" data-zoom="fit">Fit</button></div><a href="assets/chips/{key}.svg" target="_blank" rel="noopener">Open drawing</a><a href="assets/chips/{key}.svg" download="srvl-{key}.svg">Save drawing</a></div>
       <div class="chip-canvas" tabindex="0" aria-label="Scrollable {e(diagram.title)}">{diagram.svg()}</div>
-      <div class="chip-inspector" aria-live="polite"><div class="chip-inspector-title"><span class="chip-node-kicker">BLOCK INSPECTOR</span><strong>Select a block to inspect its contract</strong><span class="badge proposed">Design scope</span></div><p class="chip-detail">{e(diagram.subtitle)}. The accompanying text defines limitations and acceptance; these diagrams do not add new hardware evidence.</p><dl class="chip-ports"><div><dt>Inputs</dt><dd data-port="inputs">Select a block</dd></div><div><dt>Outputs</dt><dd data-port="outputs">Select a block</dd></div><div><dt>Acceptance gate</dt><dd data-port="gate">Select a block</dd></div></dl></div>
-      <figcaption>{e(diagram.title)}. Colors distinguish project logic, reused implementation and integration work. Each block identifies its implementation state.</figcaption>
+      <div class="chip-inspector" aria-live="polite"><div class="chip-inspector-title"><span class="chip-node-kicker">Block description</span><strong>No block selected</strong><span class="badge proposed">Design scope</span></div><p class="chip-detail">{e(diagram.subtitle)}. The accompanying text defines limitations and acceptance; these diagrams do not add new hardware evidence.</p><dl class="chip-ports"><div><dt>Inputs</dt><dd data-port="inputs">Select a block</dd></div><div><dt>Outputs</dt><dd data-port="outputs">Select a block</dd></div><div><dt>Acceptance gate</dt><dd data-port="gate">Select a block</dd></div></dl></div>
+      <figcaption>{e(diagram.title)}. Solid outlines are project logic, long dashes reused implementation, dots integration work. Each block identifies its implementation state.</figcaption>
     </figure>'''

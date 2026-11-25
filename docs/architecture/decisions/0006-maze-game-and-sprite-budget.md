@@ -55,4 +55,4 @@ ADR 0004. This supersedes ADR 0005's four-sprite budget and retains its CPU choi
 - [Current architecture and memory map](../software-prototype.md)
 - [Game ROM](../../../firmware/courier.s)
 - [Maze asset authoring](../../../scripts/make-mazes.py)
-- [Custom peripherals](../../../hardware/rtl/chipbuilder_peripherals.sv)
+- [Custom peripherals](../../../hardware/rtl/srvl_peripherals.sv)

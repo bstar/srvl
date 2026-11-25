@@ -1,6 +1,6 @@
 "use strict";
 (() => {
-  const definitions = window.CHIPBUILDER_CHIPS || {};
+  const definitions = window.SRVL_CHIPS || {};
   document.querySelectorAll("[data-chip-diagram]").forEach(figure => {
     const diagram = definitions[figure.dataset.chipDiagram];
     if (!diagram) return;

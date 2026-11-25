@@ -36,7 +36,7 @@ let
     ];
   };
   mapping =
-    runCommand "chipbuilder-tang-board-mapping"
+    runCommand "srvl-tang-board-mapping"
       {
         nativeBuildInputs = [
           yosys
@@ -74,14 +74,12 @@ let
         ln -s ${lynxHdl} "$out/console-hdl"
         yosys -V > "$out/yosys-version.txt"
       '';
-  constraints =
-    runCommand "chipbuilder-tang-board-constraints" { nativeBuildInputs = [ python3 ]; }
-      ''
-        python ${../scripts/prepare-tang-board.py} ${mapping}/board.json \
-          ${../hardware/boards/tang_nano20k/pins.json} "$out"
-        cp ${../hardware/boards/tang_nano20k/pins.json} "$out/pins.json"
-      '';
-  packProbe = runCommand "chipbuilder-tang-board-pack-probe" { nativeBuildInputs = [ nextpnr ]; } ''
+  constraints = runCommand "srvl-tang-board-constraints" { nativeBuildInputs = [ python3 ]; } ''
+    python ${../scripts/prepare-tang-board.py} ${mapping}/board.json \
+      ${../hardware/boards/tang_nano20k/pins.json} "$out"
+    cp ${../hardware/boards/tang_nano20k/pins.json} "$out/pins.json"
+  '';
+  packProbe = runCommand "srvl-tang-board-pack-probe" { nativeBuildInputs = [ nextpnr ]; } ''
     mkdir "$out"
     set +e
     nextpnr-himbaechel --device GW2AR-LV18QN88C8/I7 -o family=GW2A-18C \
@@ -93,7 +91,7 @@ let
     tail -45 "$out/pack.log"
     nextpnr-himbaechel --version > "$out/tool-version.txt" 2>&1
   '';
-  route = runCommand "chipbuilder-tang-board-route" { nativeBuildInputs = [ nextpnr ]; } ''
+  route = runCommand "srvl-tang-board-route" { nativeBuildInputs = [ nextpnr ]; } ''
     mkdir "$out"
     set +e
     nextpnr-himbaechel --device GW2AR-LV18QN88C8/I7 -o family=GW2A-18C \
@@ -108,33 +106,31 @@ let
     ln -s ${constraints} "$out/constraints"
     nextpnr-himbaechel --version > "$out/tool-version.txt" 2>&1
   '';
-  coverage = runCommand "chipbuilder-tang-timing-coverage" { nativeBuildInputs = [ python3 ]; } ''
+  coverage = runCommand "srvl-tang-timing-coverage" { nativeBuildInputs = [ python3 ]; } ''
     mkdir "$out"
     python ${../scripts/report-gowin-timing-coverage.py} \
       ${nextpnr}/share/nextpnr/himbaechel/gowin/chipdb-GW2A-18C.bin \
       ${nextpnr.src} ${mapping}/board.json "$out/evidence.json" > "$out/review.log"
     cat "$out/review.log"
   '';
-  buildCheck =
-    runCommand "chipbuilder-tang-board-constraint-check" { nativeBuildInputs = [ python3 ]; }
-      ''
-        test "$(cat ${packProbe}/exit-code.txt)" = 0
-        cp ${../scripts/prepare-tang-board.py} prepare-tang-board.py
-        cp ${../scripts/check-tang-constraints.py} check-tang-constraints.py
-        python check-tang-constraints.py ${mapping}/board.json \
-          ${../hardware/boards/tang_nano20k/pins.json} > test.log 2>&1 || { cat test.log; exit 1; }
-        cat test.log
-        mkdir "$out"
-        cp test.log "$out/"
-        ln -s ${constraints} "$out/constraints"
-        ln -s ${packProbe} "$out/pack-probe"
-        ln -s ${coverage} "$out/timing-coverage"
-      '';
-  report = runCommand "chipbuilder-tang-board-report" { nativeBuildInputs = [ python3 ]; } ''
+  buildCheck = runCommand "srvl-tang-board-constraint-check" { nativeBuildInputs = [ python3 ]; } ''
+    test "$(cat ${packProbe}/exit-code.txt)" = 0
+    cp ${../scripts/prepare-tang-board.py} prepare-tang-board.py
+    cp ${../scripts/check-tang-constraints.py} check-tang-constraints.py
+    python check-tang-constraints.py ${mapping}/board.json \
+      ${../hardware/boards/tang_nano20k/pins.json} > test.log 2>&1 || { cat test.log; exit 1; }
+    cat test.log
+    mkdir "$out"
+    cp test.log "$out/"
+    ln -s ${constraints} "$out/constraints"
+    ln -s ${packProbe} "$out/pack-probe"
+    ln -s ${coverage} "$out/timing-coverage"
+  '';
+  report = runCommand "srvl-tang-board-report" { nativeBuildInputs = [ python3 ]; } ''
     python ${../scripts/report-tang-board-build.py} ${mapping} ${buildCheck} ${route} "$out"
   '';
   image =
-    runCommand "chipbuilder-tang-bench-bitstream"
+    runCommand "srvl-tang-bench-bitstream"
       {
         nativeBuildInputs = [
           apycula

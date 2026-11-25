@@ -15,7 +15,7 @@
 }:
 let
   cpu-hdl =
-    runCommand "chipbuilder-r65c02-hdl"
+    runCommand "srvl-r65c02-hdl"
       {
         nativeBuildInputs = [
           ghdl
@@ -28,7 +28,7 @@ let
         cp build.log "$out/"
       '';
   cpu-check =
-    runCommand "chipbuilder-cpu-check"
+    runCommand "srvl-cpu-check"
       {
         nativeBuildInputs = [
           verilator
@@ -40,28 +40,28 @@ let
       ''
         verilator --cc --exe --build -j 4 --top-module core --Mdir obj \
           -CFLAGS -O3 ${cpu-hdl}/cpu.v ${../sim/cpu-check.cpp} > compile.log 2>&1 || { cat compile.log; exit 1; }
-        mkdir -p "$out/bin" "$out/share/chipbuilder"
-        cp obj/Vcore "$out/bin/chipbuilder-cpu-check"
-        cp compile.log "$out/share/chipbuilder/"
-        cp ${cpu-hdl}/LICENSE.txt "$out/share/chipbuilder/LICENSE.cpu.txt"
+        mkdir -p "$out/bin" "$out/share/srvl"
+        cp obj/Vcore "$out/bin/srvl-cpu-check"
+        cp compile.log "$out/share/srvl/"
+        cp ${cpu-hdl}/LICENSE.txt "$out/share/srvl/LICENSE.cpu.txt"
       '';
-  cpu-directed = runCommand "chipbuilder-cpu-directed" { } ''
-    ${cpu-check}/bin/chipbuilder-cpu-check > test.log 2>&1 || { cat test.log; exit 1; }
+  cpu-directed = runCommand "srvl-cpu-directed" { } ''
+    ${cpu-check}/bin/srvl-cpu-check > test.log 2>&1 || { cat test.log; exit 1; }
     cat test.log
     mkdir "$out"
     cp test.log "$out/"
   '';
-  cpu-functional = runCommand "chipbuilder-cpu-functional" { } ''
-    ${cpu-check}/bin/chipbuilder-cpu-check --functional ${testSource}/bin_files/6502_functional_test.bin 3469 > 6502.log 2>&1 || { cat 6502.log; exit 1; }
+  cpu-functional = runCommand "srvl-cpu-functional" { } ''
+    ${cpu-check}/bin/srvl-cpu-check --functional ${testSource}/bin_files/6502_functional_test.bin 3469 > 6502.log 2>&1 || { cat 6502.log; exit 1; }
     cat 6502.log
-    ${cpu-check}/bin/chipbuilder-cpu-check --functional ${testSource}/bin_files/65C02_extended_opcodes_test.bin 24f1 > 65c02.log 2>&1 || { cat 65c02.log; exit 1; }
+    ${cpu-check}/bin/srvl-cpu-check --functional ${testSource}/bin_files/65C02_extended_opcodes_test.bin 24f1 > 65c02.log 2>&1 || { cat 65c02.log; exit 1; }
     cat 65c02.log
     mkdir "$out"
     cp *.log ${testSource}/license.txt "$out/"
     cp ${cpu-directed}/test.log "$out/directed.log"
   '';
   graphics-data =
-    runCommand "chipbuilder-graphics-rom"
+    runCommand "srvl-graphics-rom"
       {
         nativeBuildInputs = [ python3 ];
       }
@@ -69,7 +69,7 @@ let
         python ${../scripts/make-assets.py} "$out"
       '';
   game-data =
-    runCommand "chipbuilder-courier-rom"
+    runCommand "srvl-courier-rom"
       {
         nativeBuildInputs = [
           cc65
@@ -88,16 +88,16 @@ let
   project = lib.fileset.toSource {
     root = ../.;
     fileset = lib.fileset.unions [
-      ../hardware/rtl/chipbuilder_cpu.sv
-      ../hardware/rtl/chipbuilder_peripherals.sv
-      ../hardware/rtl/chipbuilder_soc.sv
+      ../hardware/rtl/srvl_cpu.sv
+      ../hardware/rtl/srvl_peripherals.sv
+      ../hardware/rtl/srvl_soc.sv
       ../sim/main.cpp
       ../sim/machine.hpp
     ];
   };
   simulatorBuild =
     hierarchical:
-    runCommand "chipbuilder-simulator${lib.optionalString (!hierarchical) "-flat"}"
+    runCommand "srvl-simulator${lib.optionalString (!hierarchical) "-flat"}"
       {
         inherit project;
         nativeBuildInputs = [
@@ -111,31 +111,31 @@ let
       }
       ''
         verilator --cc --exe --build -j 4 ${lib.optionalString hierarchical "--hierarchical"} \
-          --top-module chipbuilder_soc --Mdir obj \
+          --top-module srvl_soc --Mdir obj \
           "-GROM_FILE=\"${game-data}/courier.hex\"" \
         "-GFONT_FILE=\"${graphics-data}/font.hex\"" \
         "-GSPRITE_FILE=\"${graphics-data}/sprites.hex\"" \
           -CFLAGS "-O3 $(pkg-config --cflags sdl2)" -LDFLAGS "$(pkg-config --libs sdl2)" \
-          ${cpu-hdl}/cpu.v "$project/hardware/rtl/chipbuilder_cpu.sv" \
-          "$project/hardware/rtl/chipbuilder_peripherals.sv" "$project/hardware/rtl/chipbuilder_soc.sv" \
+          ${cpu-hdl}/cpu.v "$project/hardware/rtl/srvl_cpu.sv" \
+          "$project/hardware/rtl/srvl_peripherals.sv" "$project/hardware/rtl/srvl_soc.sv" \
           "$project/sim/main.cpp" > compile.log 2>&1 || { cat compile.log; exit 1; }
-        mkdir -p "$out/bin" "$out/share/chipbuilder"
-        cp obj/Vchipbuilder_soc "$out/bin/chipbuilder-sim"
-        cp compile.log "$out/share/chipbuilder/"
-        ln -s ${game-data} "$out/share/chipbuilder/rom"
-        ln -s ${cpu-hdl} "$out/share/chipbuilder/cpu-source"
+        mkdir -p "$out/bin" "$out/share/srvl"
+        cp obj/Vsrvl_soc "$out/bin/srvl-sim"
+        cp compile.log "$out/share/srvl/"
+        ln -s ${game-data} "$out/share/srvl/rom"
+        ln -s ${cpu-hdl} "$out/share/srvl/cpu-source"
       '';
   simulator = simulatorBuild true;
   simulator-flat = simulatorBuild false;
   gameTest =
     app: label:
-    runCommand "chipbuilder-game-test${label}"
+    runCommand "srvl-game-test${label}"
       {
         nativeBuildInputs = [ python3 ];
       }
       ''
         export SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy
-        ${app}/bin/chipbuilder-sim --self-test --output-dir artifacts > test.log 2>&1 || { cat test.log; exit 1; }
+        ${app}/bin/srvl-sim --self-test --output-dir artifacts > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
         mkdir -p "$out"
         cp test.log artifacts/* "$out/"
@@ -145,7 +145,7 @@ let
       '';
   game-check = gameTest simulator "";
   game-flat-check = gameTest simulator-flat "-flat";
-  simulator-equivalence = runCommand "chipbuilder-simulator-equivalence" { } ''
+  simulator-equivalence = runCommand "srvl-simulator-equivalence" { } ''
     for artifact in title.ppm gameplay.ppm delivered.ppm link-lost.ppm jammed.ppm level-2.ppm level-3.ppm level-4.ppm campaign-complete.ppm gameplay.wav; do
       cmp "${game-check}/$artifact" "${game-flat-check}/$artifact"
     done
@@ -154,7 +154,7 @@ let
     cat "$out/test.log"
   '';
   peripheral-check =
-    runCommand "chipbuilder-peripheral-check"
+    runCommand "srvl-peripheral-check"
       {
         nativeBuildInputs = [
           verilator
@@ -164,11 +164,11 @@ let
         ];
       }
       ''
-        verilator --cc --exe --build -j 4 --top-module chipbuilder_peripherals --Mdir obj \
+        verilator --cc --exe --build -j 4 --top-module srvl_peripherals --Mdir obj \
           "-GFONT_FILE=\"${graphics-data}/font.hex\"" "-GSPRITE_FILE=\"${graphics-data}/sprites.hex\"" \
-          -CFLAGS -O3 ${../hardware/rtl/chipbuilder_peripherals.sv} \
+          -CFLAGS -O3 ${../hardware/rtl/srvl_peripherals.sv} \
           ${../sim/peripheral-check.cpp} > compile.log 2>&1 || { cat compile.log; exit 1; }
-        ./obj/Vchipbuilder_peripherals > test.log 2>&1 || { cat test.log; exit 1; }
+        ./obj/Vsrvl_peripherals > test.log 2>&1 || { cat test.log; exit 1; }
         cat test.log
         mkdir "$out"
         cp compile.log test.log "$out/"

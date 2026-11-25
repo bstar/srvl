@@ -48,7 +48,7 @@ assign VIDEO_ARY = 13'd3;
 
 `include "build_id.v"
 localparam CONF_STR = {
-    "Chipbuilder;;",
+    "SRVL;;",
     "O[1],Tone,Button A,Continuous;",
     "O[2],Test grid,Off,On;",
     "-;",
@@ -94,7 +94,7 @@ assign CLK_VIDEO = clk_sys;
 wire [31:0] frame_count;
 wire [8:0] marker_x;
 wire [7:0] marker_y;
-chipbuilder_demo demo (
+srvl_demo demo (
     .clk(clk_sys), .reset(logic_reset),
     .joystick(joystick[5:0]),
     .continuous_tone(status[1]), .grid(status[2]),

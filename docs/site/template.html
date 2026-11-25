@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{DESCRIPTION}}">
   <meta name="color-scheme" content="light">
-  <title>{{TITLE}} · Chipbuilder</title>
+  <title>{{TITLE}} · SRVL</title>
   <link rel="icon" href="assets/chip.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
   <link rel="stylesheet" href="assets/chip-design.css">
@@ -16,36 +16,36 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <aside class="sidebar" id="sidebar" aria-label="Documentation navigation">
-    <a class="brand" href="index.html"><img src="assets/chip.svg" alt="" width="34" height="34"><span>CHIPBUILDER<small>CONSOLE ENGINEERING</small></span></a>
-    <div class="project-label"><span class="signal-dot"></span> Design in progress <span class="revision">REV 0</span></div>
-    <nav>{{NAVIGATION}}</nav>
-    <div class="sidebar-footer"><span class="mono">160 × 102 → 320 × 204</span><p>Purpose-designed logic.<br>Explicit limits. Recorded decisions.</p></div>
-  </aside>
-  <div class="workspace">
-    <header class="topbar">
-      <button class="menu-button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false" hidden>Menu</button>
-      <div class="breadcrumbs"><a href="index.html">Project docs</a><span>/</span><span>{{GROUP}}</span></div>
-      <button class="search-launch" id="search-launch" hidden><span>Search the project</span><kbd>Ctrl K</kbd></button>
-      <span class="snapshot">Snapshot · {{REVIEWED}}</span>
-    </header>
-    <div class="page-layout">
-      <main id="main" tabindex="-1">
-        <div class="eyebrow">{{GROUP}} <span class="badge {{STATE_CLASS}}">{{STATE}}</span></div>
-        <h1>{{TITLE}}</h1>
-        <p class="page-deck">{{DESCRIPTION}}</p>
-        {{NOTICE}}
-        {{EXTRA}}
-        <article class="prose">{{CONTENT}}</article>
-        <footer class="page-footer"><span>Built from repository source · <a href="{{SOURCE_URL}}">{{SOURCE_LABEL}}</a></span><a href="documentation.html">How to update these docs ↗</a></footer>
-      </main>
-      <aside class="page-outline" aria-label="On this page"><div class="eyebrow">On this page</div>{{TOC}}<div class="outline-note"><span class="signal-dot"></span><strong>Evidence has a scope.</strong><p>Accepted design ≠ implemented hardware.<br>Simulation ≠ physical acceptance.</p></div></aside>
-    </div>
+  <header class="running-head">
+    <a class="brand" href="index.html">SRVL Hardware Reference Manual</a>
+    <span class="chapter">{{GROUP}}</span>
+    <span class="snapshot">Preliminary &middot; {{REVIEWED}}</span>
+  </header>
+  <div class="tools">
+    <button class="menu-button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false" hidden>Contents</button>
+    <button class="search-launch" id="search-launch" hidden>Index search <kbd>Ctrl K</kbd></button>
+  </div>
+  <div class="page-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Contents">
+      <p class="contents-title">Contents</p>
+      <nav>{{NAVIGATION}}</nav>
+    </aside>
+    <main id="main" tabindex="-1">
+      <div class="eyebrow">{{GROUP}}</div>
+      <h1>{{TITLE}}</h1>
+      <p class="page-deck">{{DESCRIPTION}}</p>
+      <p class="page-state">Status: <span class="badge {{STATE_CLASS}}">{{STATE}}</span></p>
+      <div class="page-outline" aria-label="In this chapter"><p class="contents-title">In this chapter</p>{{TOC}}</div>
+      {{NOTICE}}
+      {{EXTRA}}
+      <article class="prose">{{CONTENT}}</article>
+      <footer class="page-footer"><span>SRVL Hardware Reference Manual &middot; {{GROUP}}</span><span>Source: <a href="{{SOURCE_URL}}">{{SOURCE_LABEL}}</a> &middot; <a href="documentation.html">About this manual</a></span></footer>
+    </main>
   </div>
   <dialog id="search-dialog" aria-labelledby="search-title">
-    <form method="dialog" class="search-heading"><h2 id="search-title">Search documentation</h2><button aria-label="Close search" value="close">Esc</button></form>
+    <form method="dialog" class="search-heading"><h2 id="search-title">Index search</h2><button aria-label="Close search" value="close">Close</button></form>
     <label class="sr-only" for="search-input">Search all project documents</label>
-    <input id="search-input" type="search" placeholder="Try “CPU”, “backlight” or “memory”…" autocomplete="off">
+    <input id="search-input" type="search" placeholder="CPU, backlight, memory" autocomplete="off">
     <p id="search-status" class="search-status" role="status">Search all project documents, including research and decision history.</p>
     <ul id="search-results" class="search-results" aria-label="Search results"></ul>
   </dialog>

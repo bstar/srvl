@@ -1,7 +1,7 @@
 --- a/fsm_execution_unit.vhd
 +++ b/fsm_execution_unit.vhd
 @@ -1,3 +1,4 @@
-+-- Modified for Chipbuilder, 2026-10-28: BRK stack D flag, RDY defaults, and branch-output factoring.
++-- Modified for SRVL, 2026-10-28: BRK stack D flag, RDY defaults, and branch-output factoring.
  -- VHDL Entity r65c02_tc.fsm_execution_unit.symbol
  --
  -- Created:
@@ -9,7 +9,7 @@
     )
     -----------------------------------------------------------------
     BEGIN
-+      next_state <= current_state; -- Chipbuilder: hold on otherwise unassigned RDY paths.
++      next_state <= current_state; -- SRVL: hold on otherwise unassigned RDY paths.
        CASE current_state IS
           WHEN s544 => 
              next_state <= s550;

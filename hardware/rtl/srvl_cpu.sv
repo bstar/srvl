@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Stable adapter around the separately licensed, pinned R65C02 implementation.
-module chipbuilder_cpu (
+module srvl_cpu (
     input wire clk, reset,
     input wire [7:0] read_data,
     input wire irq,

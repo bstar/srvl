@@ -37,7 +37,7 @@ Lite 17.0.2 Build 602 and template revision
 | Build evidence | Result |
 | --- | --- |
 | Target | DE10-Nano, Cyclone V 5CSEBA6U23I7 |
-| Output | `build/mister/Chipbuilder.rbf`, 2,424,312 bytes |
+| Output | `build/mister/SRVL.rbf`, 2,424,312 bytes |
 | Fitted demo clock | 50.4 MHz, 19.841 ns period |
 | Worst setup slack | +0.246 ns |
 | Worst hold slack | +0.247 ns |
@@ -78,7 +78,7 @@ and builder with a distinct derivation name to avoid reusing the first output:
 
 ```sh
 nix build --impure --expr \
-  'let project = builtins.getFlake (toString ./.); in project.packages.x86_64-linux.prototype.overrideAttrs (_: { name = "chipbuilder-mister-reproducibility"; })' \
+  'let project = builtins.getFlake (toString ./.); in project.packages.x86_64-linux.prototype.overrideAttrs (_: { name = "srvl-mister-reproducibility"; })' \
   -o build/mister-repro -L
 ```
 
@@ -105,7 +105,7 @@ It was inspected read-only, then mounted writable to add the prototype as a new
 file without replacing existing cores:
 
 ```text
-_Other/Chipbuilder_9e0f461b1459.rbf
+_Other/SRVL_9e0f461b1459.rbf
 ```
 
 The copied file's SHA-256 matched the accepted build above. The file was flushed

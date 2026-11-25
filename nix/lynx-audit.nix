@@ -14,7 +14,7 @@
 }:
 let
   hdl =
-    runCommand "chipbuilder-lynx-audit-hdl"
+    runCommand "srvl-lynx-audit-hdl"
       {
         nativeBuildInputs = [
           ghdl
@@ -27,7 +27,7 @@ let
         ghdl --version > "$out/ghdl-version.txt"
       '';
   sizing =
-    runCommand "chipbuilder-lynx-audit-sizing"
+    runCommand "srvl-lynx-audit-sizing"
       {
         nativeBuildInputs = [ yosys ];
       }
@@ -39,7 +39,7 @@ let
         ln -s ${hdl} "$out/hdl"
       '';
   report =
-    runCommand "chipbuilder-lynx-audit-report"
+    runCommand "srvl-lynx-audit-report"
       {
         nativeBuildInputs = [ python3 ];
       }
@@ -50,7 +50,7 @@ let
         ln -s ${sizing} "$out/sizing"
       '';
   routeProbe =
-    runCommand "chipbuilder-lynx-audit-route-probe"
+    runCommand "srvl-lynx-audit-route-probe"
       {
         nativeBuildInputs = [
           python3
@@ -74,7 +74,7 @@ let
         nextpnr-himbaechel --version > "$out/tool-version.txt" 2>&1
       '';
   ramCheck =
-    runCommand "chipbuilder-lynx-audit-ram-check"
+    runCommand "srvl-lynx-audit-ram-check"
       {
         nativeBuildInputs = [
           ghdl
@@ -92,7 +92,7 @@ let
         cp ram.v translation.log compile.log test.log "$out/"
       '';
   audit =
-    runCommand "chipbuilder-lynx-compatibility-audit"
+    runCommand "srvl-lynx-compatibility-audit"
       {
         nativeBuildInputs = [ python3 ];
       }
@@ -105,7 +105,7 @@ let
         ln -s ${routeProbe} "$out/core-route-probe"
       '';
   diagnostic =
-    runCommand "chipbuilder-lynx-audit-diagnostic"
+    runCommand "srvl-lynx-audit-diagnostic"
       {
         nativeBuildInputs = [ cc65 ];
       }
@@ -116,7 +116,7 @@ let
         ld65 -C diagnostic.cfg diagnostic.o -o "$out/diagnostic.bin"
       '';
   smoke =
-    runCommand "chipbuilder-lynx-audit-smoke"
+    runCommand "srvl-lynx-audit-smoke"
       {
         nativeBuildInputs = [
           verilator

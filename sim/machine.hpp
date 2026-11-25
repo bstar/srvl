@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 #pragma once
-#include "Vchipbuilder_soc.h"
+#include "Vsrvl_soc.h"
 #include "verilated.h"
 #include <array>
 #include <cstdint>
@@ -14,7 +14,7 @@ public:
     static constexpr unsigned width=320, height=204, clocks_per_frame=400*262;
     static constexpr unsigned clock_hz=clocks_per_frame*60;
     VerilatedContext context;
-    Vchipbuilder_soc model{&context};
+    Vsrvl_soc model{&context};
     std::array<uint32_t,width*height> pixels{};
     std::array<uint8_t,65536> writes{}; // Bus observation only, never feeds the CPU.
     std::vector<int16_t> audio;

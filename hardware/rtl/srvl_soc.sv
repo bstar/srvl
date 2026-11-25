@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Software-first console prototype. This map is not the Lynx legacy memory map.
-module chipbuilder_soc #(
+module srvl_soc #(
     parameter ROM_FILE = "courier.hex",
     parameter FONT_FILE = "font.hex",
     parameter SPRITE_FILE = "sprites.hex"
@@ -41,7 +41,7 @@ module chipbuilder_soc #(
     // snapshot must not fire on dummy cycles or while the CPU clock is stopped.
     wire peripheral_read = read_enable && cpu_running && !reset;
     wire peripheral_write = write_enable && cpu_running && !reset && address >= 16'h2000 && address < 16'h8000;
-    chipbuilder_cpu cpu (
+    srvl_cpu cpu (
         .clk(cpu_clock), .reset(reset), .read_data(read_data), .irq(irq),
         .address(address), .write_data(write_data), .write_enable(write_enable),
         .write_n(write_n), .read_enable(read_enable), .sync(sync)
@@ -57,7 +57,7 @@ module chipbuilder_soc #(
         else if (address < 16'h2000) read_data = ram[address[12:0]];
         else read_data = peripheral_data;
     end
-    chipbuilder_peripherals #(.FONT_FILE(FONT_FILE),.SPRITE_FILE(SPRITE_FILE)) peripherals (
+    srvl_peripherals #(.FONT_FILE(FONT_FILE),.SPRITE_FILE(SPRITE_FILE)) peripherals (
         .clk(clk), .reset(reset), .address(address), .write_data(write_data),
         .write_enable(peripheral_write), .read_enable(peripheral_read), .read_data(peripheral_data),
         .buttons(buttons), .irq(irq), .cpu_sleep(cpu_sleep), .red(red), .green(green), .blue(blue),

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Prototype custom video/audio/input hardware. One 6.288 MHz clock; 60 Hz frames.
-module chipbuilder_peripherals #(
+module srvl_peripherals #(
     parameter FONT_FILE = "font.hex",
     parameter SPRITE_FILE = "sprites.hex"
 ) (

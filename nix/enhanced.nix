@@ -59,7 +59,7 @@ let
     ];
   };
   abiCheck =
-    runCommand "chipbuilder-graphics-abi-check"
+    runCommand "srvl-graphics-abi-check"
       {
         nativeBuildInputs = [ python3 ];
       }
@@ -71,7 +71,7 @@ let
         cp generated/* "$out/"
       '';
   mmioCheck =
-    runCommand "chipbuilder-blitter-mmio-check"
+    runCommand "srvl-blitter-mmio-check"
       {
         nativeBuildInputs = [
           verilator
@@ -104,7 +104,7 @@ let
         verilator --version > "$out/tool-version.txt"
       '';
   nativeCpuCheck =
-    runCommand "chipbuilder-native-graphics-check"
+    runCommand "srvl-native-graphics-check"
       {
         nativeBuildInputs = [
           verilator
@@ -146,7 +146,7 @@ let
         verilator --version > "$out/tool-version.txt"
       '';
   memoryServiceCheck =
-    runCommand "chipbuilder-graphics-memory-check"
+    runCommand "srvl-graphics-memory-check"
       {
         nativeBuildInputs = [
           verilator
@@ -187,7 +187,7 @@ let
         yosys -V > "$out/yosys-version.txt"
       '';
   blitterCheck =
-    runCommand "chipbuilder-scaled-blitter-check"
+    runCommand "srvl-scaled-blitter-check"
       {
         nativeBuildInputs = [
           verilator
@@ -221,7 +221,7 @@ let
         yosys -V > "$out/yosys-version.txt"
       '';
   blitterMemoryCheck =
-    runCommand "chipbuilder-scaled-blitter-memory-check"
+    runCommand "srvl-scaled-blitter-memory-check"
       {
         nativeBuildInputs = [
           verilator

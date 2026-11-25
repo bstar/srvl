@@ -84,7 +84,7 @@ The script copies a content-addressed RBF to `/tmp`, verifies its checksum, and
 optionally sends `load_core` to `/dev/MiSTer_cmd`. It does not overwrite the menu,
 installed cores, or SD-card configuration. Loading switches the running core;
 return to MiSTer's menu normally afterward. For a permanent manual installation,
-copy `Chipbuilder.rbf` to a new file under `_Other/` and select it in the menu.
+copy `SRVL.rbf` to a new file under `_Other/` and select it in the menu.
 
 ## Hardware acceptance
 

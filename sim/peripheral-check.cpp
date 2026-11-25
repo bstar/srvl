@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#include "Vchipbuilder_peripherals.h"
+#include "Vsrvl_peripherals.h"
 #include "verilated.h"
 #include <array>
 #include <cstdint>
@@ -13,7 +13,7 @@ static void check(bool value,const std::string& why) {
 class Bench {
 public:
     VerilatedContext context;
-    Vchipbuilder_peripherals d{&context};
+    Vsrvl_peripherals d{&context};
     void tick() { d.clk=0;d.eval();d.clk=1;d.eval(); }
     void reset() { d.reset=1;tick();tick();d.reset=0; }
     void write(unsigned a,unsigned v) {

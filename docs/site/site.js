@@ -5,7 +5,7 @@
   const input = document.getElementById("search-input");
   const results = document.getElementById("search-results");
   const status = document.getElementById("search-status");
-  const index = window.CHIPBUILDER_SEARCH || [];
+  const index = window.SRVL_SEARCH || [];
 
   function textElement(tag, value, className) {
     const element = document.createElement(tag);

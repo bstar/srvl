@@ -93,9 +93,9 @@ the native frame on exit. `--no-audio` permits visual work without an audio devi
 
 ## Implementation boundaries
 
-- [SoC](../hardware/rtl/chipbuilder_soc.sv): CPU, RAM, ROM, and bus decode.
-- [CPU adapter](../hardware/rtl/chipbuilder_cpu.sv): pinned VHDL CPU boundary.
-- [Custom peripherals](../hardware/rtl/chipbuilder_peripherals.sv): pipelined
+- [SoC](../hardware/rtl/srvl_soc.sv): CPU, RAM, ROM, and bus decode.
+- [CPU adapter](../hardware/rtl/srvl_cpu.sv): pinned VHDL CPU boundary.
+- [Custom peripherals](../hardware/rtl/srvl_peripherals.sv): pipelined
   tiles/glyphs, four sprites, palette, oscillators, input, IRQ, and frame-wait.
 - [Original ROM](../firmware/courier.s): all game behavior and hardware setup.
 - [Memory map](../docs/architecture/software-prototype.md) and
@@ -111,7 +111,7 @@ budgets are not established by this milestone.
 
 The generated CPU package retains the pinned VHDL source, local correction patch,
 and upstream GPL-3.0-or-later license. The simulator references them under
-`share/chipbuilder/cpu-source/`; its original ROM sources and assets are under
-`share/chipbuilder/rom/`. The new project files retain their individual SPDX
+`share/srvl/cpu-source/`; its original ROM sources and assets are under
+`share/srvl/rom/`. The new project files retain their individual SPDX
 notices. No project-wide relicensing claim is made here. See
 [CPU research](../docs/research/cpu-selection.md) for choices and known limits.

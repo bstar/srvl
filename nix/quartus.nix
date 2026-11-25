@@ -10,7 +10,7 @@
 }:
 let
   installerEnv = buildFHSEnv {
-    name = "chipbuilder-quartus-installer";
+    name = "srvl-quartus-installer";
     targetPkgs =
       p: with p; [
         bash
@@ -51,7 +51,7 @@ let
     ];
   };
   unwrapped = stdenv.mkDerivation {
-    pname = "chipbuilder-quartus-lite";
+    pname = "srvl-quartus-lite";
     version = "17.0.2.602";
     src = archive;
     nativeBuildInputs = [
@@ -74,10 +74,10 @@ let
       # Quartus installers. Their missing section tables must not be patchelf'ed.
       export HOME="$TMPDIR/home"
       mkdir -p "$HOME"
-      ${installerEnv}/bin/chipbuilder-quartus-installer -c \
+      ${installerEnv}/bin/srvl-quartus-installer -c \
         'python3 "$1" "$2" --mode unattended --installdir "$3" --disable-components quartus_help,arria_lite,cyclone,cyclone10lp,max,max10,quartus_update,modelsim_ase,modelsim_ae' \
         -- ${./run-quartus-installer.py} "$PWD/selected/QuartusLiteSetup-17.0.0.595-linux.run" "$out"
-      ${installerEnv}/bin/chipbuilder-quartus-installer -c \
+      ${installerEnv}/bin/srvl-quartus-installer -c \
         'python3 "$1" "$2" --mode unattended --installdir "$3"' \
         -- ${./run-quartus-installer.py} "$PWD/selected/QuartusSetup-17.0.2.602-linux.run" "$out"
       test -x "$out/quartus/bin/quartus_sh"
@@ -92,7 +92,7 @@ let
     };
   };
   runtime = buildFHSEnv {
-    name = "chipbuilder-quartus-runtime";
+    name = "srvl-quartus-runtime";
     targetPkgs =
       p: with p; [
         bash
@@ -143,11 +143,11 @@ let
   ];
 in
 symlinkJoin {
-  name = "chipbuilder-quartus-lite-17.0.2.602";
+  name = "srvl-quartus-lite-17.0.2.602";
   paths = map (
     command:
     writeShellScriptBin command ''
-      exec ${runtime}/bin/chipbuilder-quartus-runtime -c \
+      exec ${runtime}/bin/srvl-quartus-runtime -c \
         'exec "$QUARTUS_ROOTDIR/bin/${command}" "$@"' ${command} "$@"
     ''
   ) commands;

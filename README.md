@@ -1,4 +1,4 @@
-# Chipbuilder
+# SRVL: Superior Retro Video Legacy
 
 A handheld console project inspired by an alternate-history Atari Lynx successor
 from roughly 1993–1995. The aim is to design the boards, graphics/audio hardware,

@@ -63,7 +63,7 @@
     "hardware/memory/cb_graphics_arbiter.sv": "1bfb30c0e4f13e30c73da5257d0d3039e350528f9fe8c08edf88fbc949264885",
     "hardware/memory/cb_graphics_sdram.sv": "9c83bd17adb97c0bca767ea1fc5bbc193fec6b6d2297049a945cf9ca4046b20c",
     "hardware/tests/graphics-memory-top.sv": "5f9500047d172a038e98600b34956ba28456496d9dafe34f8907090089950524",
-    "nix/enhanced.nix": "1b4b0d0899c67ba3adb6f0850e42146acb5daa05063fe6afc8ef45a09334a2d3",
+    "nix/enhanced.nix": "3970005a17fc438ee0746c924c9b1ca31392010b32ff491bcd0aaa606d3545fd",
     "sim/graphics-memory.cpp": "cb8d1862a315c0b0f30247c877d8a4243a473e4b5a72dbcce8c7bfa8ed43f61c",
     "sim/sdram-model.hpp": "4be149d3921143653969221cf71a3741d18ad4a1dfe4c4971b24c67d2ff69cf6"
   }

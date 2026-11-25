@@ -1,7 +1,7 @@
 ; SPDX-License-Identifier: GPL-2.0-or-later
 ; CIRCUIT COURIER: original 65C02 game. All game rules execute on the HDL CPU.
 .setcpu "65C02"
-.include "chipbuilder.inc"
+.include "srvl.inc"
 
 .segment "ZEROPAGE"
 tile_ptr:      .res 2

@@ -1,6 +1,6 @@
 # System architecture
 
-Chipbuilder is a handheld console built in an FPGA: an imagined mid-1990s
+SRVL (Superior Retro Video Legacy) is a handheld console built in an FPGA: an imagined mid-1990s
 successor to the Atari Lynx. It has to do two things. It runs original Lynx
 software unchanged at 160 × 102, shown as exact 2 × 2 blocks. And it runs new
 games at 320 × 204 on a faster 65C02 with graphics hardware of our own design:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect and load owner-supplied images through Chipbuilder's Tang UART.
+"""Inspect and load owner-supplied images through SRVL's Tang UART.
 
 The bench protocol is ASCII so payloads cannot contain the debugger's binary
 console escape. No device is selected, programmed or contacted by inspection.
@@ -89,7 +89,7 @@ def response(line):
         raise ValueError("reply CRC mismatch")
     status = int(line[1:9], 16)
     if status >> 16 != 0x4c59:
-        raise ValueError("device did not return the Chipbuilder Lynx signature")
+        raise ValueError("device did not return the SRVL Lynx signature")
     return line[:1] == b"K", status
 
 

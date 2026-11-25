@@ -91,7 +91,7 @@ public:
     Application(bool hidden,bool no_audio) {
         sdl_check(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_GAMECONTROLLER)==0,"SDL initialization failed");
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"0");
-        window=SDL_CreateWindow("Circuit Courier - Chipbuilder | Arrows steer, Z jam/start, X slow",
+        window=SDL_CreateWindow("Circuit Courier - SRVL | Arrows steer, Z jam/start, X slow",
             SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,960,612,
             SDL_WINDOW_RESIZABLE|(hidden?SDL_WINDOW_HIDDEN:SDL_WINDOW_SHOWN));
         sdl_check(window,"Cannot create window");
@@ -578,7 +578,7 @@ int main(int argc,char** argv) {
             else if (arg=="--output-dir") output=next();
             else if (arg=="--screenshot") screenshot=next();
             else if (arg=="--help") {
-                std::cout<<"Chipbuilder - Circuit Courier\n"
+                std::cout<<"SRVL - Circuit Courier\n"
                     <<"Arrows/WASD steer, Z/Space starts or jams guards, X slows, Enter starts.\n"
                     <<"P pauses, R resets, F11 toggles fullscreen, Esc quits. Gamepads are supported.\n"
                     <<"Options: --self-test --output-dir DIR --benchmark FRAMES --frames N --screenshot FILE.ppm --no-audio\n";

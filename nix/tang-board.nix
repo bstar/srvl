@@ -29,7 +29,7 @@ let
     ];
   };
   dviCheck =
-    runCommand "chipbuilder-dvi-encoder-check"
+    runCommand "srvl-dvi-encoder-check"
       {
         nativeBuildInputs = [
           verilator
@@ -50,7 +50,7 @@ let
         verilator --version > "$out/tool-version.txt"
       '';
   controlCheck =
-    runCommand "chipbuilder-board-control-check"
+    runCommand "srvl-board-control-check"
       {
         nativeBuildInputs = [
           verilator

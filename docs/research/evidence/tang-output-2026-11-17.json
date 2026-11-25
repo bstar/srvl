@@ -36,7 +36,7 @@
     "hardware/boards/tang_nano20k/cb_reset_sync.sv": "f871d621c4aa5bbef091198636f1e0133ec422995fe14925246ffeffeda18099",
     "hardware/boards/tang_nano20k/cb_board_control.sv": "ee1acee915ba787a86ee83c0d1fe72fc79dbc6e637885bf2781521e7751c79f4",
     "sim/board-control.cpp": "38badda58cb04c7fcd3e2ba0281409d3946dea1e493eddb4765e63b3e0015e9f",
-    "nix/tang-board.nix": "fc3242ab93fab4727b5b9219d751e0584b20a82b3aa7bd422d94e5e4f0312307",
+    "nix/tang-board.nix": "9bfc041ee518e859d5bfb2fc5dd9ffaa0e553d34d20b1df0fe297639da2d400c",
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a"
   },
   "serializer_primitive_simulation": false,

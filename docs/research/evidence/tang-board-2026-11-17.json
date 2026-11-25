@@ -669,7 +669,7 @@
     "hardware/video/lynx_frame_capture.sv": "9146a2ee577f97cff1ccde409f3ea29f1908c5fb5011e5ea0a365619dc409346",
     "hardware/video/lynx_scanout.sv": "2329bab93cd098313cc35dbf1c8fabf87ca7da59678b32eb373cd1c987479ca5",
     "hardware/boards/tang_nano20k/pins.json": "7a2885224cc74c417861b04e79f9b12afe43881a198ea402e87b127cfc639f44",
-    "nix/tang-bitstream.nix": "0596da7e3d03f2e309df9cc8a7b89d5e254869cf1f1e8dd3b0a2c2ba4b57fa82",
+    "nix/tang-bitstream.nix": "f9b5d9150d11dc6b1cd6de352bf00273e0510846822c4c6a43e44e1c8f0b76c2",
     "flake.lock": "19dd881fa06fb19667bdb9ccb0b094ff9386a8ceee30657667868dd6a000b77a",
     "scripts/prepare-tang-board.py": "5e4b15efe8d1874b9ffe29cc67ab3329555cf88e986e34e571f75f01d1771b8b",
     "scripts/check-tang-constraints.py": "08087ec4ac213c024caded79d5292c7a8e861d352d4bcb5d54be1f3738d895ab",
